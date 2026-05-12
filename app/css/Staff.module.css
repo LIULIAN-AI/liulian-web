@@ -1,0 +1,313 @@
+/* 新的样式 */
+.staffContainer{
+    width: 100%;
+    padding: 0px 72px;
+}
+.navStaffTitle{
+    color:#18181B;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 30px;
+}
+.navStaffBar{
+    display: flex;
+    flex-direction: column;
+}
+.navStaffBarItem{
+    display: flex;
+    height: 51px;
+    padding: 10px;
+    align-items: center;
+    gap: 16px;
+    align-self: stretch;
+    border-radius: 6px;
+    border: 1px solid #E4E4E7;
+    background: #FFF;
+    width: 100%;
+    flex: 1;
+    margin-bottom: 20px;
+}
+.navStaffBarItemText{
+    color:#18181B;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.navStaffBarItemTextActive{
+    background: #FEEFEF;
+    color: #D92121;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+}
+.navStaffBarContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.navStaffShareholderItem{
+    display: flex;
+    padding: 16px 12px;
+    justify-content: flex-start;
+    gap: 5.26px;
+    align-self: stretch;
+}
+.navStaffShareholderItem:hover{
+    background: #F9F9FA;
+}
+.navStaffShareholderItemLeft{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 90.58px;
+    flex: 0 0 90.58px;
+    margin-right: 60px;
+    padding-left: 10px;
+}
+.navStaffShareholderItemLeftText{
+    color: #1D2129;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 6.58px;
+}
+.navStaffShareholderItemLeftSubText{
+    color: #D92121;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+.navStaffShareholderItemRight{
+    display: grid;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+}
+.navStaffShareholderItemRightTextTop{
+    color:#1D2129;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 30px;
+    letter-spacing: -0.7px;
+    margin-bottom: 8.14px;
+}
+.navStaffShareholderItemRightTextMiddle{
+    overflow: hidden;
+    color:#1D2129;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    height: 31px;
+    display: block;
+    box-sizing: border-box;
+    margin-bottom: 6.57px;
+    min-width: 0;
+    flex-shrink: 0;
+    max-width: 100%;
+}
+.navStaffShareholderItemRightTextBottom{
+    display: flex;
+    padding: 7.808px 15.616px;
+    align-items: center;
+    gap: 15.616px;
+    border-radius: 81.763px;
+    background:#FEEFEF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color:#D92121;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    width: max-content;
+}
+.navStaffManagementBarContainer{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+.navStaffManagementItem{
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    margin-bottom: 30px;
+}
+.navStaffManagementItemTop{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 4px;
+}
+.navStaffManagementItemTopImage{
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    margin-right: 14.24px;
+}
+.navStaffManagementItemTopText{
+    color:#1D2129;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 30px;
+    letter-spacing: -0.7px;
+    height: 30px;
+}
+.navStaffManagementItemMiddle{
+    color: rgba(105, 69, 69, 1);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 4px;
+}
+.navStaffManagementItemBottom{
+    display: flex;
+    padding: 5.637px 11.273px;
+    align-items: center;
+    gap: 11.273px;
+    border-radius: 59.027px;
+    background: #FEEFEF;
+    max-width: max-content;
+    color:#D92121;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+}
+.navStaffDirectorItem{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px 12px;
+    border-bottom: 1px solid #E4E4E7;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+.navStaffDirectorImage{
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    margin-right: 23.73px;
+    flex: 0 0 80px;
+}
+.navStaffDirectorInfo{
+    display: flex;
+    flex-direction: column;
+}
+.navStaffDirectorInfoTop{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    margin-bottom: 6px;
+}
+.navStaffDirectorInfoTopText{
+    color:#1D2129;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 30px;
+    letter-spacing: -0.7px;
+    margin-right: 14.24px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.navStaffDirectorInfoTopSubText{
+    color: rgba(105, 69, 69, 1);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.navStaffDirectorBarContainer{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 10px;
+}
+.navStaffDirectorInfoBottom{
+    display: flex;
+    padding: 5.637px 11.273px;
+    align-items: center;
+    gap: 11.273px;
+    border-radius: 59.027px;
+    background:#FEEFEF;
+    color:#D92121;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    max-width: max-content;
+    white-space: nowrap;
+}
+.navStaffHighlightsAndNews{
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 40px;
+}
+.navStaffHighlights{
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 614px;
+    border-right: 1px solid #E4E4E7;
+    margin-right: 70px;
+    padding-right: 70px;
+}
+.navStaffHighlightsTitle{
+    color:#18181B;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 30px;
+}
+.navStaffHighlightsContent{
+    display: flex;
+    gap: 20px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-self: stretch;
+}
+.navStaffHighlightsItem{
+    display: flex;
+    width: 260px;
+    height: 140px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    background: #F9F9FA;
+}
+.navStaffHighlightsItemText{
+    color:#1D2129;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    height: 44px;
+    margin-bottom: 10px;
+}
+.navStaffHighlightsItemNumber{
+    color: #4E5969;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+.navStaffNews{
+    width: 100%;
+}

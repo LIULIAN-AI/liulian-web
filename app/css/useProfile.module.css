@@ -1,0 +1,62 @@
+.profile{
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+.profileTitle{
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.80) 16.67%, rgba(255, 228, 230, 0.80) 89%), var(--background-bg-background-90, rgba(255, 255, 255, 0.90));
+  display: flex;
+  padding: 50px 120px;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+}
+.profileTitleText{
+  font-size: 50px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 72px;
+  background: linear-gradient(100deg, #ED1522 -1.65%, #E56E48 82.54%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.profileContent{
+  display: flex;
+  justify-content: flex-start;
+  padding: 0px 120px 0px;
+  margin-bottom: 48px;
+}
+.profileNavbar{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-right: 48px;
+}
+.profileNavbarItem{
+  height: 36px;
+  padding: 8px 16px;
+  color:#18181B;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  width: 250px;
+  display: flex;
+  cursor: pointer;
+}
+.profileNavbarItemActive{
+  display: flex;
+  height: 36px;
+  padding: 8px 16px;
+  align-items: center;
+  gap: 8px;
+  border-radius: 6px;
+  background: #D92121;
+  color: #FFF;
+  font-size: 16px;
+  font-style: normal;
+  width: 250px;
+  font-weight: 500;
+  cursor: pointer;
+}

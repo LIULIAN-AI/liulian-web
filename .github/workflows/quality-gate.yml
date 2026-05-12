@@ -1,0 +1,96 @@
+name: Quality Gate (warn)
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  typecheck:
+    name: TypeScript
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx tsc --noEmit
+        continue-on-error: true
+
+  lint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx next lint
+        continue-on-error: true
+
+  i18n-keys:
+    name: i18n key consistency
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Chat namespace keys match across locales
+        run: |
+          python3 -c "
+          import json, sys
+          def flatten(d, prefix=''):
+              keys = set()
+              for k, v in d.items():
+                  full = f'{prefix}.{k}' if prefix else k
+                  if isinstance(v, dict):
+                      keys |= flatten(v, full)
+                  else:
+                      keys.add(full)
+              return keys
+
+          en = json.load(open('messages/en.json'))
+          cn = json.load(open('messages/zh-CN.json'))
+          hk = json.load(open('messages/zh-HK.json'))
+
+          ok = True
+          for ns in en:
+              en_keys = flatten(en.get(ns, {}))
+              cn_keys = flatten(cn.get(ns, {}))
+              hk_keys = flatten(hk.get(ns, {}))
+              for name, keys in [('zh-CN', cn_keys), ('zh-HK', hk_keys)]:
+                  missing = en_keys - keys
+                  extra = keys - en_keys
+                  if missing:
+                      print(f'::warning ::{ns}: {name} missing {sorted(missing)}')
+                      ok = False
+                  if extra:
+                      print(f'::warning ::{ns}: {name} has extra {sorted(extra)}')
+                      ok = False
+
+          if ok:
+              print('All i18n keys consistent across en/zh-CN/zh-HK')
+          else:
+              sys.exit(1)
+          "
+        continue-on-error: true
+
+  audit:
+    name: npm audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm audit --audit-level=high
+        continue-on-error: true

@@ -1,0 +1,70 @@
+name: License & Supply Chain
+
+# Free OSS license + dependency review pipeline. No tokens needed.
+# Combines:
+#   - GitHub `dependency-review-action` (license + vuln gate on PRs)
+#   - ScanCode Toolkit (deep license/copyright scan, uploaded as artifact)
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependency-review:
+    name: Dependency Review (licenses + advisories)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Review new dependencies on this PR
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+          # Block copyleft licenses entering the dep tree without an
+          # explicit override review. Edit this list to match the
+          # project's accepted-license policy.
+          deny-licenses: GPL-2.0, GPL-3.0, AGPL-3.0, LGPL-3.0
+
+  scancode:
+    name: ScanCode license/copyright sweep
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install ScanCode Toolkit
+        run: pip install --upgrade pip scancode-toolkit==32.* --extra-index-url https://download.pytest.org/
+
+      - name: Run ScanCode (licenses + copyrights)
+        run: |
+          scancode \
+            --license --copyright --info \
+            --json-pp scancode-report.json \
+            --html scancode-report.html \
+            --processes 2 \
+            --strip-root \
+            --ignore "node_modules/*" \
+            --ignore ".next/*" \
+            --ignore "dist/*" \
+            --ignore "build/*" \
+            --ignore ".git/*" \
+            .
+
+      - name: Upload ScanCode reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: scancode-report
+          path: |
+            scancode-report.json
+            scancode-report.html
+          retention-days: 30

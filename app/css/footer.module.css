@@ -1,0 +1,177 @@
+/* 新的样式---------------------------- */
+.newBottom {
+	min-height: 449px;
+	width: 100%;
+	padding: 55.5px 120px;
+	display: flex;
+	justify-content: space-between;
+	/* flex-wrap: wrap; */
+}
+.newBottomLeftTop{
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-end;
+	margin-bottom: 41px;
+}
+.newLinks {
+	margin-right: 8px;
+}
+.newBottomLeftTopLinks{
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+.newBottomLeftTopIconText{
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-end;
+	margin-right: 58px;
+}
+.newBottomLeftTopIconTextIcon{
+	width: 48.42px;
+	height: 42.73px;
+}
+.newBottomLeftTopIconTextText{
+	color: #AC001D;
+	font-size: 34.182px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: 95%; /* 32.473px */
+	letter-spacing: -1.709px;
+}
+.newBottomLeftMiddle{
+	display: flex;
+	justify-content: flex-start;
+	margin-bottom: 41px;
+}
+.newBottomLeftMiddleLinkActive{
+	color:#18181B;
+	font-size: 18px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 22px;
+	margin-bottom: 12px;
+	cursor: pointer;
+}
+.newBottomLeftMiddleLinkActive:hover{
+	color: #D92121;
+}
+.newBottomLeftMiddleLink{
+	color: #18181B;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: 18px;
+	margin-bottom: 6px;
+	min-width: 110px;
+	cursor: pointer;
+}
+.newBottomLeftMiddleLink:hover{
+	color: #D92121;
+}
+.newBottomLeftMiddleLeft{
+	display: flex;
+	flex-direction: column;
+	margin-right: 92px;
+	min-width: 110px;
+}
+.newBottomLeftMiddleRight{
+		display: flex;
+		flex-direction: column;
+		margin-right: 150px;
+}
+.newBottomLeftBottom{
+	display: flex;
+	padding: 10px 0;
+	justify-content: flex-start;
+	align-items: flex-start;
+	align-self: stretch;
+	color: #71717A;
+	text-align: left;
+	/* muted */
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 22px; /* 137.5% */
+}
+.newBottomRight{
+	width: 702px;
+	cursor: pointer;
+	min-height: 318px;
+	border-radius: 20px;
+	background: url('/images/footer/aboutUsBg.png') no-repeat center center;
+	background-size: 100% 100%;
+	/* background: linear-gradient(100deg, rgba(237, 21, 34, 0.88) -1.65%, rgba(229, 110, 72, 0.88) 82.54%);
+	background-blend-mode: plus-darker, normal; */
+	display: flex;
+	padding: 44px 36px;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+}
+.newBottomRightTop{
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	align-items: center;
+}
+.newBottomRightTopAboutUs{
+	display: flex;
+	height: 40px;
+	padding: 8px 32px;
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+	border-radius: 20px;
+	background: #FFF;
+	box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.50);
+	color: #82101E;
+	text-align: center;
+	font-size: 28px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: 30px; /* 107.143% */
+	letter-spacing: -0.7px;
+}
+.newBottomRightMiddle{
+	margin: 26px 0px;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+.newBottomRightMiddleItem{
+	display: flex;
+	padding: 5px 10px;
+	align-items: center;
+	margin-right: 10px;
+	border-radius: 5px;
+	background: rgba(255, 255, 255, 0.95);
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+	justify-content: center;
+}
+.newBottomRightMiddleItemText{
+	background: linear-gradient(100deg, #ED1522 -1.65%, #E56E48 82.54%);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	margin-left: 4.63px;
+}
+.newBottomRightBottom{
+	font-size: 26px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: 1.2;
+	background: linear-gradient(100deg, #FF969C -1.65%, #FFF 82.54%);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	align-self: stretch;
+	width: 100%;
+	max-width: 100%;
+	min-height: 96px;
+	text-wrap: pretty;
+	word-break: keep-all;
+}

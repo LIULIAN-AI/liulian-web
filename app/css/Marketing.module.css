@@ -1,0 +1,446 @@
+/* Marketing新的样式 */
+.marketingNew{
+  width: 100%;
+  padding: 0px 72px;
+}
+.marketingCompanyOverview{
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 60px;
+}
+.marketingCompanyOverviewLeft{
+  display: flex;
+  flex-direction: column;
+  padding-right: 70px;
+  border-right: 1px solid #E4E4E7;
+  margin-right: 70px;
+  flex: 0 0 712px;
+  width: 712px;
+  align-self: stretch;
+}
+.marketingCompanyOverviewLeftTop{
+  padding-top: 23.44px;
+  margin-bottom: 70px;
+}
+.marketingCompanyOverviewTitle{
+  color:#18181B;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  height: 36px;
+  margin-bottom: 30px;
+}
+.marketingCompanyOverviewLeftTopContent{
+  color: #71717A;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: -0.25px;
+  margin-bottom: 23px;
+  word-break: break-word;
+  display: flex;
+  flex-wrap: wrap;
+}
+.marketingCompanyOverviewLeftBottom{
+  display: flex;
+  flex-direction: column;
+}
+.marketingCompanyOverviewLeftBottomContent{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.marketingCompanyOverviewItem{
+  display: flex;
+  width: 300px;
+  height: 160px;
+  padding: 20px 26px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  border-radius: 20px;
+  border: 2px solid#F9F7F6;
+  background: #F9F9FA;
+}
+.marketingCompanyOverviewItemTitle{
+  color:#4E5969;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 30px;
+}
+.marketingCompanyOverviewItemContent{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+.marketingCompanyOverviewItemContentNumber{
+  color:#1D2129;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.overviewApplication{
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.applicationItem{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.applicationText{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 20px;
+}
+.applicationTextTitle{
+  color:#18181B;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-skip-ink: none;
+  text-decoration-thickness: auto;
+  text-underline-offset: auto;
+  text-underline-position: from-font;
+}
+.applicationTextStar{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  color:#18181B;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-left: 10px;
+}
+.overviewTitleApplication{
+  margin-top: 80px;
+}
+.overviewMarketItem{
+  margin-top: 32px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.overviewMarketItemTitle{
+  color:#18181B;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-right: 10px;
+  width: 120px;
+}
+.overviewMarketItemContent{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  color: #82101E;
+  text-align: right;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  /* text-decoration-line: underline; */
+  text-decoration-style: solid;
+  text-decoration-skip-ink: none;
+  text-decoration-thickness: auto;
+  text-underline-offset: auto;
+  text-underline-position: from-font;
+  cursor: pointer;
+}
+.overviewMarketItemLast{
+  margin-top: 24px;
+}
+.overviewMarketItemContentItemImage{
+  margin-right: 8px;
+  cursor: pointer;
+}
+.overviewApplicationTitle{
+  margin-top: 60px;
+}
+.marketingNews{
+  padding-bottom: 40px;
+}
+.marketingAppPerformance{
+  margin-bottom: 40px;
+}
+.marketingAppPerformanceTitle{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 36px;
+  margin-bottom: 30px;
+}
+.marketingAppPerformanceTitleText{
+  color:#18181B;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.marketingAppPerformanceTitleMore{
+  color: rgba(105, 69, 69, 1);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-skip-ink: none;
+  text-decoration-thickness: auto;
+  text-underline-offset: auto;
+  text-underline-position: from-font;
+}
+.marketingAppPerformanceContent{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 50px;
+}
+.marketingAppPerformanceContentLeft{
+  padding: 60px 50px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 60px;
+  align-self: stretch;
+  display: flex;
+  border-radius: 6px;
+  border: 1px solid#E4E4E7;
+}
+.marketingAppPerformanceContentLeftItem{
+  display: flex;
+  justify-content: flex-start;
+  height: 100px;
+  align-items: center;
+}
+.applicationItemLast{
+  margin-bottom: 0px;
+}
+.marketingAppPerformanceContentRight{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.marketingAppPerformanceContentRightCommon{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  border-radius: 6px;
+  border: 1px solid #E4E4E7;
+}
+.marketingAppPerformanceNumber{
+  color:#1D2129;
+  text-align: right;
+  font-family: Inter;
+  font-size: 46px;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -1.056px;
+}
+.marketingAppPerformanceContentRightItem{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.marketingAppPerformanceSubTitle{
+  margin-right: 10px;
+  color: #86909C;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: -0.66px;
+}
+.marketingAppPerformanceContentRightBottom{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  border: 1px solid #E4E4E7;
+  align-self: stretch;
+  padding: 30px 40px;
+}
+.marketingAppPerformanceText{
+  color:#86909C;
+  text-align: right;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: -0.66px;
+  text-transform: capitalize;
+}
+.marketingAppPerformanceLanguageText{
+  color:#1D2129;
+  text-align: center;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.704px;
+  line-height: 150%;
+}
+.marketingAppPerformanceContentLeftImage{
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+.marketingAppPerformanceContentLeftTitle{
+  font-weight: bold;
+  font-size: 50px;
+  line-height: 150%;
+  color:#18181B;
+}
+.navStaffBarItem{
+    display: flex;
+    height: 51px;
+    padding: 10px;
+    align-items: center;
+    gap: 16px;
+    align-self: stretch;
+    border-radius: 6px;
+    border: 1px solid #E4E4E7;
+    background: #FFF;
+    width: 100%;
+    flex: 1;
+    margin-bottom: 40px;
+}
+.navStaffBarItemText{
+    color:#18181B;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.navStaffBarItemTextActive{
+    background: #FEEFEF;
+    color: #D92121;
+    font-size: 16px;
+    font-weight: 600;
+}
+.campaign{
+  display: flex;
+  flex-direction: column;
+}
+.campaignTitle{
+  color:#18181B;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-bottom: 40px;
+}
+.campaignItem{
+  height: 440.5px;
+  width: 460px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid#E4E4E7;
+}
+.campaignText{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 26px;
+  margin-bottom: 6px;
+}
+.campaignContent{
+  display: flex;
+  justify-content: flex-start;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+.campaignTextItem{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.campaignTextTitle{
+  margin-left: 10px;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-word;
+  color: rgba(105, 69, 69, 1);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.304px;
+}
+.campaignTextDate{
+  color: rgba(105, 69, 69, 1);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: -0.304px;
+}
+.campaignTextBigTitle{
+  height: 36px;
+  margin-bottom: 6px;
+  color:#1D2129;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: -0.528px;
+}
+.campaignTextContent{
+  color:#4E5969;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  word-break: break-word;
+  text-overflow: ellipsis;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  line-height: 1.5;
+  max-height: 4.5em;
+  display: -webkit-box;
+}
+.overviewMarketItemContentItemImageNew{
+    margin-right: 10px;
+}
+.overviewMarketItemContentItemImage{
+    margin-right: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.overviewMarketItemContentSocialMedia{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+.overviewMarketItemContentItemText{
+    color: #86909C;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 23px;
+}

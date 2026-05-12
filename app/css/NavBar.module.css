@@ -1,0 +1,163 @@
+/* 新的navbar的样式 */
+   .NavigationBarLeftItemContainer{
+      cursor: pointer;
+   }
+ .NavigationBar{
+    height: 90px;
+    margin-bottom: 10px;
+    padding: 10px 120px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+ }
+ .NavigationBarLeft{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+ }
+ .NavigationBarLeftItem{
+    margin-left: 100px;
+    display: flex;
+    height: 70px;
+    padding: 0 23px;
+    align-items: center;
+    justify-content: flex-start;
+ }
+ .NavigationBarLeftItemLabel{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 40px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    color: #18181B;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+ }
+ .NavigationBarLeftItemLabelText{
+    margin-right: 3px;
+ }
+ .NavigationBarLeftItemLabelText:hover{
+   color: #D92121;
+ }
+ .NavigationBarLeftItemLabelTextActive{
+   color: #D92121;
+ }
+ .NavigationBarRight{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border: none;
+ }
+ .NavigationBarRightSearch{
+    display: flex;
+    width: 73px;
+    height: 30px;
+    padding: 8px 0px 8px 8px;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 40px;
+    border: 1.5px solid #D92121;
+}
+.NavigationBarRight>.NavigationBarRightSearch:hover{
+   border-color: #D92121 !important;
+}
+.NavigationBarRightSearchFocused{
+   width: 200px !important;
+}
+.NavigationBarRightLanguage{
+    color: #A1161F;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-left:27px;
+    border: none;
+    min-width: 28px;
+}
+.NavigationBarRightLogin{
+    margin-left: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.NavigationBarPopoverContainer{
+   width: 639px;
+   padding: 30px 20px;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}
+.NavigationBarPopoverImage{
+   display: flex;
+   flex: 0 0 137px;
+   margin-left: 20px;
+}
+.NavigationBarPopover{
+   display: flex;
+   align-items: flex-start;
+   flex-direction: column;
+}
+.NavigationBarPopoverTitle{
+   color:#18181B;
+   font-size: 20px;
+   font-style: normal;
+   font-weight: 400;
+   line-height: normal;
+   margin-bottom: 8px;
+}
+/* .NavigationBarPopoverTitle:hover{
+   color: #D92121;
+} */
+.NavigationBarPopoverItem{
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+   flex-wrap: wrap;
+   color:#B09EA0;
+   font-size: 16px;
+   font-style: normal;
+   font-weight: 400;
+   line-height: normal;
+   margin-bottom: 20px;
+}
+.NavigationBarPopoverItemRight{
+   margin-right: 10px;
+}
+.loginContainer{
+   position: relative;
+}
+.loginContainerImage{
+   border-radius: 50%;
+   background: var(--Gradient, linear-gradient(100deg, #ED1522 -1.65%, #E56E48 82.54%));
+   cursor: pointer;
+   width: 38px;
+   height: 38px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+.loginContainerImageIcon{
+   width:24px;
+   height: 24px;
+   border-radius: 50%;
+}
+.loginContainerContent{
+   background: #fff;
+}
+.loginContainerContentItem{
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+   height: 40px;
+   font-size: 16px;
+   color: #18181B;
+   font-weight: 600;
+   padding: 20px 30px;
+}
+.loginContainerContentItem:hover{
+   background: #e8e3e3;
+   color: #fff;
+}

@@ -1,0 +1,175 @@
+/* === Fluent Components — pixel-identical to platform bank-info overview === */
+
+/* ── About Section ── */
+.aboutRoot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  position: relative;
+}
+
+.aboutTitle {
+  color: #18181B;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.aboutSubTitle {
+  color: #18181B;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.aboutEstablishmentSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  position: relative;
+}
+
+.aboutItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  flex: 1;
+  width: 100%;
+}
+
+.aboutItemLast {
+  margin-bottom: 46px;
+}
+
+.aboutItemStart {
+  align-items: flex-start;
+  margin-bottom: 46px;
+}
+
+.aboutItemTitle {
+  color: #71717A;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.aboutItemContent {
+  color: #18181B;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.aboutItemContentOwners {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+.aboutItemContentTop {
+  color: rgba(105, 69, 69, 1);
+  text-align: right;
+  font-size: 16px;
+  font-weight: 400;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-skip-ink: none;
+  cursor: pointer;
+}
+
+.aboutItemContentBottom {
+  color: rgba(105, 69, 69, 1);
+  font-size: 16px;
+  font-weight: 400;
+  text-align: right;
+}
+
+/* ── Compact mode for Canvas widget embedding ── */
+.aboutCompact .aboutTitle {
+  font-size: 16px;
+}
+
+.aboutCompact .aboutSubTitle {
+  font-size: 14px;
+}
+
+.aboutCompact .aboutItem {
+  margin-top: 8px;
+}
+
+.aboutCompact .aboutItemTitle {
+  font-size: 13px;
+}
+
+.aboutCompact .aboutItemContent {
+  font-size: 13px;
+}
+
+.aboutCompact .aboutItemLast {
+  margin-bottom: 24px;
+}
+
+.aboutCompact .aboutItemStart {
+  margin-bottom: 24px;
+}
+
+.aboutCompact .aboutItemContentTop,
+.aboutCompact .aboutItemContentBottom {
+  font-size: 13px;
+}
+
+/* ── Overview page composition (fluent/bank-info route) ── */
+.overviewRoot {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.overviewAboutAndApplication {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 72px 30px;
+  width: 100%;
+}
+
+.overviewAboutSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex: 1;
+  border-right: 1px solid #E4E4E7;
+  padding-right: 120px;
+  margin-right: 120px;
+  width: 60%;
+}
+
+.overviewApplicationSection {
+  min-width: 300px;
+  width: 40%;
+}
+
+/* ── Responsive for widget embedding ── */
+@media (max-width: 800px) {
+  .overviewAboutAndApplication {
+    flex-direction: column;
+    padding: 10px 24px 30px;
+  }
+
+  .overviewAboutSection {
+    width: 100%;
+    border-right: none;
+    padding-right: 0;
+    margin-right: 0;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #E4E4E7;
+    padding-bottom: 24px;
+  }
+
+  .overviewApplicationSection {
+    width: 100%;
+    min-width: unset;
+  }
+}

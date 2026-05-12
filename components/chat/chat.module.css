@@ -1,0 +1,3163 @@
+/* ──────────────────────────────────────────────────────────────────
+ * v10 design tokens — single source of truth for the chat module.
+ * Component styles below should reference these via var(--nbk-*) so
+ * theming + responsive overrides stay coherent.
+ * ──────────────────────────────────────────────────────────────── */
+.panel,
+.bubble,
+.backdrop {
+  --nbk-accent: var(--accent, #ef4444);
+  --nbk-accent-soft: color-mix(in srgb, var(--nbk-accent) 12%, transparent);
+  --nbk-accent-strong: color-mix(in srgb, var(--nbk-accent) 70%, black);
+  --nbk-success: #16a34a;
+  --nbk-success-soft: color-mix(in srgb, var(--nbk-success) 14%, transparent);
+  --nbk-danger: #b8413f;
+  --nbk-danger-soft: color-mix(in srgb, var(--nbk-danger) 12%, transparent);
+  --nbk-muted: color-mix(in srgb, var(--foreground) 60%, transparent);
+  --nbk-line: color-mix(in srgb, var(--foreground) 12%, transparent);
+  --nbk-line-strong: color-mix(in srgb, var(--foreground) 22%, transparent);
+  --nbk-radius-sm: 8px;
+  --nbk-radius-md: 12px;
+  --nbk-radius-lg: 16px;
+  --nbk-shadow-soft:
+    0 1px 2px rgba(24, 24, 27, 0.04),
+    0 4px 10px rgba(24, 24, 27, 0.04);
+  --nbk-shadow-lift:
+    0 2px 4px rgba(24, 24, 27, 0.06),
+    0 12px 28px rgba(24, 24, 27, 0.06);
+}
+
+/* Chat Bubble */
+.bubble {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--chatbot-warm-red, #ef4444);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+  border: none;
+  font-size: 24px;
+}
+.bubble:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+.bubbleBounce {
+  animation: bubbleBounce 0.5s ease-out;
+}
+@keyframes bubbleBounce {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+.unreadDot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ef4444;
+  border: 2px solid var(--background);
+}
+
+/* Panel */
+.panel {
+  position: fixed;
+  z-index: 1000;
+  background: var(--background);
+  border: 1px solid var(--nbk-line-strong);
+  border-radius: var(--nbk-radius-md);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  /* v10: framer-motion no longer animates layout. CSS owns the size morph
+     between default and expanded — fast iOS easing keeps it crisp. */
+  transition:
+    width 0.22s cubic-bezier(0.32, 0.72, 0, 1),
+    height 0.22s cubic-bezier(0.32, 0.72, 0, 1),
+    top 0.22s cubic-bezier(0.32, 0.72, 0, 1),
+    bottom 0.22s cubic-bezier(0.32, 0.72, 0, 1),
+    right 0.22s cubic-bezier(0.32, 0.72, 0, 1),
+    border-radius 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.panelDefault {
+  bottom: 96px;
+  right: 24px;
+  /* clamp() lets the panel breathe on small windows without going off-screen,
+     while still capping at the comfortable 420px reading width on desktop. */
+  width: clamp(320px, 30vw, 420px);
+  height: clamp(440px, 70vh, 640px);
+  transform-origin: bottom right;
+}
+.panelExpanded {
+  width: clamp(720px, 70vw, 1180px);
+  height: clamp(560px, 82vh, 920px);
+  top: 9vh;
+  left: 0;
+  right: 0;
+  bottom: auto;
+  margin-inline: auto;
+  transform-origin: center center;
+}
+
+/* R9-5 reuses the existing v10-13 responsive tiers further down (≤480
+ * full-screen, 481-768 tablet, 769-1279 desktop, ≥1280 wide, ≥1920
+ * ultrawide). Those rules are extended at the bottom of this file with
+ * additional `.panelDefault` scaling so wide-monitor users get a bigger
+ * collapsed panel — rather than duplicate them here. */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.2);
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
+  flex-shrink: 0;
+}
+.headerTitle {
+  flex: 1;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--chatbot-warm-red, #ef4444);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.headerBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  color: var(--foreground);
+  opacity: 0.6;
+  font-size: 16px;
+  border-radius: 4px;
+}
+.headerBtn:hover {
+  opacity: 1;
+  background: color-mix(in srgb, var(--foreground) 8%, transparent);
+}
+
+.compactToolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #fca5a5;
+  background: #fff5f5;
+  flex-shrink: 0;
+}
+
+.compactNewBtn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #dc2626;
+  background: #ef4444;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.compactNewBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.compactSummaryBtn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--primary, #2563eb);
+  background: #fff;
+  color: var(--primary, #2563eb);
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.compactSummaryBtn:hover:not(:disabled) {
+  background: var(--primary, #2563eb);
+  color: #fff;
+}
+
+.compactSummaryBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.compactSessionSelect {
+  width: 120px;
+  border: 1px solid #f87171;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--foreground);
+  padding: 5px 8px;
+  font-size: 12px;
+  outline: none;
+}
+
+.compactSearchShell {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  min-width: 0;
+}
+
+.compactSearchBtn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #f87171;
+  border-radius: 8px;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.compactSearchIcon {
+  color: #dc2626;
+  font-size: 12px;
+}
+
+.compactSearchInputWrap {
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: #fff;
+  transition: width 0.2s ease, opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.compactSearchInputWrapExpanded {
+  width: 148px;
+  opacity: 1;
+  pointer-events: auto;
+  border-color: #f87171;
+}
+
+.compactSearchInput {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--foreground);
+  height: 28px;
+  font-size: 12px;
+  outline: none;
+  padding: 0 8px;
+}
+
+.compactMatchCount {
+  min-width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
+  background: color-mix(in srgb, var(--background) 92%, var(--foreground) 2%);
+  color: color-mix(in srgb, var(--foreground) 80%, transparent);
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+}
+
+.searchNavigator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.searchNavBtn {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
+  background: var(--background);
+  color: color-mix(in srgb, var(--foreground) 85%, transparent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.searchNavBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.compactSessionMeta {
+  min-width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
+  background: var(--background);
+  color: color-mix(in srgb, var(--foreground) 80%, transparent);
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 8px;
+}
+
+.compactSearchInput::placeholder {
+  color: color-mix(in srgb, var(--foreground) 45%, transparent);
+}
+
+.compactSearchInput:focus {
+  outline: none;
+}
+
+.compactToolbar:focus-within {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, #ef4444 30%, transparent);
+}
+
+/* R9-2: When the panel is in its narrow (non-expanded) state AND the user
+ * is interacting with the search input (hover/focus expands it), fade out
+ * the non-essential middle controls so the search input has room to grow.
+ * Left edge (.compactNewBtn) and right edge (.compactSearchShell) stay
+ * visible. Animated width/opacity collapse keeps the layout shift smooth.
+ *
+ * `:has()` selector support: Chrome 105+, Safari 15.4+, Firefox 121+ (all
+ * baseline 2024). Graceful degradation: in older browsers the controls
+ * simply remain visible — the input stays small but nothing breaks. */
+.panel:not(.panelExpanded) .compactToolbar:has(.compactSearchInputWrapExpanded) .compactSummaryBtn,
+.panel:not(.panelExpanded) .compactToolbar:has(.compactSearchInputWrapExpanded) .pinToggleBtn,
+.panel:not(.panelExpanded) .compactToolbar:has(.compactSearchInputWrapExpanded) .compactSessionSelect,
+.panel:not(.panelExpanded) .compactToolbar:has(.compactSearchInputWrapExpanded) .sessionEditBtn,
+.panel:not(.panelExpanded) .compactToolbar:has(.compactSearchInputWrapExpanded) .sessionDeleteBtn {
+  width: 0;
+  min-width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition:
+    width 0.18s ease,
+    min-width 0.18s ease,
+    opacity 0.16s ease,
+    padding 0.18s ease,
+    border-width 0.18s ease;
+}
+/* Mirror the transition on the resting state so re-appearing also animates. */
+.compactSummaryBtn,
+.pinToggleBtn,
+.compactSessionSelect,
+.sessionEditBtn,
+.sessionDeleteBtn {
+  transition:
+    width 0.18s ease,
+    min-width 0.18s ease,
+    opacity 0.16s ease,
+    padding 0.18s ease,
+    border-width 0.18s ease,
+    background 0.16s ease-out,
+    color 0.16s ease-out;
+}
+
+.introCard {
+  border: 1px solid #efd4ce;
+  background: #fff7f5;
+  border-radius: 12px;
+  padding: 12px;
+  color: var(--foreground);
+}
+
+.introTitle {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.introText {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--foreground) 78%, transparent);
+}
+
+.historySearchInput {
+  width: 100%;
+  border: 1px solid color-mix(in srgb, var(--foreground) 18%, transparent);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 13px;
+  background: var(--background);
+  color: var(--foreground);
+  outline: none;
+}
+
+.historySearchInput:focus {
+  border-color: var(--chatbot-soft-green, #3F8F78);
+}
+
+.archiveSearchResults {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+  flex-shrink: 0;
+}
+
+.archiveSearchItem {
+  border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
+  background: color-mix(in srgb, var(--foreground) 3%, transparent);
+  color: var(--foreground);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+/* Messages */
+.messagesArea {
+  flex: 1;
+  overflow-y: auto;
+  /* R8 v3: bottom padding 2 → 1 to tighten the gap between the last
+   * assistant toolbar and the chips/input row. */
+  padding: 16px 16px 1px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--foreground) 25%, transparent) transparent;
+}
+.messagesArea::-webkit-scrollbar {
+  width: 8px;
+}
+.messagesArea::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--foreground) 22%, transparent);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.18s ease-out;
+}
+.messagesArea::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--foreground) 38%, transparent);
+  background-clip: padding-box;
+}
+
+.searchMatchItem {
+  border-radius: 10px;
+}
+
+.searchMatchActive {
+  outline: 2px solid color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 35%, transparent);
+  outline-offset: 4px;
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 7%, transparent);
+}
+
+/* Message Bubbles — v10 modern layout
+ * User   : right-aligned, compact max-width 72% (like ChatGPT / Claude.ai),
+ *          bubble with solid fill — it *is* an utterance.
+ * Assistant: reads full column width, rendered without a bubble background
+ *          so long markdown/tables breathe. A subtle left border still hints
+ *          at "this is a response" without feeling boxed-in. */
+.messageRow {
+  display: flex;
+  max-width: 100%;
+}
+.messageRowRight {
+  justify-content: flex-end;
+}
+.messageRowLeft {
+  justify-content: flex-start;
+}
+.messageBubble {
+  padding: 10px 14px;
+  border-radius: var(--nbk-radius-md);
+  font-size: 14px;
+  line-height: 1.55;
+  word-wrap: break-word;
+}
+.messageBubbleUser {
+  max-width: 72%;
+  background: var(--chatbot-soft-green, #3F8F78);
+  color: #fff;
+  border-top-right-radius: 2px;
+}
+.messageBubbleAssistant {
+  max-width: 100%;
+  flex: 1 1 auto;
+  background: transparent;
+  color: var(--foreground);
+  border: none;
+  border-left: 2px solid var(--nbk-accent-soft);
+  border-top-left-radius: 2px;
+  padding: 6px 14px 10px 16px;
+  box-shadow: none;
+  transition: border-color 0.18s ease-out;
+}
+.messageBubbleAssistant:hover {
+  border-left-color: color-mix(in srgb, var(--nbk-accent) 35%, transparent);
+}
+
+/* Inline per-section source markers — substituted into the rendered
+   markdown by `injectSourceMarkers` (MessageBubble.tsx) when the planner
+   emits `〔来源:DB〕` / `〔来源:Web · X〕` under `auto`/`always` online
+   modes. The pill is intentionally compact so it can sit at the start of
+   a paragraph without disrupting the line; colours follow the existing
+   reliability palette (DB ≈ official tier, Web ≈ web tier). Targeted via
+   :global so they survive react-markdown's CSS-modules pass. */
+.messageBubble :global(.nbkSrcMarker) {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 7px;
+  margin-right: 6px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+.messageBubble :global(.nbkSrcMarker_db) {
+  background: color-mix(in srgb, var(--nbk-accent, #1d4ed8) 12%, transparent);
+  color: var(--nbk-accent, #1d4ed8);
+  border: 1px solid color-mix(in srgb, var(--nbk-accent, #1d4ed8) 28%, transparent);
+}
+.messageBubble :global(.nbkSrcMarker_web) {
+  background: color-mix(in srgb, #0ea5e9 12%, transparent);
+  color: #0369a1;
+  border: 1px solid color-mix(in srgb, #0ea5e9 32%, transparent);
+}
+
+/* Error bubble — assistant skin overridden with a warm-red border and a
+   tinted background so the user can immediately tell this card is *not*
+   a real answer. Synthesized from SSE_ERROR; carries a Retry button and
+   a collapsible <details> with the raw payload. */
+.messageBubbleError {
+  border-left-color: var(--chatbot-warm-red, #ef4444);
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 6%, transparent);
+  border-radius: 6px;
+  padding: 10px 14px;
+}
+.errorBubbleHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--chatbot-warm-red, #ef4444);
+  margin-bottom: 4px;
+}
+.errorBubbleBody {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--foreground);
+  margin-bottom: 8px;
+}
+.errorBubbleActions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.errorBubbleRetryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: 1px solid var(--chatbot-warm-red, #ef4444);
+  border-radius: 6px;
+  background: var(--background);
+  color: var(--chatbot-warm-red, #ef4444);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.16s ease-out,
+    color 0.16s ease-out;
+}
+.errorBubbleRetryBtn:hover:not(:disabled) {
+  background: var(--chatbot-warm-red, #ef4444);
+  color: #fff;
+}
+.errorBubbleRetryBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.errorBubbleDetails {
+  margin-top: 4px;
+  font-size: 11.5px;
+  color: color-mix(in srgb, var(--foreground) 70%, transparent);
+}
+.errorBubbleDetails summary {
+  cursor: pointer;
+  user-select: none;
+  padding: 2px 0;
+}
+.errorBubbleDetails pre {
+  margin-top: 4px;
+  padding: 6px 8px;
+  background: color-mix(in srgb, var(--foreground) 6%, transparent);
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.4;
+  max-height: 180px;
+  overflow-y: auto;
+}
+/* Context bubble: warm platform palette (brand red + soft amber), muted
+   for a professional financial look — clearly an attached context card
+   without feeling decorative. */
+.messageBubbleContext {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  max-width: 72%;
+  background: var(--background);
+  color: var(--foreground);
+  border: 1px solid color-mix(in srgb, var(--nbk-accent) 55%, transparent);
+  border-radius: var(--nbk-radius-md);
+  border-top-right-radius: 2px;
+  box-shadow: var(--nbk-shadow-soft);
+}
+.contextCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 82%, #000000) 0%,
+    color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 95%, transparent) 55%,
+    #f59e0b 100%
+  );
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.contextCardHeader :global(.anticon) {
+  font-size: 12px;
+  color: #ffffff;
+  opacity: 0.9;
+}
+/* "Reveal source" button — pinned to the right of the context header.
+   Translucent so it doesn't compete with the title; full white on hover. */
+.contextRevealBtn {
+  margin-left: auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 11px;
+  padding: 0;
+  transition: background-color 0.18s ease-out, border-color 0.18s ease-out;
+}
+.contextRevealBtn:hover {
+  background: rgba(255, 255, 255, 0.32);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+.contextCardBody {
+  padding: 10px 14px 12px;
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 4%, var(--background));
+}
+.messageBubbleContext .contextSummary {
+  color: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 70%, black);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.messageBubbleContext .contextSummary :global(.anticon-paper-clip) {
+  color: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 85%, transparent);
+}
+.panelExpanded .messageBubbleUser {
+  max-width: 56%;
+}
+.panelExpanded .messageBubbleContext {
+  max-width: 56%;
+}
+
+/* References */
+.references {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.assistantActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+/* Stacks the assistant bubble + the meta strip (elapsed badge + action
+ * buttons) so meta sits BELOW the bubble (one row when there's space,
+ * wraps on narrow screens). */
+.assistantMessageWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+}
+.assistantMetaRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 0 4px;
+  /* R8 v2: zero top margin so the toolbar hugs the bubble. */
+  margin-top: 0;
+}
+.assistantMetaRow .elapsedBadge {
+  margin-top: 0;
+  margin-left: 8px;
+  /* Push the elapsed badge to the right of the toolbar so the meta row
+   * reads as: [actions toolbar]   [elapsed]. Toolbar stays anchored to
+   * the LEFT — the previous "centered" attempt drifted visually as the
+   * panel resized. */
+  margin-right: auto;
+  opacity: 0.85;
+}
+.assistantMetaRow .assistantActions {
+  margin-top: 0;
+  margin-left: 0;
+  justify-content: flex-start;
+}
+
+/* Suggested-chip "fly to input" ghost. Portalled to body so the flight
+   never clips against the panel edge — feels like the chip jumps into
+   the composer. Pointer-events disabled so it never blocks the cursor. */
+.chipFlyGhost {
+  position: fixed;
+  z-index: 1500;
+  pointer-events: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--chatbot-warm-red, #ef4444);
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 14%, var(--background));
+  border: 1px solid color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 50%, transparent);
+  border-radius: 999px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 30%, transparent);
+}
+
+.assistantActionBtn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 35%, transparent);
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 10%, transparent);
+  color: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 85%, black);
+  border-radius: 999px;
+  padding: 0;
+  font-size: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.18s ease-out, border-color 0.18s ease-out, color 0.18s ease-out;
+}
+/* Success-feedback variant for action buttons (Copy, Download, etc).
+   Bank-grade green, soft fill, swap matches the check-icon morph. */
+.actionBtnSuccess {
+  background: color-mix(in srgb, #16a34a 16%, transparent);
+  border-color: color-mix(in srgb, #16a34a 55%, transparent);
+  color: #15803d;
+}
+
+/* Context Card */
+.contextSummary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.contextDetail {
+  margin-top: 8px;
+  font-size: 12px;
+  opacity: 0.85;
+}
+.contextDetailRow {
+  display: flex;
+  gap: 8px;
+  padding: 2px 0;
+}
+.contextDetailKey {
+  font-weight: 500;
+  min-width: 80px;
+  color: color-mix(in srgb, var(--foreground) 60%, transparent);
+}
+
+/* Trace Accordion */
+.traceContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 0;
+}
+/* Custom collapsible thinking-chain panel — three modes:
+ *   1. scroll    : fixed-height list, auto-pinned to latest step
+ *                  (default while streaming so the chain doesn't push
+ *                   the bubble off-screen)
+ *   2. expanded  : natural flow, every step visible
+ *   3. collapsed : header only — "n steps · click to expand"
+ */
+.thinkingPanel {
+  display: flex;
+  flex-direction: column;
+  /* Streaming TraceAccordion is a direct child of .messagesArea (a flex
+   * column). Without this, default flex-shrink:1 lets a tall thread
+   * squeeze the live panel down to its header (~2px body) on turn 2+. */
+  flex-shrink: 0;
+  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--foreground) 4%, transparent);
+  overflow: hidden;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+/* Streaming variant — soft brand-red tint so the user clearly sees the
+ * orchestration affordance even when collapsed. */
+.thinkingPanelStreaming {
+  border-color: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 30%, transparent);
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 5%, transparent);
+}
+.thinkingHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+  cursor: pointer;
+  font: inherit;
+  color: color-mix(in srgb, var(--foreground) 80%, transparent);
+  text-align: left;
+}
+.thinkingHeader:hover {
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+}
+.thinkingHeaderTitle {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+.thinkingHeaderCount {
+  color: color-mix(in srgb, var(--foreground) 55%, transparent);
+  font-weight: 400;
+}
+.thinkingModeBtn {
+  border: 1px solid color-mix(in srgb, var(--foreground) 14%, transparent);
+  background: var(--background);
+  color: color-mix(in srgb, var(--foreground) 65%, transparent);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.thinkingModeBtn:hover {
+  border-color: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 35%, transparent);
+  color: var(--chatbot-warm-red, #ef4444);
+}
+.thinkingBody {
+  display: flex;
+  flex-direction: column;
+}
+.thinkingBodyScroll {
+  max-height: 180px;
+  overflow-y: auto;
+  /* Let scroll chain to the parent once we hit either edge — keeps the
+     outer page from getting "stuck" when the cursor parks on the chain. */
+  overscroll-behavior-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--foreground) 22%, transparent) transparent;
+}
+.thinkingBodyScroll::-webkit-scrollbar {
+  width: 6px;
+}
+.thinkingBodyScroll::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--foreground) 20%, transparent);
+  border-radius: 999px;
+}
+.thinkingStep {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 12px;
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
+}
+.thinkingStep:first-child {
+  border-top: none;
+}
+.thinkingStepLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: color-mix(in srgb, var(--foreground) 78%, transparent);
+}
+.thinkingStepLabel:hover {
+  color: var(--foreground);
+}
+.thinkingStepDetail {
+  margin: 4px 0 2px 22px;
+  padding: 6px 8px;
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  border-radius: 6px;
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+  font-size: 11px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: color-mix(in srgb, var(--foreground) 70%, transparent);
+}
+.analysisNotice {
+  border: 1px solid color-mix(in srgb, var(--chatbot-soft-green, #3F8F78) 30%, transparent);
+  background: color-mix(in srgb, var(--chatbot-soft-green, #3F8F78) 10%, transparent);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.analysisNoticeStreaming {
+  border-color: color-mix(in srgb, var(--chatbot-soft-green, #3F8F78) 45%, transparent);
+}
+.analysisNoticeTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--foreground) 95%, transparent);
+}
+.analysisNoticeMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  color: color-mix(in srgb, var(--foreground) 70%, transparent);
+}
+.analysisNoticeTimer {
+  white-space: nowrap;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--foreground) 85%, transparent);
+}
+.traceItem {
+  font-size: 12px;
+  color: color-mix(in srgb, var(--foreground) 70%, transparent);
+}
+.traceLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.traceDetail {
+  max-height: 200px;
+  overflow: auto;
+  font-size: 12px;
+  font-family: monospace;
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  padding: 8px;
+  border-radius: 6px;
+  margin-top: 4px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Suggested Chips — wrap to multiple lines. Capped at ~2 rows; overflow
+   becomes a slim vertical scrollbar (R9-3) so a busy suggestion set
+   can't dominate the panel and crowd out the conversation/input. */
+.chipsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  /* R8 v3: padding squeezed to 1px above/below so the chips sit flush
+   * against output above and input below. Drops to display:none when
+   * empty (rule below). */
+  padding: 1px 16px;
+  /* One chip ≈ 31px tall (6px+6px padding + 1.35*12.5px line + 2px borders).
+   * 2 rows + 6px gap + 2px container padding ≈ 70px. Slight buffer to
+   * avoid clipping descenders / focus rings. */
+  max-height: 74px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-shrink: 0;
+  /* Slim Firefox scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--foreground) 22%, transparent) transparent;
+}
+.chipsContainer:empty {
+  display: none;
+}
+.chipsContainer::-webkit-scrollbar {
+  width: 6px;
+}
+.chipsContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chipsContainer::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--foreground) 18%, transparent);
+  border-radius: 3px;
+}
+.chipsContainer::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--foreground) 32%, transparent);
+}
+.suggestionChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  background: color-mix(in srgb, var(--foreground) 4%, transparent);
+  color: var(--foreground);
+  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 450;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  max-width: 100%;
+  white-space: normal;
+  word-break: break-word;
+  transition:
+    background 0.16s ease-out,
+    border-color 0.16s ease-out,
+    color 0.16s ease-out,
+    transform 0.16s ease-out;
+}
+.suggestionChip:hover {
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 8%, var(--background));
+  border-color: var(--chatbot-warm-red, #ef4444);
+  color: var(--chatbot-warm-red, #ef4444);
+  transform: translateY(-1px);
+}
+.suggestionChip:active {
+  transform: translateY(0);
+}
+.suggestionChip:focus-visible {
+  outline: 2px solid var(--chatbot-warm-red, #ef4444);
+  outline-offset: 2px;
+}
+
+/* Online-mode toggle (3-state segmented) — sits between the suggested
+   chips and the input. Compact pills so the row never dominates. Mirrors
+   the chip-row's flex-shrink:0 so a tall thread can't squeeze it. */
+.onlineModeToggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 16px 2px;
+  flex-shrink: 0;
+  font-size: 11.5px;
+  color: color-mix(in srgb, var(--foreground) 60%, transparent);
+}
+.onlineModeLabel {
+  font-weight: 500;
+  margin-right: 2px;
+}
+.onlineModeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 14%, transparent);
+  background: var(--background);
+  color: color-mix(in srgb, var(--foreground) 70%, transparent);
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+  transition:
+    background 0.16s ease-out,
+    color 0.16s ease-out,
+    border-color 0.16s ease-out;
+}
+.onlineModeBtn:hover {
+  border-color: color-mix(in srgb, var(--nbk-accent, #1d4ed8) 35%, transparent);
+  color: var(--foreground);
+}
+.onlineModeBtnActive {
+  background: var(--nbk-accent, #1d4ed8);
+  border-color: var(--nbk-accent, #1d4ed8);
+  color: #fff;
+}
+.onlineModeBtnActive:hover {
+  background: var(--nbk-accent, #1d4ed8);
+  color: #fff;
+}
+.onlineModeBtnGlyph {
+  display: inline-flex;
+  font-size: 12px;
+}
+
+/* Input */
+.inputArea {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* R8 v3: top padding 4 → 1 so the input border-top sits right under
+   * the chips/toolbar; bottom kept at 10 for thumb comfort on touch. */
+  padding: 1px 16px 10px;
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
+  flex-shrink: 0;
+}
+.inputField {
+  flex: 1;
+  border: 1px solid color-mix(in srgb, var(--foreground) 20%, transparent);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  background: var(--background);
+  color: var(--foreground);
+  outline: none;
+  resize: none;
+  font-family: inherit;
+}
+.inputField:focus {
+  border-color: var(--chatbot-warm-red, #ef4444);
+}
+/* Brief "catch" pulse fired when a flying chip lands. The border flashes
+ * to the brand red, a soft top-down inset glow suggests text dropping in,
+ * and a tiny scale impulse gives a tactile thud. Paired with
+ * ChipFlyOverlay's downward fall to make both reads as one transfer. */
+.inputFieldCatching {
+  /* R8 v2: stretched 0.46 → 0.7s to match the slower chip flight so the
+   * pulse reads as the actual landing, not a separate twitch. */
+  animation: inputCatchPulse 0.7s ease-out;
+}
+@keyframes inputCatchPulse {
+  0% {
+    border-color: var(--chatbot-warm-red, #ef4444);
+    box-shadow: inset 0 8px 8px -6px color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 55%, transparent);
+    transform: scaleY(1.04);
+  }
+  35% {
+    border-color: var(--chatbot-warm-red, #ef4444);
+    box-shadow: inset 0 4px 6px -4px color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 30%, transparent);
+    transform: scaleY(0.98);
+  }
+  100% {
+    border-color: color-mix(in srgb, var(--foreground) 20%, transparent);
+    box-shadow: none;
+    transform: scaleY(1);
+  }
+}
+.sendBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--chatbot-warm-red, #ef4444);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+.sendBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.stopBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--chatbot-warm-red, #ef4444);
+  color: #fff;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+}
+.stopBtn:hover {
+  filter: brightness(0.96);
+}
+
+/* Bot Icon (for component context injection)
+   Both the legacy inline `<button class="botIcon">` and the new
+   `<span class="botIconHost"><button class="botIcon"/>` are anchored
+   to the host card's top-right via `.botIcon` itself, so component
+   layouts (e.g. `.overviewAbout`) don't need to be flex-aware. */
+.botIconHost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.botIcon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--chatbot-warm-red, #ef4444);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.7;
+  font-size: 12px;
+  border: none;
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out, background-color 0.2s ease-out, width 0.22s ease-out, height 0.22s ease-out;
+}
+.botIcon:hover {
+  opacity: 1;
+}
+/* Visibility tiers. "always" = legacy full-bleed; "hover" = shows only
+   when the parent .botIconContainer is hovered; "quiet" = a small dot
+   at rest that grows into the full persona on parent hover. */
+.botIconVisible {
+  opacity: 0.85;
+}
+.botIconHoverOnly {
+  opacity: 0;
+  transform: scale(0.75);
+  pointer-events: none;
+}
+.botIconContainer:hover .botIconHoverOnly,
+.botIconContainer:focus-within .botIconHoverOnly {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+.botIconQuiet {
+  width: 10px;
+  height: 10px;
+  opacity: 0.35;
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 60%, transparent);
+  color: transparent;
+  animation: botIconBreathe 3s ease-in-out infinite;
+}
+.botIconQuiet > :global(*) {
+  opacity: 0;
+  transition: opacity 0.22s ease-out;
+}
+.botIconContainer:hover .botIconQuiet,
+.botIconContainer:focus-within .botIconQuiet {
+  width: 26px;
+  height: 26px;
+  opacity: 1;
+  background: var(--chatbot-warm-red, #ef4444);
+  color: #fff;
+  animation: none;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 35%, transparent);
+}
+.botIconContainer:hover .botIconQuiet > :global(*),
+.botIconContainer:focus-within .botIconQuiet > :global(*) {
+  opacity: 1;
+}
+@keyframes botIconBreathe {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.15); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .botIconQuiet { animation: none; }
+}
+/* First-visit onboarding pulse — two rings fan out so users learn the
+   affordance exists, then localStorage silences it forever. */
+.botIconPulse {
+  animation: botIconPulse 0.9s ease-out 2;
+}
+@keyframes botIconPulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 55%, transparent);
+  }
+  80% {
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 0%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 0%, transparent);
+  }
+}
+.botIconContainer {
+  position: relative;
+}
+/* Animated flowing gradient border, revealed only while the bot icon itself
+   is hovered (not when any part of the wrapped component is hovered).
+   Uses mask-composite to produce a hollow border from a gradient fill. */
+.botIconContainer::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 10px;
+  padding: 2px;
+  background: linear-gradient(
+    90deg,
+    #ef4444,
+    #f59e0b,
+    #10b981,
+    #3b82f6,
+    #a855f7,
+    #ef4444
+  );
+  background-size: 300% 100%;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.18s ease-in-out;
+  pointer-events: none;
+  animation: chatBorderFlow 4s linear infinite;
+  animation-play-state: paused;
+}
+.botIconContainer:has(> .botIcon:hover)::before {
+  opacity: 1;
+  animation-play-state: running;
+}
+@keyframes chatBorderFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 300% 50%;
+  }
+}
+
+/* ==========================================================================
+   Reliability badges, tooltips, and sources footer (T5)
+   Tier palette: verified/official/reference/web/ai_generated.
+   Each tier defines three CSS custom props consumed by badge + tooltip +
+   source dot, so adding a new tier only touches one .tier_* block.
+   ========================================================================== */
+.tier_verified {
+  --tier-fg: #065f46;
+  --tier-bg: #d1fae5;
+  --tier-border: #10b981;
+}
+.tier_official {
+  --tier-fg: #1e40af;
+  --tier-bg: #dbeafe;
+  --tier-border: #3b82f6;
+}
+.tier_reference {
+  --tier-fg: #92400e;
+  --tier-bg: #fef3c7;
+  --tier-border: #f59e0b;
+}
+.tier_web {
+  --tier-fg: #9a3412;
+  --tier-bg: #ffedd5;
+  --tier-border: #f97316;
+}
+.tier_ai_generated {
+  --tier-fg: #991b1b;
+  --tier-bg: #fee2e2;
+  --tier-border: #ef4444;
+}
+
+.messageBubbleBadgeSlot {
+  float: right;
+  margin: 0 0 4px 8px;
+}
+.reliabilityBadge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border: 1px solid var(--tier-border, #d4d4d8);
+  background: var(--tier-bg, #f4f4f5);
+  color: var(--tier-fg, #52525b);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: help;
+  user-select: none;
+  white-space: nowrap;
+}
+.reliabilityBadgeGlyph {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+}
+.reliabilityBadgeLabel {
+  font-size: 11px;
+}
+.reliabilityTooltip {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 1000;
+  min-width: 240px;
+  max-width: 320px;
+  padding: 10px 12px;
+  background: var(--tier-bg, #f4f4f5);
+  color: var(--tier-fg, #27272a);
+  border: 1px solid var(--tier-border, #d4d4d8);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.14s ease-out, transform 0.14s ease-out;
+  white-space: normal;
+  text-align: left;
+}
+.reliabilityBadge:hover > .reliabilityTooltip,
+.reliabilityBadge:focus-within > .reliabilityTooltip {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.reliabilityTooltipTitle {
+  display: block;
+  font-weight: 600;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+.reliabilityTooltipBlurb {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--tier-fg);
+  opacity: 0.88;
+}
+.reliabilityTooltipSources {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--tier-border);
+}
+.reliabilityTooltipSourceRow {
+  display: flex;
+  gap: 4px;
+  align-items: baseline;
+  font-size: 11px;
+}
+.reliabilityTooltipSourceRow a {
+  color: var(--tier-fg);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.reliabilityTooltipSourceProvider {
+  opacity: 0.6;
+  font-size: 10px;
+}
+.reliabilityTooltipMore {
+  font-size: 10px;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+.sourcesFooter {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed color-mix(in srgb, var(--foreground) 18%, transparent);
+  font-size: 12px;
+}
+.sourcesFooterHeader {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: color-mix(in srgb, var(--foreground) 55%, transparent);
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.sourcesFooterHeader :global(.anticon) {
+  font-size: 11px;
+}
+.sourcesFooterList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sourcesFooterItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  line-height: 1.35;
+}
+.sourcesFooterDot {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--tier-fg, #a1a1aa);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--tier-fg, #a1a1aa) 22%, transparent);
+}
+/* Type chip: the "Internal DB / Wikipedia / Web" pill — tinted by tier so
+   users can glance the palette: verified=blue, reference=violet, web=amber, etc.
+   Uses the tier_* custom properties (--tier-fg/bg/border). */
+/* Type pill: the "Internal DB / Wikipedia / Web" chip, tier-coloured so
+   users can scan the palette (verified=green, reference=amber, web=orange,
+   ai_generated=red). */
+.sourcesFooterType {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tier-fg, color-mix(in srgb, var(--foreground) 65%, transparent));
+  background: var(--tier-bg, color-mix(in srgb, var(--foreground) 6%, transparent));
+  border: 1px solid var(--tier-border, color-mix(in srgb, var(--foreground) 15%, transparent));
+  line-height: 1.5;
+}
+/* Content text (the actual table / article / card name). Stronger weight
+   so the eye lands here after scanning the type pill. */
+.sourcesFooterContent {
+  color: color-mix(in srgb, var(--foreground) 90%, transparent);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  max-width: 280px;
+  font-weight: 600;
+  font-size: 12px;
+}
+a.sourcesFooterContent:hover {
+  color: var(--chatbot-warm-red, #ef4444);
+  text-decoration: underline;
+}
+.sourcesFooterDomain {
+  font-size: 10px;
+  color: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 75%, var(--foreground));
+  flex-shrink: 0;
+  padding: 1px 6px;
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 22%, transparent);
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+}
+
+.offerWebSearchBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  padding: 3px 9px;
+  background: #fff;
+  color: var(--chatbot-warm-red, #ef4444);
+  border: 1px solid var(--chatbot-warm-red, #ef4444);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+}
+.offerWebSearchBtn:hover {
+  background: var(--chatbot-warm-red, #ef4444);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   Markdown rendering — used by assistant messages.
+   Keeps the chat typography distinct from the host app: tighter
+   line-height, smaller headings, GFM tables that don't blow out
+   the bubble width.
+   ============================================================ */
+.markdownBody {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: inherit;
+}
+.markdownBody p {
+  margin: 0 0 0.55em;
+}
+.markdownBody p:last-child {
+  margin-bottom: 0;
+}
+.markdownBody h1,
+.markdownBody h2,
+.markdownBody h3,
+.markdownBody h4 {
+  margin: 0.8em 0 0.4em;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.markdownBody h1 { font-size: 1.15em; }
+.markdownBody h2 { font-size: 1.08em; }
+.markdownBody h3 { font-size: 1.02em; }
+.markdownBody h4 { font-size: 0.98em; }
+.markdownBody ul,
+.markdownBody ol {
+  margin: 0 0 0.55em;
+  padding-left: 1.25em;
+}
+.markdownBody li { margin-bottom: 0.2em; }
+.markdownBody li > p { margin: 0; }
+.markdownBody blockquote {
+  margin: 0 0 0.55em;
+  padding: 0.4em 0.8em;
+  border-left: 3px solid color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 55%, transparent);
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 6%, transparent);
+  border-radius: 0 8px 8px 0;
+  color: color-mix(in srgb, var(--foreground) 82%, transparent);
+  font-style: italic;
+}
+.markdownBody :not(pre) > code {
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.88em;
+  background: color-mix(in srgb, var(--foreground) 10%, transparent);
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+}
+.markdownBody a {
+  color: var(--chatbot-warm-red, #ef4444);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+.markdownBody a:hover {
+  text-decoration-thickness: 2px;
+}
+.markdownBody table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0 0 0.6em;
+  font-size: 0.92em;
+  table-layout: auto;
+  display: block;
+  overflow-x: auto;
+}
+.markdownBody th,
+.markdownBody td {
+  border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
+  padding: 5px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+.markdownBody th {
+  background: color-mix(in srgb, var(--foreground) 7%, transparent);
+  font-weight: 600;
+}
+.markdownBody hr {
+  border: 0;
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
+  margin: 0.8em 0;
+}
+.markdownBody img {
+  max-width: 100%;
+  border-radius: 6px;
+}
+
+/* Citation badge — rendered for `[N]` tokens when withCitations is set.
+   Styled as a compact superscript pill that scrolls to the source row. */
+.citationBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 16px;
+  padding: 0 4px;
+  margin: 0 1px;
+  border-radius: 4px;
+  border: none;
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 14%, transparent);
+  color: var(--chatbot-warm-red, #ef4444);
+  font-size: 10.5px;
+  font-weight: 600;
+  cursor: pointer;
+  vertical-align: super;
+  line-height: 1;
+  transition: background-color 0.15s ease-out, transform 0.15s ease-out;
+}
+.citationBadge:hover {
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 28%, transparent);
+  transform: translateY(-1px);
+}
+
+/* Fenced code blocks — dark-panel aesthetic with language label + copy. */
+.codeBlockShell {
+  position: relative;
+  margin: 0 0 0.6em;
+  border-radius: 8px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--foreground) 92%, transparent);
+  color: color-mix(in srgb, var(--background) 92%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--foreground) 20%, transparent);
+}
+.codeBlockBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px;
+  background: color-mix(in srgb, var(--foreground) 86%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--foreground) 30%, transparent);
+}
+.codeBlockLang {
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--background) 70%, transparent);
+  font-weight: 600;
+}
+.codeBlockCopyBtn {
+  width: 24px;
+  height: 24px;
+  border: 1px solid color-mix(in srgb, var(--background) 25%, transparent);
+  background: color-mix(in srgb, var(--background) 8%, transparent);
+  color: color-mix(in srgb, var(--background) 90%, transparent);
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 11px;
+  transition: background-color 0.15s ease-out;
+}
+.codeBlockBody {
+  margin: 0;
+  padding: 10px 12px;
+  overflow-x: auto;
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.55;
+}
+.codeBlockBody code {
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+ * P2/P4: User message actions, assistant feedback, revert affordances,
+ * edit modal, citation flash, new-message indicator, long-message
+ * collapse, drag-drop highlight, persona/region badge, slash menu,
+ * command palette and onboarding empty state.
+ * ──────────────────────────────────────────────────────────────── */
+
+/* User-message three-piece toolbar (Copy / Edit / Regenerate) */
+.userActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 6px;
+  opacity: 0;
+  transform: translateX(4px);
+  transition: opacity 0.16s ease-out, transform 0.16s ease-out;
+}
+.messageRowUser:hover .userActions,
+.messageRowUser:focus-within .userActions {
+  opacity: 1;
+  transform: translateX(0);
+}
+.userActionBtn {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
+  background: color-mix(in srgb, var(--background) 92%, transparent);
+  color: color-mix(in srgb, var(--foreground) 60%, transparent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.16s ease-out, color 0.16s ease-out, border-color 0.16s ease-out;
+}
+.userActionBtn:hover {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--background));
+  border-color: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+/* Assistant feedback row (thumbs up/down + read-aloud).
+ * No left margin — the parent `.assistantActions` already provides the
+ * 6px flex gap, so adding margin here makes the spacing between the
+ * Export button and the first feedback button visibly larger than the
+ * gaps between the feedback buttons themselves. */
+.assistantFeedback {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.actionBtnDanger {
+  color: #b8413f !important;
+  background: color-mix(in srgb, #b8413f 8%, transparent) !important;
+  border-color: color-mix(in srgb, #b8413f 32%, transparent) !important;
+}
+.actionBtnActive {
+  color: var(--accent) !important;
+  background: color-mix(in srgb, var(--accent) 12%, transparent) !important;
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important;
+}
+
+/* Revert separator (between messages). Idle = invisible hit-strip.
+ * Hovering anywhere on the strip immediately promotes to the dashed-line
+ * `.revertSeparatorHint` button (no delay). Leaving the strip drops back
+ * to invisible. Clicking the dashed line promotes to the armed danger
+ * banner; clicking the banner confirms.
+ *
+ * R8 v3 (rework): the turn-2+ hover failure root-cause was that assistant
+ * `MessageBubble` neighbours render absolutely-positioned action toolbars
+ * that overlap downward into the gap where the separator lives. Raising
+ * z-index alone wasn't enough because the toolbars caught `pointerenter`
+ * before the separator could. Fix: make the separator its own isolated
+ * stacking context AND raise z-index above any sibling toolbar. We also
+ * pin pointer-events:auto so React Flip / framer transforms upstream
+ * never accidentally disable hit-testing on the strip. */
+.revertSeparator {
+  position: relative;
+  min-height: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  margin: 4px 0;
+  cursor: pointer;
+  z-index: 20;
+  isolation: isolate;
+  pointer-events: auto;
+}
+.revertSeparator[data-phase='hinted'],
+.revertSeparator[data-phase='armed'] {
+  min-height: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+}
+.revertSeparatorHint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px dashed color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 45%, transparent);
+  border-bottom: 1px dashed color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 45%, transparent);
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 5%, transparent);
+}
+.revertSeparatorHintLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--foreground) 70%, transparent);
+  background: var(--background);
+  border-radius: 12px;
+}
+.revertSeparatorArmed {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 6px 14px;
+  cursor: pointer;
+  border: 1px solid #d97706;
+  background: linear-gradient(180deg, #fff7ed, #ffedd5);
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #9a3412;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.18);
+}
+.revertSeparatorArmedIcon {
+  font-size: 14px;
+  color: #d97706;
+}
+.revertSeparatorHintText {
+  font-weight: 400;
+  font-size: 11px;
+  color: color-mix(in srgb, #9a3412 70%, transparent);
+}
+
+/* Edit modal */
+.editModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, #000 35%, transparent);
+  border: none;
+  cursor: pointer;
+  z-index: 9050;
+  padding: 0;
+}
+.editModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(560px, 92vw);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 9060;
+  background: var(--background);
+  border-radius: 16px;
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.28);
+  border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+  padding: 18px 20px 16px;
+  transform-origin: center center;
+}
+.editModalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.editModalTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--foreground);
+}
+.editModalCloseBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: color-mix(in srgb, var(--foreground) 60%, transparent);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.editModalCloseBtn:hover {
+  background: color-mix(in srgb, var(--foreground) 6%, transparent);
+}
+.editModalNote {
+  font-size: 12px;
+  color: color-mix(in srgb, var(--foreground) 64%, transparent);
+  margin: 4px 0 10px;
+  line-height: 1.5;
+}
+.editModalTextarea {
+  width: 100%;
+  min-height: 96px;
+  resize: vertical;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--accent) 3%, var(--background));
+  outline: none;
+  transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+.editModalTextarea:focus {
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+.editModalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  gap: 12px;
+}
+.editModalHint {
+  font-size: 11px;
+  color: color-mix(in srgb, var(--foreground) 50%, transparent);
+}
+.editModalSendBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.15s ease-out, opacity 0.15s ease-out;
+}
+.editModalSendBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Citation badge inside markdown bodies */
+.citationBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 6px;
+  margin: 0 2px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.7;
+  cursor: pointer;
+  transition: background-color 0.15s ease-out, transform 0.12s ease-out;
+}
+.citationBadge:hover {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  transform: translateY(-1px);
+}
+
+/* Source-row flash (used by handleCitationJump) */
+@keyframes nbkSourceRowFlash {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent);
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+  }
+  60% {
+    box-shadow: 0 0 0 6px transparent;
+    background: color-mix(in srgb, var(--accent) 4%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+    background: transparent;
+  }
+}
+.sourceRowFlash {
+  animation: nbkSourceRowFlash 1.2s ease-out;
+  border-radius: 8px;
+}
+
+/* New-messages indicator */
+.newMessagesIndicator {
+  position: absolute;
+  left: 50%;
+  bottom: 88px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  border-radius: 999px;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--accent) 32%, transparent);
+  z-index: 30;
+}
+
+/* Long-message collapse (assistant) */
+.longMessageWrap {
+  position: relative;
+}
+.longMessageCollapsed {
+  max-height: 280px;
+  overflow: hidden;
+  position: relative;
+}
+.longMessageCollapsed::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 96px;
+  background: linear-gradient(180deg, transparent, var(--background));
+  pointer-events: none;
+}
+.longMessageToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  background: var(--background);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Drag-drop overlay (card injection) */
+.dropZoneOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 2px dashed color-mix(in srgb, var(--accent) 60%, transparent);
+  border-radius: inherit;
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 14px;
+  z-index: 40;
+  pointer-events: none;
+  backdrop-filter: blur(2px);
+}
+
+/* Persona / region badge in the header */
+.personaBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+/* Slash autocomplete — uses `--chatbot-warm-red` (the project brand
+   accent) instead of `--accent`, which is not defined globally and
+   was rendering borders/key labels as transparent. */
+.slashMenu {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: calc(100% + 8px);
+  z-index: 60;
+  background: var(--background);
+  border: 1px solid color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 30%, transparent);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.18);
+  padding: 6px;
+  max-height: 280px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* Keep wheel events landing on the menu instead of being swallowed by
+   * the framer-motion transform layer. */
+  pointer-events: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--foreground) 25%, transparent) transparent;
+}
+.slashMenu::-webkit-scrollbar {
+  width: 6px;
+}
+.slashMenu::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--foreground) 22%, transparent);
+  border-radius: 999px;
+}
+.slashMenuItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 13px;
+  color: var(--foreground);
+}
+.slashMenuItem:hover,
+.slashMenuItemActive {
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 12%, transparent);
+}
+.slashMenuItemKey {
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+  font-weight: 600;
+  color: var(--chatbot-warm-red, #ef4444);
+  font-size: 12px;
+  min-width: 92px;
+}
+.commandAliasHint {
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 11px;
+  opacity: 0.55;
+}
+/* Category-tinted variants — general commands feel like neutral system
+   utilities (rename / clear / copy …); banking commands stay in the
+   project brand red so they read as "this is the product". */
+.slashMenuItemKeyGeneral {
+  color: color-mix(in srgb, var(--foreground) 75%, transparent);
+}
+.slashMenuItemKeyBanking {
+  color: var(--chatbot-warm-red, #ef4444);
+}
+.slashMenuItemTagGeneral {
+  color: color-mix(in srgb, var(--foreground) 50%, transparent);
+}
+.slashMenuItemTagBanking {
+  color: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 70%, black);
+}
+.slashMenuItemDesc {
+  flex: 1;
+  color: color-mix(in srgb, var(--foreground) 64%, transparent);
+  font-size: 12px;
+}
+.slashMenuItemTag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--foreground) 50%, transparent);
+}
+
+/* Command palette */
+.commandPaletteBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9070;
+  background: color-mix(in srgb, #000 36%, transparent);
+  border: none;
+  cursor: pointer;
+}
+/* Centering wrapper. position: fixed + grid + place-items keeps the
+ * panel pinned to viewport centre WITHOUT writing a transform, leaving
+ * the transform free for framer-motion's entrance variant. The wrapper
+ * is pointer-events:none so the backdrop behind it still receives the
+ * close click; the panel itself re-enables pointer events. */
+.commandPaletteCentering {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 9080;
+  pointer-events: none;
+}
+.commandPalette {
+  pointer-events: auto;
+  width: min(560px, 92vw);
+  max-height: 64vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+  border: 1px solid color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 14%, transparent);
+  border-radius: 16px;
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.28);
+  overflow: hidden;
+}
+.commandPaletteSearch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.commandPaletteInput {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  color: var(--foreground);
+}
+.commandPaletteList {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  overflow-y: auto;
+}
+.commandPaletteSection {
+  padding: 8px 10px 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--foreground) 48%, transparent);
+}
+.commandPaletteItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--foreground);
+  text-align: left;
+}
+.commandPaletteItemActive {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+.commandPaletteItemDesc {
+  flex: 1;
+  color: color-mix(in srgb, var(--foreground) 60%, transparent);
+  font-size: 12px;
+}
+.commandPaletteItemShortcut {
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+  font-size: 11px;
+  color: color-mix(in srgb, var(--foreground) 50%, transparent);
+}
+
+/* Voice-input button — designed to match the send button so the toolbar
+   reads as a balanced pair of brand-red circular controls. */
+.voiceBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--chatbot-warm-red, #ef4444);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 16px;
+  padding: 0;
+}
+.voiceBtn:hover {
+  filter: brightness(0.96);
+}
+/* Active = recording. Keeps the same shape but adds a high-visibility
+   pulsing ring + 3-bar waveform indicator (rendered in TSX) so the user
+   gets ChatGPT-style "I'm listening" feedback. */
+.voiceBtnActive {
+  background: var(--chatbot-warm-red, #ef4444) !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.55);
+  animation: voiceBtnPulse 1.2s ease-out infinite;
+}
+@keyframes voiceBtnPulse {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.55); }
+  70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+/* 3-bar waveform shown inside the voice button when listening — the
+   bars stretch up/down at staggered intervals to feel like a live mic. */
+.voiceBars {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 14px;
+}
+.voiceBars span {
+  display: inline-block;
+  width: 3px;
+  height: 4px;
+  border-radius: 2px;
+  background: #fff;
+  animation: voiceBarsBeat 0.9s ease-in-out infinite;
+}
+.voiceBars span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.voiceBars span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes voiceBarsBeat {
+  0%, 100% { height: 4px; }
+  50% { height: 14px; }
+}
+
+/* Empty-state guided cards */
+.emptyStateGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+.emptyStateCard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
+  background: color-mix(in srgb, var(--accent) 4%, var(--background));
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.18s ease-out, background-color 0.15s ease-out;
+}
+.emptyStateCard:hover {
+  background: color-mix(in srgb, var(--accent) 10%, var(--background));
+  transform: translateY(-1px);
+}
+.emptyStateCardTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+}
+.emptyStateCardDesc {
+  font-size: 11px;
+  color: color-mix(in srgb, var(--foreground) 64%, transparent);
+  line-height: 1.45;
+}
+
+/* Pinned session selector indicator */
+.pinnedSessionPin {
+  font-size: 11px;
+  margin-right: 4px;
+  color: var(--accent);
+}
+.pinToggleBtn {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
+  background: color-mix(in srgb, var(--background) 92%, transparent);
+  color: color-mix(in srgb, var(--foreground) 60%, transparent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 4px;
+}
+.pinToggleBtnActive {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+/* Per-session rename + delete affordances. They sit immediately after
+ * the session-picker `<select>` and operate on whichever session it has
+ * focused. Visual baseline matches `.pinToggleBtn` so the toolbar reads
+ * as one cohesive cluster; delete carries a soft warm-red tint to flag
+ * destructiveness without dominating the row. */
+.sessionEditBtn {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
+  background: color-mix(in srgb, var(--background) 92%, transparent);
+  color: color-mix(in srgb, var(--foreground) 60%, transparent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 4px;
+}
+.sessionEditBtn:hover {
+  color: var(--chatbot-warm-red, #ef4444);
+  border-color: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 35%, transparent);
+}
+.sessionDeleteBtn {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 22%, transparent);
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 6%, transparent);
+  color: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 80%, var(--foreground));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 4px;
+}
+.sessionDeleteBtn:hover {
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 14%, transparent);
+}
+.sessionDeleteBtnDisabled,
+.sessionDeleteBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Sibling navigation (branch) */
+.branchNav {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+  font-size: 11px;
+  color: color-mix(in srgb, var(--foreground) 60%, transparent);
+}
+.branchNavBtn {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.branchNavBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+ * v10 modernization layer — added at the bottom so existing rules
+ * keep working but the new layout/responsive concerns can be tuned
+ * in one place. Order: user-stack toolbar → elapsed badge → unified
+ * action button polish → revert hint button reset → @media tier
+ * (mobile / tablet / desktop / wide).
+ * ──────────────────────────────────────────────────────────────── */
+
+/* User toolbar moves below the bubble (column layout) so the input
+ * and assistant toolbars sit in the same vertical position relative
+ * to their bubble. Hover-reveals to keep the row uncluttered. */
+.messageRowUserStack {
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.messageRowUserStack .userActions {
+  margin-right: 0;
+  margin-top: 2px;
+  transform: translateY(-2px);
+}
+.messageRowUserStack:hover .userActions,
+.messageRowUserStack:focus-within .userActions {
+  transform: translateY(0);
+}
+
+/* "Resolved in Xs" pill — embedded inside the assistant meta row at
+ * the bottom edge so the long-running banner can disappear once
+ * the stream finishes. */
+.elapsedBadge {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px 3px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 500;
+  color: var(--nbk-muted);
+  background: color-mix(in srgb, var(--foreground) 4%, transparent);
+  border: 1px solid var(--nbk-line);
+}
+.elapsedBadge :global(.anticon) {
+  font-size: 11px;
+}
+
+/* Brand-themed antd Modals — used for session rename + Modal.confirm
+ * destructive prompts. Antd's defaults look generic; we re-skin the
+ * outer chrome so the dialogs visually belong to the chatbot column.
+ *   - .brandModal           → applied via `className` on <Modal>
+ *   - .brandModalWrap       → applied via `wrapClassName` (covers mask + container)
+ *   - .brandModalWrapDanger → adds the warm-red accent for delete/destroy prompts
+ *   - .brandModalInput      → input inside the rename modal, brand focus ring
+ */
+.brandModalWrap :global(.ant-modal-mask) {
+  background: color-mix(in srgb, #0f172a 38%, transparent);
+  backdrop-filter: blur(2px);
+}
+.brandModalWrap :global(.ant-modal) {
+  padding-bottom: 0;
+}
+.brandModalWrap :global(.ant-modal-content) {
+  border-radius: 14px;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 18%, transparent);
+  box-shadow: 0 22px 56px rgba(15, 23, 42, 0.24);
+  overflow: hidden;
+  background: var(--background);
+}
+.brandModalWrap :global(.ant-modal-header) {
+  margin: 0;
+  padding: 14px 18px 12px;
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 6%, var(--background));
+  border-bottom: 1px solid color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 18%, transparent);
+}
+.brandModalWrap :global(.ant-modal-title) {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--foreground);
+  letter-spacing: 0.01em;
+}
+.brandModalWrap :global(.ant-modal-body) {
+  padding: 16px 18px;
+  color: color-mix(in srgb, var(--foreground) 82%, transparent);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.brandModalWrap :global(.ant-modal-footer) {
+  padding: 10px 18px 14px;
+  margin: 0;
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+  background: color-mix(in srgb, var(--foreground) 2%, transparent);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.brandModalWrap :global(.ant-modal-close) {
+  top: 10px;
+  right: 12px;
+  color: color-mix(in srgb, var(--foreground) 55%, transparent);
+}
+.brandModalWrap :global(.ant-modal-close:hover) {
+  color: var(--chatbot-warm-red, #ef4444);
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 10%, transparent);
+}
+.brandModalWrap :global(.ant-btn) {
+  border-radius: 8px;
+  font-weight: 500;
+  height: 32px;
+  padding: 0 14px;
+}
+.brandModalWrap :global(.ant-btn-default) {
+  border-color: color-mix(in srgb, var(--foreground) 18%, transparent);
+  color: color-mix(in srgb, var(--foreground) 78%, transparent);
+}
+.brandModalWrap :global(.ant-btn-default:hover) {
+  border-color: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 35%, transparent);
+  color: var(--chatbot-warm-red, #ef4444);
+}
+.brandModalWrap :global(.ant-btn-primary) {
+  background: var(--chatbot-warm-red, #ef4444);
+  border-color: var(--chatbot-warm-red, #ef4444);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 32%, transparent);
+}
+.brandModalWrap :global(.ant-btn-primary:hover) {
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 88%, #000);
+  border-color: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 88%, #000);
+}
+.brandModalWrap :global(.ant-btn-primary:disabled),
+.brandModalWrap :global(.ant-btn-primary[disabled]) {
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 32%, var(--background));
+  border-color: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 32%, transparent);
+  color: rgba(255, 255, 255, 0.85);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+/* Modal.confirm specific overrides — confirm uses a different DOM than Modal */
+.brandModalWrap :global(.ant-modal-confirm-body) {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px 18px 8px;
+}
+.brandModalWrap :global(.ant-modal-confirm-title) {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--foreground);
+}
+.brandModalWrap :global(.ant-modal-confirm-content) {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--foreground) 78%, transparent);
+  margin-top: 6px;
+}
+.brandModalWrap :global(.ant-modal-confirm-btns) {
+  padding: 8px 18px 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.brandModalWrap :global(.ant-modal-confirm .anticon-exclamation-circle) {
+  color: var(--chatbot-warm-red, #ef4444);
+  font-size: 22px;
+}
+/* Danger variant — slightly stronger warm-red accent on header + danger button. */
+.brandModalWrapDanger :global(.ant-modal-content) {
+  border-color: color-mix(in srgb, #b8413f 28%, transparent);
+}
+.brandModalWrapDanger :global(.ant-modal-confirm-body) {
+  background: color-mix(in srgb, #b8413f 5%, var(--background));
+  border-bottom: 1px solid color-mix(in srgb, #b8413f 14%, transparent);
+}
+.brandModalWrapDanger :global(.ant-btn-dangerous.ant-btn-primary) {
+  background: #b8413f;
+  border-color: #b8413f;
+  box-shadow: 0 4px 12px rgba(184, 65, 63, 0.32);
+  color: #fff;
+}
+.brandModalWrapDanger :global(.ant-btn-dangerous.ant-btn-primary:hover) {
+  background: #a23735;
+  border-color: #a23735;
+}
+.brandModalInput :global(.ant-input) {
+  border-radius: 8px;
+  border-color: color-mix(in srgb, var(--foreground) 18%, transparent);
+  font-size: 14px;
+  padding: 8px 12px;
+}
+.brandModalInput :global(.ant-input:hover) {
+  border-color: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 45%, transparent);
+}
+.brandModalInput :global(.ant-input:focus),
+.brandModalInput :global(.ant-input-focused) {
+  border-color: var(--chatbot-warm-red, #ef4444);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 18%, transparent);
+}
+
+/* Revert separator hint is now a <button>; reset native chrome so
+ * it still looks like the dashed strip but accepts clicks. */
+.revertSeparatorHint {
+  border-width: 1px 0 1px 0;
+  font: inherit;
+  cursor: pointer;
+  appearance: none;
+}
+.revertSeparatorHint:hover {
+  background: color-mix(in srgb, var(--chatbot-warm-red, #ef4444) 9%, transparent);
+}
+.revertSeparatorHint:focus-visible {
+  outline: 2px solid var(--chatbot-warm-red, #ef4444);
+  outline-offset: 2px;
+}
+
+/* (Removed: the unified `.assistantActionBtn, .voiceBtn, .sendBtn,
+ *  .stopBtn` family rule that overrode the project-red send/stop buttons
+ *  with neutral gray. Each button now keeps its original brand styling
+ *  defined further up the file.) */
+
+/* Responsive tiers
+ * Strategy: collapse the launcher on phones, switch the panel to
+ * full-screen sheets, then progressively widen the assistant column
+ * on tablet → desktop → wide. dvh keeps mobile address-bar shifts
+ * from clipping the input. */
+
+/* Mobile (≤480px): full-screen sheet, edge-to-edge bubble. */
+@media (max-width: 480px) {
+  .panel {
+    border-radius: 0;
+  }
+  .panelDefault,
+  .panelExpanded {
+    width: 100vw;
+    height: 100dvh;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+  }
+  .bubble {
+    bottom: 16px;
+    right: 16px;
+    width: 52px;
+    height: 52px;
+  }
+  .messageBubbleUser {
+    max-width: 86%;
+  }
+  .messageBubbleContext {
+    max-width: 86%;
+  }
+  .header {
+    padding: 10px 12px;
+  }
+}
+
+/* Tablet (481–768px): roomy bottom sheet, keeps launcher. */
+@media (min-width: 481px) and (max-width: 768px) {
+  .panelDefault {
+    width: min(94vw, 520px);
+    height: min(82dvh, 720px);
+    bottom: 80px;
+    right: 16px;
+  }
+  .panelExpanded {
+    width: 96vw;
+    height: 92dvh;
+    top: 4vh;
+  }
+  .messageBubbleUser {
+    max-width: 80%;
+  }
+}
+
+/* Desktop (769–1279px): the default sizes already work. Just give the
+ * expanded mode a sensible cap so it never sprawls full-bleed. */
+@media (min-width: 769px) and (max-width: 1279px) {
+  .panelExpanded {
+    width: min(80vw, 980px);
+  }
+}
+
+/* R9-5: Wide screens (≥1280) — bump the collapsed panel cap so a
+ * floating card on a 1080p+ display still feels proportional rather
+ * than tiny. Heights also grow modestly. The base clamp() handles vw
+ * shrinkage; this just lifts the upper bound. */
+@media (min-width: 1280px) {
+  .panelDefault {
+    width: clamp(380px, 30vw, 460px);
+    height: clamp(480px, 72vh, 680px);
+  }
+  .panelExpanded {
+    width: clamp(800px, 72vw, 1240px);
+    height: clamp(600px, 84vh, 960px);
+  }
+}
+
+/* R9-5: Desktop tier (≥1440) — common 16" laptop / external monitor.
+ * Default panel grows to ~520px so reading width matches the rest of
+ * the app. */
+@media (min-width: 1440px) {
+  .panelDefault {
+    width: clamp(420px, 30vw, 520px);
+    height: clamp(520px, 74vh, 740px);
+  }
+  .panelExpanded {
+    width: clamp(900px, 70vw, 1320px);
+    height: clamp(640px, 84vh, 1000px);
+  }
+}
+
+/* Wide (≥1280) and ultrawide (≥1920): the expanded panel keeps a
+ * sensible cap so the chrome doesn't sprawl, but the conversation column
+ * fills that whole panel width — no inner reading-column inset.
+ * R9-5: also scale the collapsed panel — on a 4K monitor the original
+ * 420px cap produced a tiny floating card. */
+@media (min-width: 1920px) {
+  .panelDefault {
+    width: clamp(480px, 30vw, 600px);
+    height: clamp(600px, 76vh, 820px);
+  }
+  .panelExpanded {
+    width: min(60vw, 1500px);
+  }
+}
+
+/* Reduced-motion users: drop every transition that isn't essential. */
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .messageBubbleAssistant,
+  .assistantActionBtn,
+  .voiceBtn,
+  .sendBtn,
+  .stopBtn,
+  .userActionBtn {
+    transition: none !important;
+  }
+}
+
+/* Standalone mode: ChatPanel fills its container instead of floating */
+.panelStandalone {
+  position: relative !important;
+  z-index: auto !important;
+  bottom: auto !important;
+  right: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ── InlineBIWidget — compact chart rendered inside assistant messages ── */
+.inlineBIWidget {
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  margin: 8px 0;
+  padding: 8px;
+  background: var(--background, #fff);
+}
+
+.inlineBIWidgetHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.inlineBIWidgetTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--foreground, #111827);
+}
+
+.inlineBIChartToolbar {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.inlineBIChartTypeBtn {
+  padding: 2px 8px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 4px;
+  background: var(--background, #fff);
+  color: var(--text-secondary, #6b7280);
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.inlineBIChartTypeBtn:hover {
+  background: var(--bg-tertiary, #f3f4f6);
+  color: var(--foreground, #111827);
+}
+
+.inlineBIChartTypeBtnActive {
+  background: var(--foreground, #111827);
+  color: var(--background, #fff);
+  border-color: var(--foreground, #111827);
+}
+
+.inlineBIChartTypeBtnActive:hover {
+  background: var(--foreground, #111827);
+  color: var(--background, #fff);
+}
+
+.inlineBIWidgetChart {
+  height: 200px;
+  width: 100%;
+}
+
+.inlineBIWidgetActions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  justify-content: flex-end;
+}
+
+.inlineBIWidgetBtn {
+  padding: 3px 10px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 4px;
+  background: var(--background, #fff);
+  color: var(--foreground, #111827);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.inlineBIWidgetBtn:hover {
+  background: var(--bg-tertiary, #f3f4f6);
+  border-color: var(--foreground, #111827);
+}
+
+.inlineBIWidgetThumbnail {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.inlineBIWidgetThumbPreview {
+  width: 120px;
+  height: 80px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--bg-tertiary, #f9fafb);
+}
+
+.inlineBIWidgetThumbInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  justify-content: center;
+  min-width: 0;
+}
+
+.inlineBIWidgetThumbMeta {
+  font-size: 10px;
+  color: var(--text-secondary, #6b7280);
+}
+
+/* === Follow-Up Chips === */
+.followUpChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 0 2px;
+}
+
+.followUpChip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 16px;
+  background: var(--bg-subtle, #f8fafc);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--foreground);
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  line-height: 1.3;
+}
+
+.followUpChip:hover {
+  background: var(--primary-light, #fef2f2);
+  border-color: var(--accent, #dc2626);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.followUpChipIcon {
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.followUpChipLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+}
+
+/* === Bank Preview Card (in chat) === */
+.bankPreviewCard {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px;
+  background: var(--bg-subtle, #f8fafc);
+}
+
+.bankPreviewHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.bankPreviewIcon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.bankPreviewInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.bankPreviewName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.bankPreviewMeta {
+  font-size: 11px;
+  color: var(--text-secondary, #6b7280);
+}
+
+.bankPreviewStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.bankPreviewStat {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.bankPreviewStatLabel {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary, #6b7280);
+  font-weight: 500;
+}
+
+.bankPreviewStatValue {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.bankPreviewTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.bankPreviewTag {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--bg-tertiary, #f0f0f0);
+  font-size: 10px;
+  color: var(--text-secondary, #6b7280);
+}
+
+.bankPreviewViewBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 5px 0;
+  border: 1px solid var(--accent, #dc2626);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--accent, #dc2626);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.bankPreviewViewBtn:hover {
+  background: var(--accent, #dc2626);
+  color: #fff;
+}

@@ -1,0 +1,63 @@
+.sign-in-container {
+  display: flex;
+ 
+  justify-content: center;
+  margin: 0 auto;
+  min-height: 100vh;
+
+  background: linear-gradient(99.83deg, #ED1522 -1.65%, #E66E48 82.54%);
+
+
+  .left-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    justify-content: space-between;
+    padding: 40px;
+
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      width: 110px;
+      height: 40px;
+    }
+
+    .content-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center; 
+      
+
+      width: 555px;
+      height: 56px;
+      gap: 8px;
+
+
+      .first {
+        width: 555px;
+        height: 28px;
+
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 28px;
+        letter-spacing: 0%;
+      }
+
+      .second {
+        width: 102px;
+        height: 20px;
+
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0%;
+      }
+
+    }
+
+  }
+
+}

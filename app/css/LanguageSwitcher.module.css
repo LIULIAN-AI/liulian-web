@@ -1,0 +1,35 @@
+.languageSwitcher{
+  flex-direction: column;
+  align-items: center;
+  width: 150px;
+  background: #fff;
+}
+.languageActive{
+  background-color: #0070f3;
+  color: #fff !important;
+  width: 100%;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+.languageCommon{
+  color: #374151;
+  width: 100%;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+.languageSwitcherContainer{
+  position: relative;
+}
+.showDefaultLanguage{
+  color: #A1161F;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  border: none;
+  min-width: 28px;
+  cursor: pointer;
+}
+.languageSwitcherContainer:hover .languageSwitcher{
+  display: flex;
+}

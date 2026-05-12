@@ -1,0 +1,140 @@
+/* LIULIAN marketing — see PLATFORM_DESIGN.md §6 + UI_AUDIT_CHECKLIST.md */
+
+.liulian-landing {
+  --canvas-warm: #FBFBFA;
+  --canvas-soft: #F7F6F3;
+  --surface-pure: #FFFFFF;
+  --ink-charcoal: #131313;
+  --ink-soft: #34373B;
+  --ink-muted: #666A70;
+  --ink-faint: #94989D;
+  --hairline: #E8E7E2;
+  --unibe-red: #E20613;
+  --unibe-red-deep: #B00010;
+
+  background: var(--canvas-warm);
+  color: var(--ink-charcoal);
+  min-height: 100vh;
+}
+
+.eyebrow {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 32px 0;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.hero {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 96px 32px 64px;
+}
+
+.hero .pretitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin: 0 0 24px;
+}
+
+.hero h1 {
+  font-weight: 500;
+  font-variation-settings: "opsz" 144, "SOFT" 20, "WONK" 0;
+  font-size: clamp(56px, 9vw, 144px);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  margin: 0;
+}
+
+.hero h1 .accent {
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 50, "WONK" 1, "wght" 600;
+  color: var(--unibe-red);
+}
+
+.hero .tagline {
+  max-width: 60ch;
+  margin: 40px 0 0;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.counter {
+  margin-top: 56px;
+  padding: 14px 0;
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  display: flex; gap: 32px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.bands {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 96px 32px;
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr 1px 1fr;
+  gap: 48px;
+}
+
+.bands .rule { background: var(--hairline); height: 100%; }
+
+.band h2 {
+  font-weight: 500;
+  font-variation-settings: "opsz" 28;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  margin: 0 0 20px;
+}
+
+.cta {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 32px 32px 96px;
+  text-align: center;
+}
+
+.cta a {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--ink-charcoal);
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 12px;
+  transition: gap 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cta a:hover { gap: 20px; }
+
+.cta a .arrow { color: var(--unibe-red); }
+
+footer {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 32px;
+  border-top: 1px solid var(--hairline);
+  display: flex; justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+@media (max-width: 880px) {
+  .bands { grid-template-columns: 1fr; }
+  .bands .rule { display: none; }
+  .counter { flex-direction: column; gap: 8px; }
+}

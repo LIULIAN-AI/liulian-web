@@ -1,0 +1,206 @@
+/* 新的样式 */
+.searchContainer{
+    height: 459px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    width: 100%;
+    background: url('/images/navbar/banner.gif') no-repeat center center;
+    background-size: 100% 100%;
+}
+.backgroundVideo{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* 确保视频完全覆盖，可能会裁剪边缘 */
+    object-position: center;
+    /* 或者使用缩放来填充 */
+    transform: scale(1.1);
+}
+.searchContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    z-index: 11;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+}
+.searchContentTitle{
+    font-size: 72px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 72px;
+    background: linear-gradient(100deg, #ED1522 -1.65%, #E56E48 82.54%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 16px;
+    margin-top: 78px;
+}
+.searchContentSubTitle{
+    color: #71717A;
+    font-size: 44px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -1.1px;
+    margin-bottom: 47px;
+}
+.searchContentSearch{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.searchContentLocateList{
+    position: absolute;
+    top: 66px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    z-index: 1000;
+}
+.searchContentItemList{
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 4px 0 #FBD0D6;
+}
+.searchContentHistoryItem{
+    height: 40px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    padding-left: 20px;
+    cursor: pointer;
+}
+.searchContentHistoryItem:hover{
+    background: #F9F9FA;
+    cursor: pointer;
+}
+.searchContent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.searchContentSearchItem{
+    display: flex;
+    justify-content: flex-start;
+    width: 750px;
+    height: 66px;
+    padding: 20px 30px;
+    align-items: center;
+    gap: 30px;
+    flex-shrink: 0;
+    border-radius: 57px;
+    background: #FFF;
+    box-shadow: 0 0 4px 0 #FBD0D6;
+    position: relative;
+}
+.searchContentSearchItemFocused{
+    border-radius: 17px 17px 0px 0px;
+}
+.searchContentSearchButton{
+    display: flex;
+    height: 66px;
+    padding: 15px 30px;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    flex: 1 0 0;
+    border-radius: 104.719px;
+    background: linear-gradient(100deg, #ED1522 -1.65%, #E56E48 82.54%);
+    margin-left: 23px;
+    color: #FEEFEF;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    cursor: pointer;
+}
+.searchContentInput{
+    border:none;
+    outline: none;
+    overflow: hidden;
+    color:#4E5969;
+    text-overflow: ellipsis;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 350;
+    line-height: 25px; /* 125% */
+}
+/* 增强选择器优先级，确保覆盖Ant Design默认样式 */
+.searchContentSearchItem .searchContentInput:focus,
+.searchContentSearchItem .searchContentInput:focus-within,
+.searchContentSearchItem .ant-input:focus,
+.searchContentSearchItem .ant-input-focused,
+/* 针对Ant Design Input组件内部的input元素 */
+.searchContentSearchItem .ant-input > input:focus,
+.searchContentSearchItem .searchContentInput > input:focus,
+/* 额外添加可能的包装元素选择器 */
+.searchContentSearchItem [class*="ant-input"]:focus,
+.searchContentSearchItem [class*="ant-input"] .ant-input:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+.searchContentHotWord{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 47px;
+    flex-wrap: wrap;
+}
+.searchContentHotWordItem{
+    display: flex;
+    height: 40px;
+    padding: 8px 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 6px;
+    background:#FFE4E6;
+    margin-right: 20px;
+    margin-bottom: 8px;
+    cursor:pointer;
+}
+.searchContentHotWordItem:hover {
+    background-color: #fecdd3;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.searchContentHotWordItemText{
+    color:#E11D48;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 23px;
+    /* margin-left: 8px; */
+}
+.similarCompany{
+    display: flex;
+    padding: var(--margin, 48px) 120px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+    border-radius: var(--spacing-4, 16px);
+    background: linear-gradient(270deg, rgba(255, 255, 255, 0.00) 5.16%, var(--background-bg-background, rgba(255, 255, 255, 0.60)) 80.66%), linear-gradient(0deg, var(--color-nbanker-color-bg, #FBF9F9) 0%, var(--color-nbanker-color-bg, #FBF9F9) 100%), var(--background-bg-background-90, rgba(255, 255, 255, 0.90));
+}
+.similarCompanyTitle{
+    color:#D92121;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+.swiperSlide{
+    width: auto !important;
+}

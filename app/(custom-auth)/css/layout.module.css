@@ -1,0 +1,190 @@
+/* 最开始的样式暂时不用 */
+.customLayout{
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: flex-start;
+}
+.customLayoutLeft{
+  display: flex;
+  padding: 60px 50px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: inherit;
+  flex: 1 0 0;
+  align-self: stretch;
+  background-color: red;
+}
+.customLayoutLeftTitle{
+  color:#FFF;
+  font-size: 50px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 72px;
+}
+.customLayoutLeftBottom{
+  display: flex;
+  flex-direction: column;
+}
+.customLayoutLeftBottomLogo{
+  margin-bottom: 30px;
+}
+.customLayoutLeftBottomCenterText{
+  color: #FFF;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px;
+  height: 28px;
+  margin-bottom: 6px;
+}
+.customLayoutLeftBottomText{
+  color: #FFF;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
+.customLayoutRight{
+  display: flex;
+  flex: 1;
+}
+/* 登录的样式 */
+.customLogin{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background: #fff;
+  border-radius: 6px;
+  align-self: stretch;
+}
+.customLoginSignUpContainer{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 16px;
+  margin-right: 22px;
+  margin-bottom: 32px;
+  flex: 1;
+  width: 100%;
+}
+.customLoginSignUp{
+  display: flex;
+  justify-content: center;
+  width: 92px;
+  height: 36px;
+  align-items: center;
+  cursor: pointer;
+  color:#09090B;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+}
+.customLoginTitle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 25px;
+}
+.customLoginTitleText{
+  color: #18181B;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-left: 16px;
+}
+.customLoginButton{
+  display: flex;
+  width: 260px;
+  height: 50px;
+  padding: 15px 30px;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  border-radius: 104.719px;
+  background: linear-gradient(100deg, #ED1522 -1.65%, #E56E48 82.54%);
+  color: #FAFAFA;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  margin: 0 auto;
+  cursor:pointer;
+}
+.customLoginFormContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+.customLoginInput{
+  height: 40px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #E4E4E7;
+  background: rgba(244, 244, 245, 0.50);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  color: #18181B;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+}
+.customLoginInput :global(.ant-input::placeholder) {
+  font-size: 16px;
+  color: #C8C9CB;
+  font-weight: 400;
+}
+.customLoginForgotPassword{
+  color: rgba(105, 69, 69, 1);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.304px;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-skip-ink: none;
+  text-decoration-thickness: auto;
+  text-underline-offset: auto;
+  text-underline-position: from-font;
+  margin: 0px auto 30px;
+  cursor: pointer;
+}
+.customLoginInputContainer{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.customLoginInputLeft{
+  display: flex;
+  flex: 1;
+  margin-right: 10px;
+}
+.customLoginInputRight{
+  width: 100px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+}
+.customLoginInputRightButton{
+  width: 100px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid #C9CDD4;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  color: #18181B;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+}

@@ -1,0 +1,253 @@
+/* 优化字体加载 - 合并重复字体，使用font-display: swap优化性能 */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Exo+2:wght@400;500;600;700&family=Noto+Sans:wght@600&family=Noto+Sans+HK:wght@500;700&display=swap");
+body {
+    margin: 0;
+    line-height: normal;
+}
+* {
+  font-family: var(--font-inter), sans-serif !important;
+}
+
+:where(.css-dev-only-do-not-override-1m2bkf9).ant-checkbox-disabled .ant-checkbox-inner:after {
+    border-color: #fff;
+}
+
+:where(.css-dev-only-do-not-override-1m2bkf9).ant-checkbox-disabled .ant-checkbox-inner {
+    background: #ef4444;
+    border-color: #ef4444;
+}
+
+/* 明暗模式变量定义 */
+:root {
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --primary: #dc2626;
+  --primary-hover: #b91c1c;
+  --primary-light: #fef2f2;
+  --accent: #ef4444;
+  --accent-hover: #dc2626;
+  --success: #0d9488;
+  --success-light: #ccfbf1;
+  --warning: #d97706;
+  --warning-light: #fef3c7;
+  --error: #dc2626;
+  --error-light: #fee2e2;
+  --bg-subtle: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --text-secondary: #64748b;
+  --text-tertiary: #94a3b8;
+  --border-color: #e2e8f0;
+  --border-focus: #fca5a5;
+  --header-bg: #0f172a;
+  --sidebar-bg: #1e293b;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --primary: #f87171;
+  --primary-hover: #ef4444;
+  --primary-light: #450a0a;
+  --accent: #f87171;
+  --accent-hover: #ef4444;
+  --success: #2dd4bf;
+  --success-light: #134e4a;
+  --warning: #fbbf24;
+  --warning-light: #78350f;
+  --error: #f87171;
+  --error-light: #450a0a;
+  --bg-subtle: #1e293b;
+  --bg-tertiary: #334155;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+  --border-color: #334155;
+  --border-focus: #f87171;
+  --header-bg: #020617;
+  --sidebar-bg: #0f172a;
+}
+
+/* 确保基础元素有默认颜色 */
+/* html {
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+body {
+  background: inherit !important;
+  color: inherit !important;
+}
+
+
+p, h1, h2, h3, h4, h5, h6, span, div, ul, li {
+  color: inherit !important;
+  background-color: inherit !important;
+} */
+/* 去除Ant Design组件的默认蓝色边框和高亮效果 */
+/* 1. 去除所有焦点和轮廓效果 */
+*:focus,
+*:focus-visible,
+*:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 2. 去除按钮的蓝色效果 */
+.ant-btn {
+  &:hover,
+  &:focus,
+  &:active,
+  &.ant-btn-primary:hover,
+  &.ant-btn-primary:focus,
+  &.ant-btn-primary:active {
+    background-color: inherit !important;
+    border-color: inherit !important;
+    color: inherit !important;
+    box-shadow: none !important;
+  }
+}
+
+.ant-checkbox-inner {
+  border-color: #d9d9d9 !important;
+}
+
+/* 3. 去除输入框的蓝色效果 */
+.ant-input,
+.ant-input-affix-wrapper {
+  &:hover,
+  &:focus,
+  &:focus-within {
+    border-color: #d9d9d9 !important;
+    box-shadow: none !important;
+  }
+}
+
+/* 4. 去除选择器的蓝色效果 */
+.ant-select-selector {
+  &:hover,
+  &:focus,
+  &:focus-within {
+    border-color: #d9d9d9 !important;
+    box-shadow: none !important;
+  }
+}
+
+/* 5. 去除菜单的蓝色效果 */
+.ant-menu-item {
+  &:hover,
+  &:focus,
+  &:active,
+  &.ant-menu-item-active,
+  &.ant-menu-item-selected {
+    background-color: inherit !important;
+    color: inherit !important;
+    border-color: inherit !important;
+  }
+}
+
+/* 6. 去除标签页的蓝色效果 */
+.ant-tabs-tab {
+  &:hover,
+  &:focus,
+  &.ant-tabs-tab-active {
+    color: inherit !important;
+  }
+}
+
+.ant-tabs-ink-bar {
+  background-color: transparent !important;
+}
+
+/* 7. 去除复选框和单选框的蓝色效果 */
+.ant-checkbox-checked .ant-checkbox-inner,
+.ant-radio-checked .ant-radio-inner {
+  background-color: #1677ff !important;
+  border-color: #1677ff !important;
+}
+
+/* 8. 去除开关的蓝色效果 */
+.ant-switch-checked {
+  background-color: #666 !important;
+}
+
+/* 9. 去除滑块的蓝色效果 */
+.ant-slider-track {
+  background-color: #666 !important;
+}
+
+.ant-slider-handle {
+  &:hover,
+  &:focus {
+    border-color: #666 !important;
+    box-shadow: 0 0 0 5px rgba(102, 102, 102, 0.2) !important;
+  }
+}
+
+/* 10. 去除分页的蓝色效果 */
+.ant-pagination-item:hover,
+.ant-pagination-item:focus,
+.ant-pagination-item-active {
+  border-color: #666 !important;
+}
+
+.ant-pagination-item-active a {
+  color: #666 !important;
+}
+
+/* 11. 去除树形控件的蓝色效果 */
+.ant-tree-node-selected {
+  background-color: inherit !important;
+  color: inherit !important;
+}
+
+/* 12. 去除表格的蓝色效果 */
+.ant-table-row:hover > td {
+  background-color: inherit !important;
+}
+
+/* 13. 去除卡片的蓝色效果 */
+.ant-card:hover {
+  box-shadow: none !important;
+}
+
+/* 14. 去除时间选择器的蓝色效果 */
+.ant-picker:hover,
+.ant-picker:focus {
+  border-color: #d9d9d9 !important;
+  box-shadow: none !important;
+}
+
+/* 15. 去除级联选择器的蓝色效果 */
+.ant-cascader:hover,
+.ant-cascader:focus {
+  border-color: #d9d9d9 !important;
+  box-shadow: none !important;
+}
+/* ============================================================
+   Chatbot — global utilities (used outside CSS modules)
+   ============================================================ */
+
+/* Highlight pulse triggered when a ContextCard "Reveal source" button
+   is clicked. The selector lives outside the CSS module because the
+   target node is on the host page, not inside the chat panel. */
+.nbk-context-source-flash {
+  animation: nbkContextSourceFlash 0.8s ease-out 2;
+  position: relative;
+  z-index: 1;
+}
+@keyframes nbkContextSourceFlash {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.55), 0 0 0 0 rgba(239, 68, 68, 0.25);
+    outline: 2px solid rgba(239, 68, 68, 0.85);
+    outline-offset: 2px;
+  }
+  60% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.18), 0 0 0 16px rgba(239, 68, 68, 0.06);
+    outline: 2px solid rgba(239, 68, 68, 0.4);
+    outline-offset: 6px;
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0), 0 0 0 0 rgba(239, 68, 68, 0);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+}

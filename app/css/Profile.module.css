@@ -1,0 +1,2641 @@
+/* 以下是你原始的 CSS 代码内容，已为所有类名前添加 prefer 前缀 */
+/* 标签订阅容器样式 */
+.usercontainer {
+  flex: 1 1 0;
+  max-width: 672px;
+  min-width: 272px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: inline-flex;
+}
+.userTabsubscription {
+  width: 100%;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 48px;
+  background-color: #fff;
+  padding-bottom: 50px;
+  min-height: 450px;
+  padding: 0px 48px;
+}
+
+/* 按钮文本样式 - 统一复用，避免冗余 */
+.userButton01Span,
+.userButton03Span,
+.userButton05Span,
+.userButton07Span,
+.userButton09Span {
+  color: var(--text-text-primary, #18181B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+
+/* 按钮样式 - 第一个按钮（激活状态） */
+.userButton {
+  align-self: stretch;
+  height: 36px;
+  padding: 8px 16px;
+  background: var(--background-bg-accent, #F4F4F5);
+  border-radius: 6px;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 按钮样式 - 其他按钮（默认状态） */
+.userButton02,
+.userButton04,
+.userButton06,
+.userButton08 {
+  align-self: stretch;
+  height: 36px;
+  padding: 8px 16px;
+  background: var(--background-bg-background, white);
+  border-radius: 6px;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 设置侧边栏样式 */
+.userSettingSidebar {
+  width: 250px;
+  max-width: 250px;
+  min-width: 250px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+}
+/*prefer ===============================================================================================*/
+.preferContainer {
+  width: 100%;
+  max-width: 672px;
+  min-width: 272px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: inline-flex;
+  user-select: none;
+}
+.preferTitle {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1px;
+  display: flex;
+}
+.preferPreference_span {
+  color: var(--text-text-primary, #18181B);
+  font-size: 18px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 28px;
+  word-wrap: break-word;
+}
+.preferPreferenceSpan{
+  color: #18181B;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.preferManageYourPreferences {
+  align-self: stretch;
+}
+.preferManageyourpreferencesSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 14px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+.preferSeparator {
+  align-self: stretch;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  display: flex;
+}
+.preferSeparator2 {
+  align-self: stretch;
+  padding-bottom: 4px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  display: flex;
+}
+.preferLine {
+  align-self: stretch;
+  height: 1px;
+  background: var(--color-border-100, #E4E4E7);
+}
+.preferContainer01 {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 32px;
+  display: flex;
+}
+.preferContainer02 {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+  display: flex;
+}
+.preferContainer03 {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: flex;
+}
+.preferLabel {
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: inline-flex;
+}
+.preferLabel01Span {
+  color: var(--color-foreground-100, #09090B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+.preferManageyourinterestedbanksanditwouldhelppersonalizedyouraiSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 12.80px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 19.20px;
+  word-wrap: break-word;
+}
+
+.preferManageYourInterestedBanksAndItWouldHelpPersonalizedYourAi {
+  align-self: stretch;
+}
+.preferSelect {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+  display: flex;
+}
+
+.preferSelectInput {
+  align-self: stretch;
+  height: 36px;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: var(--background-bg-muted-50, rgba(244.04, 244.04, 245.05, 0.50));
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  border-radius: 6px;
+  outline: 1px var(--border-border-input, #E4E4E7) solid;
+  outline-offset: -1px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  display: inline-flex;
+}
+.preferSelect01 {
+  flex: 1 1 0;
+}
+.preferSelect01Span {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 20px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 22px;
+  word-wrap: break-word;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+.preferSelect01Span:focus{
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+.preferCaretSort {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  opacity: 0.50;
+  overflow: hidden;
+}
+
+.preferVector {
+  width: 5.76px;
+  height: 9.49px;
+  left: 5.12px;
+  top: 3.25px;
+  position: absolute;
+  background: var(--color-foreground-100, #09090B);
+}
+.preferCard {
+  align-self: stretch;
+  background: var(--background-bg-background, white);
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.10);
+  overflow: hidden;
+  border-radius: 8px;
+  outline: 1px var(--border-border-input, #E4E4E7) solid;
+  outline-offset: -1px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: flex;
+}
+.preferContent {
+  align-self: stretch;
+  padding: 24px;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  display: flex;
+}
+.preferSlotContent {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 24px;
+  display: flex;
+}
+.preferContainer04 {
+  align-self: stretch;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+  display: inline-flex;
+}
+
+.preferAvatar {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  border-radius: 9999px;
+}
+.preferBackground {
+  width: 40px;
+  height: 40px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: #D9D9D9;
+  border-radius: 9999px;
+}
+
+.preferContainer05 {
+  flex: 1 1 0;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+  display: inline-flex;
+}
+
+.preferSofiadavisSpan {
+  color: var(--text-text-primary, #18181B);
+  font-size: 14px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 14px;
+  word-wrap: break-word;
+}
+
+
+.preferMexamplecomSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 14px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+.preferCombobox {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 3px;
+  display: inline-flex;
+}
+.preferTrigger {
+  align-self: stretch;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 6px;
+  outline: 1px var(--border-border-input, #E4E4E7) solid;
+  outline-offset: -1px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  display: inline-flex;
+  flex-direction: column;
+}
+.preferTrigger2 {
+
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  display: inline-flex;
+}
+.preferSelectoptionSpan {
+  color: var(--text-text-primary, #18181B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+  cursor: pointer;
+}
+.preferChevronDown {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  opacity: 0.50;
+  overflow: hidden;
+}
+.preferVector01 {
+  width: 9.60px;
+  height: 5.07px;
+  left: 3.20px;
+  top: 6.40px;
+  position: absolute;
+  background: var(--color-foreground-100, #09090B);
+}
+.preferContainer14 {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+  display: flex;
+}
+.preferCheckbox01 {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  display: inline-flex;
+}
+.preferBackground01 {
+  width: 16px;
+  height: 16px;
+  background: var(--background-bg-primary, #18181B);
+  border-radius: 2px;
+  border: 1px var(--border-border-primary, #18181B) solid;
+}
+.preferBackgroundWhite {
+  width: 16px;
+  height: 16px;
+  background: var(--background-bg-primary, #ffffff);
+  border-radius: 2px;
+  border: 1px var(--border-border-primary, #18181B) solid;
+}
+.preferCheck {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.preferVector06 {
+  width: 8.80px;
+  height: 8.27px;
+  left: 3.73px;
+  top: 3.87px;
+  position: absolute;
+  background: var(--color-foreground-100, #09090B);
+  border: 1px var(--text-text-primary-foreground, #FAFAFA) solid;
+}
+.preferContainer15 {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+  display: flex;
+}
+.preferContainer16 {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: flex;
+}
+.preferLabel03 {
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: inline-flex;
+}
+.preferLabel04Span {
+  color: var(--color-foreground-100, #09090B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+.preferSelectYourInterestedTopicsProductsAndItWouldHelpPersonalizedYourAiChatbot {
+  align-self: stretch;
+}
+.preferFrame111 {
+  width: 672px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-radius: 4px;
+  outline: 1px #E4E4E7 solid;
+  outline-offset: -1px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: flex;
+}
+.preferFrame101 {
+  align-self: stretch;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 16px;
+  padding-right: 12px;
+  border-bottom: 1px #E4E4E7 solid;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+  display: inline-flex;
+}
+.preferVector07 {
+  width: 8.80px;
+  height: 8.27px;
+  left: 3.73px;
+  top: 3.87px;
+  position: absolute;
+  background: var(--color-foreground-100, #09090B);
+  border: 1px var(--text-text-primary-foreground, #FAFAFA) solid;
+}
+.preferFrame99 {
+  flex: 1 1 0;
+  justify-content: space-between;
+  align-items: flex-start;
+  display: flex;
+}
+.preferLabel05 {
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+}
+.preferThisisatextlabelSpan {
+  color: #18181B;
+  font-size: 12px;
+  font-family: Inter;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+.preferDotsHorizontal {
+  width: 15px;
+  height: 15px;
+  position: relative;
+}
+.preferCheckbox0101 {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  display: flex;
+}
+.preferCheckbox {
+  width: 16px;
+  height: 16px;
+  background: var(--background-bg-background, white);
+  border-radius: 2px;
+  border: 1px var(--border-border-primary, #18181B) solid;
+}
+.preferContainer17 {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+  display: flex;
+}
+.preferCheckbox09 {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  display: inline-flex;
+}
+.preferCheckbox08 {
+  width: 16px;
+  height: 16px;
+  background: var(--background-bg-background, white);
+  border-radius: 2px;
+  border: 1px var(--border-border-primary, #18181B) solid;
+}
+.preferLabel14Span {
+  color: var(--color-foreground-100, #09090B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+.notiLabel04Span {
+  color: var(--color-foreground-100, #09090B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+/*=========================================================================================================*/
+
+/* invite ============================================================================================= */
+.inviteUserSpan {
+  /* color: var(--text-text-primary, #18181B);
+  font-size: 18px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 28px;
+  word-wrap: break-word; */
+  color: var(--Color-Title1, #18181B);
+  font-family: Inter;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.inviteRewardsSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 14px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+.inviteRewards {
+  align-self: stretch;
+}
+
+.inviteLine {
+  align-self: stretch;
+  height: 1px;
+  background: var(--color-border-100, #E4E4E7);
+}
+
+.inviteLabel01Span {
+  /* color: var(--color-foreground-100, #09090B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word; */
+  color: #82101E;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.inviteSubscriptionSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 12.80px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 19.20px;
+  word-wrap: break-word;
+}
+
+.inviteSubscription {
+  align-self: stretch;
+}
+
+.inviteSelect01Span {
+  /* color: var(--text-text-muted-foreground, #71717A);
+  font-size: 20px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 22px;
+  word-wrap: break-word;
+  border: none;
+  outline: none;
+  background: transparent; */
+  display: flex;
+  height: 36px;
+  padding: var(--spacing-2, 8px) var(--spacing-3, 12px);
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: var(--radius-rounded-md, 6px);
+  border: 1px solid var(--border-border-input, #E4E4E7);
+  background: var(--background-bg-muted-50, rgba(244, 244, 245, 0.50));
+  word-wrap: break-word;
+  border: none;
+  outline: none;
+  /* shadow-sm */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+.inviteSelect01Span:focus{
+  border:none;
+  outline: none;
+  box-shadow: none;
+}
+.inviteSelect01Span input {
+  outline: none;
+  border: none;
+  width: 100%;
+}
+.inviteSelect01Span input:focus {
+  outline: none;
+  border: none;
+}
+
+.inviteSelect01 {
+  flex: 1 1 0;
+}
+
+.inviteButton01Span {
+  color: var(--text-text-primary-foreground, #FAFAFA);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+
+.inviteTitle {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1px;
+  display: flex;
+}
+
+.inviteLabel {
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: inline-flex;
+}
+
+.inviteSelectInput {
+  align-self: stretch;
+  height: 36px;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: var(--background-bg-muted-50, rgba(244.04, 244.04, 245.05, 0.50));
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  border-radius: 6px;
+  outline: 1px var(--border-border-input, #E4E4E7) solid;
+  outline-offset: -1px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  display: inline-flex;
+}
+
+.inviteButton {
+  height: 36px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: var(--background-bg-primary, #18181B);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  display: inline-flex;
+  border-radius: var(--radius-rounded-md, 6px);
+  background: var(--red-red-800, #991B1B);
+  display: flex;
+  height: 36px;
+  padding: var(--spacing-2, 8px) var(--spacing-4, 16px);
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-2, 8px);
+}
+
+.inviteSeparator {
+  align-self: stretch;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  display: flex;
+}
+
+.inviteContainer03 {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: flex;
+}
+
+.inviteSelect {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+  display: flex;
+}
+
+.inviteContainer02 {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+  display: flex;
+}
+
+.inviteContainer01 {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 32px;
+  display: flex;
+}
+
+.inviteContainer {
+  width: 100%;
+  max-width: 672px;
+  min-width: 272px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: inline-flex;
+  user-select: none;
+}
+
+/* notification page==============================================================================================================*/
+/* 根容器 */
+.notiContainer {
+  width: 100%;
+  max-width: 672px;
+  min-width: 272px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: inline-flex;
+}
+.notiTitle {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1px;
+  display: flex;
+}
+.notiNotificationSpan {
+  color: var(--text-text-primary, #18181B);
+  font-size: 18px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 28px;
+  word-wrap: break-word;
+}
+.notiManagementNotificationSettings {
+  align-self: stretch;
+}
+/* 管理通知设置文本样式 */
+.notiManagementnotificationsettingsSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 14px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+.notiSeparator {
+  align-self: stretch;
+  padding: 24px 0;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  display: flex;
+}
+.notiLine {
+  align-self: stretch;
+  height: 1px;
+  background: var(--color-border-100, #E4E4E7);
+}
+.notiContainer01 {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 32px;
+  display: flex;
+}
+.notiContainer02 {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+  display: flex;
+}
+.notiContainer03 {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: flex;
+}
+.notiLabel {
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: inline-flex;
+}
+
+.notiLabel01Span {
+  color: var(--color-foreground-100, #09090B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+.notiManagethecontentofyournotificationsSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 12.80px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 19.20px;
+  word-wrap: break-word;
+}
+
+/* 通知内容管理容器 */
+.notiManageTheContentOfYourNotifications {
+  align-self: stretch;
+}
+.notiCard {
+  align-self: stretch;
+  background: var(--background-bg-background, white);
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.10);
+  overflow: hidden;
+  border-radius: 8px;
+  outline: 1px var(--border-border-input, #E4E4E7) solid;
+  outline-offset: -1px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: flex;
+}
+.notiContent {
+  align-self: stretch;
+  padding: 24px;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+  display: flex;
+}
+.notiContainer04 {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+  display: flex;
+}
+.notiContainer05 {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: flex;
+}
+.notiLabel02 {
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: inline-flex;
+}
+.notiLabel03Span {
+  color: var(--color-foreground-100, #09090B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+.notiKeeptrackofthelatestdevelopmentsinyourparticularbanktoavoidmissingoutonimportantupdatesSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 12.80px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 19.20px;
+  word-wrap: break-word;
+}
+
+/* 银行动态跟踪容器 */
+.notiKeepTrackOfTheLatestDevelopmentsInYourParticularBankToAvoidMissingOutOnImportantUpdates {
+  align-self: stretch;
+}
+.notiContainer06 {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+  display: flex;
+}
+
+
+/* 勾选图标样式 */
+.notiBackground {
+  width: 16px;
+  height: 16px;
+  background: var(--background-bg-primary, #18181B);
+  border-radius: 2px;
+  border: 1px var(--border-border-primary, #18181B) solid;
+}
+
+.notiCheck {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.notiVector {
+  width: 8.80px;
+  height: 8.27px;
+  left: 3.73px;
+  top: 3.87px;
+  position: absolute;
+  background: var(--color-foreground-100, #09090B);
+  border: 1px var(--text-text-primary-foreground, #FAFAFA) solid;
+}
+.notiCheckbox01 {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  display: inline-flex;
+}
+.notiCheckbox0201 {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  display: inline-flex;
+}
+.notiUnderstandtheoveralldynamicsofthenewbankingindustrySpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 12.80px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 19.20px;
+  word-wrap: break-word;
+}
+
+/* 银行业动态容器 */
+.notiUnderstandTheOverallDynamicsOfTheNewBankingIndustry {
+  align-self: stretch;
+}
+.notiCheckbox {
+  width: 16px;
+  height: 16px;
+  background: var(--background-bg-background, white);
+  border-radius: 2px;
+  border: 1px var(--border-border-primary, #18181B) solid;
+}
+.notiTimelyunderstandingofchangesinthebanksfinancialpositiontosupportinvestmentdecisionsSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 12.80px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 19.20px;
+  word-wrap: break-word;
+}
+
+/* 财务数据通知容器 */
+.notiTimelyUnderstandingOfChangesInTheBanksFinancialPositionToSupportInvestmentDecisions {
+  align-self: stretch;
+}
+.notiLine01 {
+  align-self: stretch;
+  height: 1px;
+  background: var(--color-border-100, #E4E4E7);
+}
+.notiNotificationsofplatformupdatesplatformmaintenanceaccountchangesandsubscriptionstatuschangesSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 12.80px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 19.20px;
+  word-wrap: break-word;
+}
+
+/* 平台通知说明容器 */
+.notiNotificationsOfPlatformUpdatesPlatformMaintenanceAccountChangesAndSubscriptionStatusChanges {
+  align-self: stretch;
+}
+.notiLabel28Span {
+  color: var(--color-foreground-100, #09090B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+.notiManagethewaynotificationsarepushedSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 12.80px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 19.20px;
+  word-wrap: break-word;
+}
+
+/* 通知推送方式说明容器 */
+.notiManageTheWayNotificationsArePushed {
+  align-self: stretch;
+}
+.notiContent01 {
+  align-self: stretch;
+  padding: 24px;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+  display: flex;
+}
+.notiExampleSlotCookieSettingsContent {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+  display: flex;
+}
+.notiContainer18 {
+  align-self: stretch;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  display: inline-flex;
+}
+.notiComputerDesktopoutline {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.notiVector08 {
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  position: absolute;
+  outline: 1.50px #111827 solid;
+  outline-offset: -0.75px;
+}
+.notiContainer19 {
+  flex: 1 1 0;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+  display: inline-flex;
+}
+.notiInAppnotificationsSpan {
+  color: var(--text-text-primary, #18181B);
+  font-size: 14px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 19.25px;
+  word-wrap: break-word;
+}
+.notiPopesiteSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 14px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+/* 弹窗通知说明容器 */
+.notiPopesite {
+  align-self: stretch;
+}
+.notiSwitch {
+  width: 36px;
+  height: 20px;
+  padding: 2px;
+  background: var(--background-bg-primary, #18181B);
+  border-radius: 9999px;
+  justify-content: flex-end;
+  align-items: center;
+  display: flex;
+}
+.notiSwitch01 {
+  width: 36px;
+  height: 20px;
+  padding: 2px;
+  background: var(--color-input-100, #E4E4E7);
+  border-radius: 9999px;
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+}
+.notiChecker {
+  width: 16px;
+  height: 16px;
+  background: var(--background-bg-background, white);
+  box-shadow: 0px 4px 6px -4px rgba(0, 0, 0, 0.10);
+  border-radius: 9999px;
+}
+.notiFrame1413 {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+  display: flex;
+}
+
+.notiVector10 {
+  width: 12px;
+  height: 21px;
+  left: 6px;
+  top: 1.50px;
+  position: absolute;
+  outline: 1.50px var(--background-bg-background, white) solid;
+  outline-offset: -0.75px;
+}
+.notiInput {
+  flex: 1 1 0;
+  padding: 8px 12px;
+  background: var(--background-bg-muted-50, rgba(244.04, 244.04, 245.05, 0.50));
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  border-radius: 6px;
+  outline: 1px solid var(--border-border-input, #E4E4E7);
+  outline-offset: -1px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.notiPlaceholderSpan {
+  background: var(--background-bg-muted-50, rgba(255, 255, 255, 0.11));
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 20px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 22px;
+  word-wrap: break-word;
+  outline: none;
+  border:none;
+  padding-top: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+}
+
+/* 占位符容器 */
+.notiPlaceholder {
+  flex: 1 1 0;
+}
+.notiFrame1412 {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+  display: flex;
+}
+.notiContainer20 {
+  align-self: stretch;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  display: inline-flex;
+}
+.notiDevicePhoneMobileoutline {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.notiVector11 {
+  width: 12px;
+  height: 21px;
+  left: 6px;
+  top: 1.50px;
+  position: absolute;
+  outline: 1.50px #111827 solid;
+  outline-offset: -0.75px;
+}
+.notiContainer24 {
+  flex: 1 1 0;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+  display: inline-flex;
+}
+.notiChecker01 {
+  width: 16px;
+  height: 16px;
+  background: var(--background-bg-background, white);
+  box-shadow: 0px 4px 6px -4px rgba(0, 0, 0, 0.10);
+  border-radius: 9999px;
+}
+/*=====================================================================================================My subscription==================*/
+/* 我的订阅标题文本样式 */
+.subMysubscriptionsSpan {
+  /* color: var(--text-text-primary, #18181B);
+  font-size: 18px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 28px;
+  word-wrap: break-word; */
+  color:#18181B;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+/* 管理订阅文本样式 */
+.subManageyoursubscriptionsandyouraccountSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 14px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+/* 管理订阅容器 */
+.subManageYourSubscriptionsAndYourAccount {
+  align-self: stretch;
+}
+
+/* 分隔线样式 */
+.subLine {
+  align-self: stretch;
+  height: 1px;
+  background: var(--color-border-100, #E4E4E7);
+}
+
+/* 标签文本样式 */
+.subLabel01Span {
+  color: var(--color-foreground-100, #09090B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+
+/* 免费计划标题文本 */
+.subShadcnuiSpan {
+  color: var(--text-text-primary, #18181B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 600;
+  line-height: 16px;
+  word-wrap: break-word;
+}
+
+/* 免费计划描述文本 */
+.subBeautifullydesignedcomponentsbuiltwithradixuiandtailwindcssSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 14px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+/* 免费计划描述容器 */
+.subBeautifullyDesignedComponentsBuiltWithRadixuiAndTailwindcss {
+  align-self: stretch;
+}
+
+/* 按钮文本样式 */
+.subButton01Span {
+  color: var(--text-text-secondary-foreground, #18181B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+
+/* 标签文本样式 */
+.subLabel03Span {
+  color: var(--color-foreground-100, #09090B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+
+/* 内容容器 */
+.subContainer06 {
+  flex: 1 1 0;
+  height: 16px;
+}
+
+/* 免费计划标题文本 */
+.subShadcnui01Span {
+  color: var(--text-text-primary, #18181B);
+  font-size: 20px;
+  font-family: Inter;
+  font-weight: 600;
+  line-height: 16px;
+  word-wrap: break-word;
+}
+
+/* 免费计划价格文本 */
+.subFpermembermonthSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 12px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+/* 免费计划价格容器 */
+.subText0PerMemberMonth {
+  align-self: stretch;
+}
+
+/* 企业版计划标题文本 */
+.subEnterpriseSpan {
+  color: var(--text-text-primary, #18181B);
+  font-size: 20px;
+  font-family: Inter;
+  font-weight: 600;
+  line-height: 16px;
+  word-wrap: break-word;
+}
+
+/* 企业版计划价格文本 */
+.subF0permembermonthSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 12px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+/* 企业版计划价格容器 */
+.subText10PerMemberMonth {
+  align-self: stretch;
+}
+
+/* 升级按钮文本样式 */
+.subButton03Span {
+  color: var(--text-text-primary-foreground, #FAFAFA);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+
+/* 亮点标题文本 */
+.subHighlightsSpan {
+  color: var(--text-text-primary, #18181B);
+  font-size: 12px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+/* 亮点标题容器 */
+.subHighlights {
+  align-self: stretch;
+}
+
+/* 有限功能描述文本 */
+.subLimitedaiaccesslimitedlimitedSpan {
+  color: var(--text-text-primary, #18181B);
+  font-size: 12px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+/* 有限功能描述容器 */
+.subLimitedAiAccessLimitedLimited {
+  align-self: stretch;
+}
+
+/* 无限功能描述文本 */
+.subUnlimitedaiaccessunlimitedinformationaisummaryunlimitedunlimitedunlimitedSpan {
+  color: var(--text-text-primary, #18181B);
+  font-size: 12px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+/* 无限功能描述容器 */
+.subUnlimitedAiAccessUnlimitedInformationAiSummaryUnlimitedUnlimitedUnlimited {
+  align-self: stretch;
+}
+
+/* 对比功能文本样式 */
+.subCompareallfeaturesSpan {
+  color: var(--color-foreground-100, #09090B);
+  font-size: 14px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+
+/* 下拉箭头矢量图标 */
+.subVector {
+  width: 5px;
+  height: 12px;
+  left: 5.50px;
+  top: 2px;
+  position: absolute;
+  outline: 1.50px #111827 solid;
+  outline-offset: -0.75px;
+}
+
+/* 标签文本样式 */
+.subLabel05Span {
+  color: var(--color-foreground-100, #09090B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+
+/* 选择框文本样式 */
+.subSelect01Span {
+  color: var(--text-text-primary, #18181B);
+  font-size: 20px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 22px;
+  word-wrap: break-word;
+}
+
+/* 选择框容器 */
+.subSelect01 {
+  flex: 1 1 0;
+}
+
+/* 排序图标矢量样式 */
+.subVector01 {
+  width: 5.76px;
+  height: 9.49px;
+  left: 5.12px;
+  top: 3.25px;
+  position: absolute;
+  background: var(--color-foreground-100, #09090B);
+}
+
+/* 邮箱管理说明文本 */
+.subYoucanmanageverifiedemailaddressesinyouremailsettingsSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 14px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 22px;
+  word-wrap: break-word;
+}
+
+/* 邮箱管理说明容器 */
+.subYouCanManageVerifiedEmailAddressesInYourEmailSettings {
+  align-self: stretch;
+}
+
+/* 密码标题文本 */
+.subPasswordSpan {
+  color: var(--text-text-primary, #18181B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+/* 密码标题容器 */
+.subPassword {
+  align-self: stretch;
+}
+
+/* 密码设置说明文本 */
+.subSetapermanentpasswordtologintoyouraccountSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 14px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 19.20px;
+  word-wrap: break-word;
+}
+
+/* 密码设置说明容器 */
+.subSetAPermanentPasswordToLoginToYourAccount {
+  align-self: stretch;
+}
+
+/* 开关按钮样式 */
+.subChecker {
+  width: 16px;
+  height: 16px;
+  background: var(--background-bg-background, white);
+  box-shadow: 0px 4px 6px -4px rgba(0, 0, 0, 0.10);
+  border-radius: 9999px;
+}
+
+/* 标签文本样式 */
+.subLabel07Span {
+  color: var(--color-foreground-100, #09090B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+
+/* 两步验证说明文本 */
+.subAddanadditionallayerofsecuritytoyouraccountduringloginSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 14px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 19.20px;
+  word-wrap: break-word;
+}
+
+/* 两步验证说明容器 */
+.subAddAnAdditionalLayerOfSecurityToYourAccountDuringLogin {
+  align-self: stretch;
+}
+
+/* 手机号文本样式 */
+.subValueSpan {
+  color: var(--text-text-primary, #18181B);
+  font-size: 20px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 22px;
+  word-wrap: break-word;
+  border: none;
+  outline: none;
+  padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+  background: var(--background-bg-muted-50, rgba(255, 255, 255, 0.11));
+}
+
+/* 手机号容器 */
+.subValue {
+  flex: 1 1 0;
+}
+
+/* 按钮文本样式 */
+.subButton05Span {
+  color: var(--text-text-secondary-foreground, #18181B);
+  font-size: 14px;
+  font-family: Inter;
+  font-weight: 600;
+  line-height: 18px;
+  word-wrap: break-word;
+}
+
+/* 标题容器 */
+.subTitle {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1px;
+  display: flex;
+}
+
+/* 标签容器 */
+.subLabel {
+  align-self: stretch;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: inline-flex;
+}
+
+/* 内容容器 */
+.subContainer03 {
+  flex: 1 1 0;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+  display: inline-flex;
+}
+/* 按钮样式 */
+.subButton {
+  height: 36px;
+  padding: 8px 16px;
+  background: var(--background-bg-secondary, #F4F4F5);
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 标签容器 */
+.subLabel02 {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* 内容容器 */
+.subContainer07 {
+  width: 258px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+/* 按钮样式 */
+.subButton02 {
+  height: 36px;
+  padding: 8px 16px;
+  background: var(--color-nbanker-color-100, #7F1D1D);
+  border-radius: 6px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 内容容器 */
+.subContainer10 {
+  width: 60px;
+  height: 20px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+/* 内容容器 */
+.subContainer11 {
+  width: 258px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+/* 内容容器 */
+.subContainer12 {
+  width: 258px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+/* 标签容器 */
+.subLabel04 {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* 内容容器 */
+.subContainer14 {
+  flex: 1 1 0;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+/* 标签容器 */
+.subLabel06 {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* 输入框样式 */
+.subInput {
+  align-self: stretch;
+  padding: 10px 12px;
+  background: var(--background-bg-muted-50, rgba(244.04, 244.04, 245.05, 0.50));
+  overflow: hidden;
+  border-radius: 6px;
+  outline: 1px solid var(--border-border-input, #E4E4E7);
+  outline-offset: -1px;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* 按钮样式 */
+.subButton04 {
+  height: 32px;
+  padding: 8px 12px;
+  background: var(--background-bg-background, white);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  outline: 1px solid var(--border-border-input, #E4E4E7);
+  outline-offset: -1px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 分隔符容器 */
+.subSeparator {
+  align-self: stretch;
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* 下拉箭头容器 */
+.subArrowLongDownoutline {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 排序图标容器 */
+.subCaretSort {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  opacity: 0.50;
+  overflow: hidden;
+}
+
+/* 开关按钮样式 */
+
+.subSwitch {
+  width: 36px;
+  height: 20px;
+  padding: 2px;
+  background: var(--background-bg-primary, #18181B);
+  border-radius: 9999px;
+  justify-content: flex-end;
+  align-items: center;
+  display: flex;
+}
+
+/* 内容容器 */
+.subContainer04 {
+  background: var(--background-bg-secondary, #F4F4F5);
+  border-radius: 6px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* 内容容器 */
+.subContainer08 {
+  width: 258px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+/* 内容容器 */
+.subContainer09 {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+/* 内容容器 */
+.subContainer15 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* 框架容器 */
+.subFrame1410 {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+/* 选择框输入容器 */
+.subSelectInput {
+  align-self: stretch;
+  height: 36px;
+  padding: 8px 12px;
+  background: var(--background-bg-muted-50, rgba(244.04, 244.04, 245.05, 0.50));
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  position: relative;
+  border-radius: 6px;
+  outline: 1px solid var(--border-border-input, #E4E4E7);
+  outline-offset: -1px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 内容容器 */
+.subContainer13 {
+  align-self: stretch;
+  padding: 16px;
+  border-radius: 8px;
+  outline: 1px solid var(--border-border-input, #E4E4E7);
+  outline-offset: -1px;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* 内容容器 */
+.subContainer02 {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+/* 内容容器 */
+.subContainer05 {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+/* 示例插槽内容容器 */
+.subExampleSlotStarContent02 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+/* 内容容器 */
+.subContent03 {
+  align-self: stretch;
+  padding: 12px 24px;
+  background: var(--background-bg-background, white);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+}
+/* 选择框容器 */
+.subSelect {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+/* 示例插槽内容容器 */
+.subExampleSlotStarContent {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+/* 示例插槽内容容器 */
+.subExampleSlotStarContent01 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+/* 内容容器 */
+.subContent02 {
+  align-self: stretch;
+  padding: 24px;
+  background: var(--color-primary-foreground-100, #FAFAFA);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* 表单字段容器 */
+.subFormField02 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* 内容容器 */
+.subContent {
+  align-self: stretch;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* 内容容器 */
+.subContent01 {
+  align-self: stretch;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* 卡片容器 */
+.subCard {
+  align-self: stretch;
+  background: var(--background-bg-background, white);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  border-radius: 8px;
+  outline: 1px solid var(--border-border-input, #E4E4E7);
+  outline-offset: -1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* 卡片容器 */
+.subCard01 {
+  align-self: stretch;
+  background: var(--background-bg-background, white);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  border-radius: 8px;
+  outline: 1px solid var(--border-border-input, #E4E4E7);
+  outline-offset: -1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* 表单字段容器 */
+.subFormField {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* 表单字段容器 */
+.subFormField01 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* 内容容器 */
+.subContainer01 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+/* 根容器 */
+.subContainer {
+  width: 100%;
+  max-width: 672px;
+  min-width: 272px;
+  /* min-width: 672px; */
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  user-select: none;
+}
+/* 下拉列表样式 */
+.subDropdownList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  padding: 4px 0;
+}
+
+/* 下拉列表项样式 */
+.subDropdownItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+  color: #18181B;
+}
+
+.subDropdownItem:hover {
+  background: #f8fafc;
+}
+
+/* 选中项的勾选标记 */
+.subCheckMark {
+  color: #10b981; /* 绿色勾选 */
+  margin-left: 8px;
+  font-weight: bold;
+}
+
+.subChecker {
+  width: 16px;
+  height: 16px;
+  background: var(--background-bg-background, white);
+  box-shadow: 0px 4px 6px -4px rgba(0, 0, 0, 0.10);
+  border-radius: 9999px;
+}
+
+.subChecker01 {
+  width: 16px;
+  height: 16px;
+  background: var(--background-bg-background, white);
+  box-shadow: 0px 4px 6px -4px rgba(0, 0, 0, 0.10);
+  border-radius: 9999px;
+}
+.subSwitch01 {
+  width: 36px;
+  height: 20px;
+  padding: 2px;
+  background: var(--color-input-100, #E4E4E7);
+  border-radius: 9999px;
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+}
+/*theme=============================================================================================*/
+/* 设置标题文本样式 */
+.themeSettingSpan {
+  color: var(--text-text-primary, #18181B);
+  font-size: 18px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 28px;
+  word-wrap: break-word;
+}
+
+/* 系统设置说明文本样式 */
+.themeManagingothersystemsettingsSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 14px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+/* 系统设置说明容器 */
+.themeManagingOtherSystemSettings {
+  align-self: stretch;
+}
+
+/* 分隔线样式 */
+.themeLine {
+  align-self: stretch;
+  height: 1px;
+  background: var(--color-border-100, #E4E4E7);
+}
+
+/* 主题标签文本样式 */
+.themeLabel01Span {
+  color: var(--color-foreground-100, #09090B);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+
+/* 主题选择说明文本样式 */
+.themeSelectthethemeforthedashboardSpan {
+  color: var(--text-text-muted-foreground, #71717A);
+  font-size: 12.80px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 19.20px;
+  word-wrap: break-word;
+}
+
+/* 骨架屏元素样式 */
+.themeSkeleton01 {
+  width: 80px;
+  height: 8px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: #F4F4F5;
+}
+
+.themeSkeleton03 {
+  width: 100px;
+  height: 8px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: #F4F4F5;
+}
+
+.themeSkeleton05 {
+  width: 16px;
+  height: 16px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: #F4F4F5;
+}
+
+.themeSkeleton07 {
+  width: 100px;
+  height: 8px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: #F4F4F5;
+}
+
+.themeSkeleton09 {
+  width: 16px;
+  height: 16px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: #F4F4F5;
+}
+
+.themeSkeleton11 {
+  width: 100px;
+  height: 8px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: #F4F4F5;
+}
+
+.themeSkeleton13 {
+  width: 80px;
+  height: 8px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: #F4F4F5;
+}
+
+.themeSkeleton15 {
+  width: 100px;
+  height: 8px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: #F4F4F5;
+}
+
+.themeSkeleton17 {
+  width: 16px;
+  height: 16px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: #F4F4F5;
+}
+
+.themeSkeleton19 {
+  width: 100px;
+  height: 8px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: #F4F4F5;
+}
+
+.themeSkeleton21 {
+  width: 16px;
+  height: 16px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: #F4F4F5;
+}
+
+.themeSkeleton23 {
+  width: 100px;
+  height: 8px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: #F4F4F5;
+}
+
+/* 按钮文本样式 */
+.themeButton01Span {
+  color: var(--text-text-primary-foreground, #FAFAFA);
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+  line-height: 23px;
+  word-wrap: break-word;
+}
+
+/* 标题容器 */
+.themeTitle {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1px;
+  display: flex;
+}
+
+/* 标签容器 */
+.themeLabel {
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: inline-flex;
+}
+
+/* 按钮样式 */
+.themeButton {
+  height: 36px;
+  padding: 8px 16px;
+  background: var(--background-bg-primary, #18181B);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  display: inline-flex;
+}
+
+/* 分隔符容器 */
+.themeSeparator {
+  align-self: stretch;
+  padding: 24px 0;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  display: flex;
+}
+
+/* 骨架屏容器 */
+.themeSkeleton {
+  width: 80px;
+  height: 8px;
+  position: relative;
+}
+
+.themeSkeleton02 {
+  width: 100px;
+  height: 8px;
+  position: relative;
+}
+
+.themeSkeleton04 {
+  width: 16px;
+  height: 16px;
+  position: relative;
+}
+
+.themeSkeleton06 {
+  width: 100px;
+  height: 8px;
+  position: relative;
+}
+
+.themeSkeleton08 {
+  width: 16px;
+  height: 16px;
+  position: relative;
+}
+
+.themeSkeleton10 {
+  width: 100px;
+  height: 8px;
+  position: relative;
+}
+
+.themeSkeleton12 {
+  width: 80px;
+  height: 8px;
+  position: relative;
+}
+
+.themeSkeleton14 {
+  width: 100px;
+  height: 8px;
+  position: relative;
+}
+
+.themeSkeleton16 {
+  width: 16px;
+  height: 16px;
+  position: relative;
+}
+
+.themeSkeleton18 {
+  width: 100px;
+  height: 8px;
+  position: relative;
+}
+
+.themeSkeleton20 {
+  width: 16px;
+  height: 16px;
+  position: relative;
+}
+
+.themeSkeleton22 {
+  width: 100px;
+  height: 8px;
+  position: relative;
+}
+
+/* 内容容器（浅色主题预览） */
+.themeContainer04 {
+  align-self: stretch;
+  padding: 8px;
+  background: white;
+  border-radius: 6px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+  display: flex;
+}
+
+.themeContainer05 {
+  align-self: stretch;
+  padding: 8px;
+  background: white;
+  border-radius: 6px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  display: inline-flex;
+}
+
+.themeContainer06 {
+  align-self: stretch;
+  padding: 8px;
+  background: white;
+  border-radius: 6px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  display: inline-flex;
+}
+
+/* 内容容器（深色主题预览） */
+.themeContainer08 {
+  align-self: stretch;
+  padding: 8px;
+  background: #1E293B;
+  border-radius: 6px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+  display: flex;
+}
+
+.themeContainer09 {
+  align-self: stretch;
+  padding: 8px;
+  background: #1E293B;
+  border-radius: 6px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  display: inline-flex;
+}
+
+.themeContainer10 {
+  align-self: stretch;
+  padding: 8px;
+  background: #1E293B;
+  border-radius: 6px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  display: inline-flex;
+}
+
+/* 主题预览容器 */
+.themeContainer03 {
+  padding: 8px;
+  background: #ECEDEF;
+  border-radius: 2px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+  display: flex;
+}
+
+.themeContainer07 {
+  padding: 8px;
+  background: #020617;
+  border-radius: 2px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+  display: flex;
+}
+/* 单选组项样式（选中状态） */
+.themeRadioGroupItem {
+  padding: 4px;
+  overflow: hidden;
+  border-radius: 6px;
+  outline: 2px solid #18181B;
+  outline-offset: -2px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* 单选组项样式（未选中状态） */
+.themeRadioGroupItem01 {
+  padding: 4px;
+  overflow: hidden;
+  border-radius: 6px;
+  outline: 2px solid #F4F4F5;
+  outline-offset: -2px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* 单选组容器 */
+.themeRadioGroup {
+  width: 100%;
+  max-width: 360px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+/* 主题设置容器 */
+.themeContainer02 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* 主内容容器 */
+.themeContainer01 {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+/* 根容器 */
+.themeContainer {
+  width: 100%;
+  max-width: 672px;
+  min-width: 272px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+/*------------根据figma新增加的顶部固定数据---------------*/
+.userTop{
+  height: 115px;
+  padding: 0px 16px;
+  margin: 0px 48px;
+}
+.userTopTitle{
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 32px;
+  color: #18181B;
+}
+.userTopDescription{
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  color: #71717A;
+}
+.userTopLine{
+  background:#E4E4E7;
+  height: 1px;
+  margin: 40px 0px 16px;
+}
