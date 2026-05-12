@@ -1,0 +1,28 @@
+{
+  "name": "@liulian/design-tokens",
+  "version": "0.1.0",
+  "description": "LIULIAN design tokens: UniBe red on warm paper, editorial Swiss typography (Fraunces · Switzer · JetBrains Mono). Source: feat/gui-demo iteration 2.",
+  "main": "dist/tokens.js",
+  "module": "dist/tokens.mjs",
+  "types": "dist/tokens.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/tokens.mjs",
+      "require": "./dist/tokens.js",
+      "types": "./dist/tokens.d.ts"
+    },
+    "./css": "./dist/tokens.css",
+    "./tailwind": "./dist/tailwind.preset.js",
+    "./antd-theme": "./dist/antd-theme.js",
+    "./rn": "./dist/tokens.rn.js"
+  },
+  "files": ["dist", "src"],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs --watch"
+  },
+  "keywords": ["liulian", "design-tokens", "tokens", "tailwind", "design-system"],
+  "license": "MIT",
+  "author": "Linlin Jia <linlin.jia@unibe.ch>",
+  "repository": "github:jajupmochi/liulian-design-system"
+}
