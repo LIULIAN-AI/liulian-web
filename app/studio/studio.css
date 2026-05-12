@@ -1,0 +1,215 @@
+/* /studio shell — see PLATFORM_DESIGN.md §5 */
+
+.liulian-studio {
+  --canvas-warm: #FBFBFA;
+  --surface-pure: #FFFFFF;
+  --surface-shade: #FAFAF9;
+  --ink: #131313;
+  --ink-soft: #34373B;
+  --ink-muted: #666A70;
+  --ink-faint: #94989D;
+  --hairline: #E8E7E2;
+  --bern: #E20613;
+  --bern-deep: #B00010;
+
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  grid-template-rows: 32px 1fr;
+  min-height: 100vh;
+  background: var(--canvas-warm);
+  color: var(--ink);
+}
+
+.studio-header {
+  grid-column: 1 / -1;
+  height: 32px;
+  border-bottom: 1px solid var(--hairline);
+  background: var(--canvas-warm);
+  display: flex;
+  align-items: center;
+  padding: 0 16px 0 24px;
+  gap: 16px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.studio-mark {
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: -0.005em;
+}
+
+.studio-running {
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.studio-running .dim { color: var(--ink-faint); }
+
+.studio-shortcut {
+  margin-left: auto;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 10px;
+}
+
+.studio-sidebar {
+  border-right: 1px solid var(--hairline);
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: width 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--canvas-warm);
+}
+
+.studio-sidebar:hover {
+  width: 220px;
+  z-index: 5;
+  box-shadow: 4px 0 8px rgba(19, 19, 19, 0.04);
+}
+
+.studio-tab {
+  position: relative;
+  display: grid;
+  grid-template-columns: 16px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  text-decoration: none;
+  color: var(--ink-muted);
+  font-size: 13px;
+  transition: color 150ms;
+}
+
+.studio-tab:hover { color: var(--ink); background: var(--surface-shade); }
+
+.studio-tab[aria-current="page"],
+.studio-tab.active {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.studio-tab-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: transparent;
+  margin-left: 5px;
+  transition: background 150ms;
+}
+
+.studio-tab[aria-current="page"] .studio-tab-dot,
+.studio-tab.active .studio-tab-dot {
+  background: var(--bern);
+}
+
+.studio-tab-label {
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+.studio-sidebar:hover .studio-tab-label {
+  opacity: 1;
+}
+
+.studio-tab-shortcut {
+  font-size: 10px;
+  color: var(--ink-faint);
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+.studio-sidebar:hover .studio-tab-shortcut {
+  opacity: 1;
+}
+
+.studio-main {
+  padding: 32px 40px 64px;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* List-page archetype — asymmetric 60/40 (PLATFORM_DESIGN §5.2) */
+.studio-list-layout {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 48px;
+}
+
+.studio-list-table {
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  background: var(--surface-pure);
+  overflow: hidden;
+}
+
+.studio-list-table-header {
+  display: grid;
+  grid-template-columns: 1fr 120px 80px 100px;
+  padding: 10px 16px;
+  background: var(--surface-shade);
+  border-bottom: 1px solid var(--hairline);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.studio-list-row {
+  display: grid;
+  grid-template-columns: 1fr 120px 80px 100px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 13px;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.studio-list-row:hover { background: var(--surface-shade); }
+
+.studio-list-row .mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; font-size: 11px; color: var(--ink-muted); }
+
+.studio-list-row .status-running { font-style: italic; color: var(--ink); }
+.studio-list-row .status-failed { font-weight: 600; color: var(--bern-deep); }
+.studio-list-row .status-completed { color: var(--ink-muted); }
+.studio-list-row .status-pending { color: var(--ink-faint); }
+
+.studio-list-explainer {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.studio-list-explainer h2 {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  margin: 0 0 16px;
+}
+
+.studio-list-explainer p {
+  color: var(--ink-soft);
+  max-width: 36ch;
+  margin: 0 0 14px;
+}
+
+.studio-list-explainer .footnote {
+  font-family: 'JetBrains Mono', monospace;
+  font-style: normal;
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 1024px) {
+  .studio-list-layout { grid-template-columns: 1fr; }
+}
