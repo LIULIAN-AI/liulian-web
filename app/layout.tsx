@@ -1,66 +1,50 @@
-import './css/style.css'
-import { Inter } from 'next/font/google'
-import ThemeProvider from "@/components/ThemeProvider"
-import { ClerkProvider } from '@clerk/nextjs'
-import { NextIntlClientProvider } from 'next-intl'
-import { getMessages } from 'next-intl/server'
-import { locales, defaultLocale } from '@/i18n'
-import { cookies } from 'next/headers'
-import { setupGlobalAbortController, abortAllRequests } from '@/app/api/apiClient';
+/**
+ * Demo-minimal root layout — bypasses Clerk + next-intl + contentlayer
+ * so the /forecast and /studio Day-1 pages can render without all of
+ * neobanker's auth/i18n/content infrastructure wired up.
+ *
+ * The full neobanker-derived layout is preserved at app/layout.original.tsx
+ * and gets restored at M2 when we wire Clerk + next-intl properly.
+ */
 
+export const metadata = {
+  title: 'LIULIAN — Liquid Intelligence for Time',
+  description:
+    'Open-source production stack for spatio-temporal AI: research-grade model zoo wrapped in production-grade BI.',
+};
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap'
-})
-
-interface RootLayoutProps {
-  children: React.ReactNode
-}
-
-// 将cookies的使用移到异步函数中
-async function getLocale() {
-  const cookieStore = await cookies()
-  const localeCookie = cookieStore.get('NEXT_LOCALE')
-  return localeCookie?.value || defaultLocale
-}
-
-export default async function RootLayout({
-  children,
-}: RootLayoutProps) {
-  // 从cookie获取当前语言
-  const locale = await getLocale()
-  // 获取消息
-  const messages = await getMessages({ locale })
-  
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={locale} suppressHydrationWarning className="scroll-smooth">
+    <html lang="en">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="Neobanker is a modern bank that provides you with a secure and convenient way to manage your finances." />
-        <title>Neobanker</title>
-        <link rel="icon" href="/favicon.ico" />
-        <meta charSet="utf-8" />
+        {/* Brand fonts — pinned snapshot of @liulian/design-tokens font stack */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=JetBrains+Mono:wght@300;400;500;600&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://api.fontshare.com/v2/css?f[]=switzer@200,300,400,500,600,700&display=swap"
+          rel="stylesheet"
+        />
       </head>
-      <body className={`${inter.variable} font-inter antialiased tracking-tight`}>
-        <div className="flex flex-col min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip">
-          <NextIntlClientProvider locale={locale} messages={messages}>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <div className="bg-background text-foreground">
-                <ClerkProvider>
-                  {children}
-                </ClerkProvider>
-              </div>
-            </ThemeProvider>
-          </NextIntlClientProvider>
-        </div>
+      <body
+        style={{
+          margin: 0,
+          background: '#FBFBFA',
+          color: '#131313',
+          fontFamily: "'Switzer', 'SF Pro Text', system-ui, sans-serif",
+          fontSize: 15,
+          lineHeight: 1.55,
+          fontFeatureSettings: "'ss01', 'ss02', 'kern'",
+          WebkitFontSmoothing: 'antialiased',
+          MozOsxFontSmoothing: 'grayscale',
+        }}
+      >
+        {children}
       </body>
     </html>
-  )
+  );
 }

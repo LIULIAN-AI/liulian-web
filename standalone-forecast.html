@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LIULIAN · Forecast Canvas</title>
+  <meta name="viewport" content="width=1440" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@200,300,400,500,600,700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+  <style>
+    :root {
+      --canvas-warm: #FBFBFA;
+      --surface: #FFFFFF;
+      --surface-shade: #FAFAF9;
+      --ink: #131313;
+      --ink-soft: #34373B;
+      --ink-muted: #666A70;
+      --ink-faint: #94989D;
+      --hairline: #E8E7E2;
+      --bern: #E20613;
+      --bern-deep: #B00010;
+      --bern-tint: #FDEBEC;
+      --yellow-pale: #FBF1D9;
+      --amber: #946400;
+      --serif: 'Fraunces', 'Times New Roman', serif;
+      --sans: 'Switzer', 'SF Pro Text', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--canvas-warm); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.5; font-feature-settings: "ss01","ss02","kern"; -webkit-font-smoothing: antialiased; }
+    .topbar { height: 32px; border-bottom: 1px solid var(--hairline); display: flex; align-items: center; padding: 0 24px; gap: 14px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
+    .topbar .brand { color: var(--ink); font-weight: 600; font-size: 14px; letter-spacing: -0.005em; text-transform: none; }
+    .topbar .sep { opacity: 0.5; }
+    .topbar .live-dot { color: var(--bern); margin-right: 4px; }
+    .topbar .right { margin-left: auto; color: var(--ink-muted); }
+    .canvas { max-width: 1440px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 260px 1fr 360px; gap: 14px; }
+    .station-list { background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; padding: 8px 0; overflow-y: auto; max-height: 90vh; grid-row: 1 / 6; }
+    .station-list h3 { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); padding: 8px 16px 12px; margin: 0; border-bottom: 1px solid var(--hairline); font-weight: 500; }
+    .station-list h3 .hint { display: block; color: var(--ink-muted); margin-top: 4px; }
+    .station-list ul { list-style: none; margin: 0; padding: 0; }
+    .station-list li { display: grid; grid-template-columns: 16px 1fr auto; align-items: center; gap: 8px; padding: 10px 16px; cursor: pointer; font-size: 14px; transition: background 150ms; }
+    .station-list li:hover { background: var(--surface-shade); }
+    .station-list li .dot { width: 6px; height: 6px; border-radius: 9999px; background: transparent; margin-left: 5px; }
+    .station-list li.active .dot { background: var(--bern); }
+    .station-list li.active { font-weight: 500; }
+    .station-list li .id { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint); }
+    .col-main { grid-column: 2; display: flex; flex-direction: column; gap: 14px; }
+    .chat { grid-column: 3; }
+    .title-band h1 { font-family: var(--serif); font-weight: 500; font-variation-settings: "opsz" 38; font-size: 38px; letter-spacing: -0.02em; margin: 0; color: var(--ink); }
+    .title-band p { font-family: var(--serif); font-style: italic; color: var(--ink-muted); margin: 6px 0 0; font-size: 14px; }
+    .map-panel { background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; overflow: hidden; position: relative; height: 240px; }
+    .map-panel .label { position: absolute; top: 10px; left: 12px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); background: rgba(251,251,250,0.9); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--hairline); z-index: 2; }
+    .map-panel svg { width: 100%; height: 100%; display: block; }
+    .chart-panel { background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; padding: 16px 18px; }
+    .chart-panel .meta { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
+    .chart-panel #chart { height: 320px; }
+    .kpi-strip { display: flex; border: 1px solid var(--hairline); border-radius: 10px; background: var(--surface); overflow: hidden; }
+    .kpi-strip .cell { padding: 14px 18px; flex: 1; border-right: 1px solid var(--hairline); }
+    .kpi-strip .cell:last-child { border-right: none; }
+    .kpi-strip .cell .label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 4px; }
+    .kpi-strip .cell .value { font-family: var(--mono); font-size: 22px; font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+    .kpi-strip .cell .unit { font-size: 12px; color: var(--ink-muted); margin-left: 4px; font-weight: 400; }
+    .alert-panel { background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; padding: 14px 18px; }
+    .alert-panel h3 { font-family: var(--serif); font-weight: 500; font-size: 18px; margin: 0; letter-spacing: -0.01em; display: inline-block; }
+    .alert-panel .right { font-family: var(--mono); font-size: 10px; color: var(--ink-faint); letter-spacing: 0.06em; text-transform: uppercase; float: right; }
+    .alert-row { display: grid; grid-template-columns: 200px 1fr; gap: 12px; align-items: center; margin-top: 12px; }
+    .alert-row .name { font-size: 13px; }
+    .alert-row .name .station-id { margin-left: 6px; font-family: var(--mono); font-size: 10px; color: var(--ink-faint); }
+    .alert-row .track { position: relative; height: 14px; background: var(--surface-shade); border: 1px solid var(--hairline); border-radius: 4px; overflow: hidden; }
+    .alert-row .seg { position: absolute; top: 0; bottom: 0; }
+    .seg.watch { background: var(--yellow-pale); border: 1px solid var(--amber); }
+    .seg.elevated { background: var(--bern-tint); border: 1px solid var(--bern-deep); }
+    .seg.critical { background: var(--bern); }
+    .alert-row .name.watch { font-weight: 400; }
+    .alert-row .name.elevated { font-weight: 600; color: var(--bern-deep); }
+    .alert-row .name.critical { font-weight: 600; font-style: italic; }
+    .chat { grid-row: 1 / 6; background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; display: flex; flex-direction: column; overflow: hidden; max-height: 90vh; }
+    .chat header { padding: 12px 16px; border-bottom: 1px solid var(--hairline); font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); display: flex; justify-content: space-between; }
+    .chat .stream { flex: 1; padding: 16px; overflow-y: auto; font-size: 13px; line-height: 1.55; }
+    .chat .opening { font-family: var(--serif); font-style: italic; color: var(--ink-muted); margin-top: 0; }
+    .chat .msg-user { color: var(--ink); margin-bottom: 14px; }
+    .chat .role { color: var(--ink-faint); font-family: var(--mono); font-size: 11px; margin-right: 8px; text-transform: lowercase; }
+    .chat .tool { background: var(--surface-shade); border: 1px solid var(--hairline); border-radius: 6px; padding: 8px 12px; margin-bottom: 10px; font-family: var(--mono); font-size: 11px; }
+    .chat .tool .name { color: var(--bern); }
+    .chat .tool .input, .chat .tool .arrow { white-space: pre-wrap; }
+    .chat .tool .input { color: var(--ink-muted); margin-top: 4px; }
+    .chat .tool .arrow { color: var(--ink); margin-top: 6px; }
+    .chat .msg-agent { color: var(--ink); margin-bottom: 16px; }
+    .chat .suggestions { display: flex; flex-direction: column; gap: 6px; }
+    .chat .suggestions button { text-align: left; background: transparent; border: 1px solid var(--hairline); border-radius: 6px; padding: 8px 12px; font-family: var(--sans); font-size: 12px; color: var(--ink-muted); cursor: pointer; }
+    .chat form { border-top: 1px solid var(--hairline); padding: 8px; display: flex; gap: 8px; background: var(--surface-shade); }
+    .chat input { flex: 1; border: 1px solid var(--hairline); border-radius: 6px; padding: 8px 12px; font-family: var(--sans); font-size: 13px; outline: none; background: var(--surface); }
+    .chat .send { border: none; border-radius: 6px; padding: 8px 14px; background: var(--ink); color: #fff; font-size: 13px; cursor: pointer; font-family: var(--sans); }
+    .palette-backdrop { position: fixed; inset: 0; background: rgba(19,19,19,0.20); display: none; align-items: flex-start; justify-content: center; padding-top: 12vh; z-index: 1000; }
+    .palette-backdrop.open { display: flex; }
+    .palette { width: 600px; max-width: 92vw; background: var(--surface); border: 1px solid var(--hairline); border-radius: 14px; box-shadow: 0 24px 48px rgba(19,19,19,0.12); overflow: hidden; }
+    .palette > input { width: 100%; border: none; outline: none; padding: 18px 22px; font-size: 18px; background: transparent; font-family: var(--sans); border-bottom: 1px solid var(--hairline); }
+    .palette .group-title { padding: 8px 22px 4px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
+    .palette .cmd { display: grid; grid-template-columns: 16px 1fr auto; align-items: center; gap: 12px; padding: 10px 22px; cursor: pointer; }
+    .palette .cmd:hover { background: var(--surface-shade); }
+    .palette .cmd:hover .dot { background: var(--bern); }
+    .palette .cmd .dot { width: 6px; height: 6px; border-radius: 9999px; background: transparent; margin-left: 5px; }
+    .palette .cmd .lbl { font-size: 14px; }
+    .palette .cmd .kbd { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); letter-spacing: 0.04em; }
+    .palette .foot { display: flex; justify-content: space-between; padding: 10px 22px; border-top: 1px solid var(--hairline); font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint); background: var(--surface-shade); }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <span class="brand">LIULIAN</span><span class="sep">·</span><span>Forecast</span>
+    <span class="sep">·</span><span><span class="live-dot">●</span> live · 2026-05-13 05:08 UTC</span>
+    <span class="sep">·</span><span>aare-bern / patchtst / entity=none / seed=42</span>
+    <span class="right">⌘K palette · b agent</span>
+  </header>
+
+  <section class="canvas">
+    <nav class="station-list">
+      <h3>Stations · 28 <span class="hint">j/k to nav · o to open</span></h3>
+      <ul id="stations">
+        <li class="active" data-id="aare-bern"><span class="dot"></span><span>Aare at Bern</span><span class="id">aare-bern</span></li>
+        <li data-id="aare-thun"><span class="dot"></span><span>Aare at Thun</span><span class="id">aare-thun</span></li>
+        <li data-id="aare-hagneck"><span class="dot"></span><span>Aare at Hagneck</span><span class="id">aare-hagneck</span></li>
+        <li data-id="rhine-basel"><span class="dot"></span><span>Rhine at Basel</span><span class="id">rhine-basel</span></li>
+        <li data-id="rhine-rekingen"><span class="dot"></span><span>Rhine at Rekingen</span><span class="id">rhine-rekingen</span></li>
+        <li data-id="reuss-luzern"><span class="dot"></span><span>Reuss at Luzern</span><span class="id">reuss-luzern</span></li>
+        <li data-id="limmat-zurich"><span class="dot"></span><span>Limmat at Zurich</span><span class="id">limmat-zurich</span></li>
+        <li data-id="inn-martina"><span class="dot"></span><span>Inn at Martina</span><span class="id">inn-martina</span></li>
+        <li data-id="rhone-porte"><span class="dot"></span><span>Rhone at Porte</span><span class="id">rhone-porte</span></li>
+        <li data-id="brienz"><span class="dot"></span><span>Brienzersee</span><span class="id">brienz</span></li>
+      </ul>
+    </nav>
+
+    <div class="col-main">
+      <div class="title-band">
+        <h1>aare-bern</h1>
+        <p>72-hour forecast with Q05–Q95 prediction intervals · m³/s</p>
+      </div>
+      <div class="map-panel">
+        <span class="label">Swiss river network · 28 stations</span>
+        <svg viewBox="0 0 800 240" preserveAspectRatio="xMidYMid meet">
+          <path d="M 60,180 Q 50,150 80,120 Q 110,90 160,80 Q 220,72 280,82 Q 340,90 400,75 Q 460,60 520,72 Q 580,84 630,98 Q 690,118 720,150 Q 740,182 700,200 Q 640,212 560,206 Q 480,200 400,210 Q 320,220 240,212 Q 160,204 100,196 Z" fill="#F2F0EA" stroke="#DEDCD4" stroke-width="1"/>
+          <path d="M 100,180 Q 200,150 320,140 Q 440,130 540,110" stroke="#94989D" stroke-width="1.2" fill="none"/>
+          <path d="M 540,110 Q 600,108 660,120" stroke="#94989D" stroke-width="1.4" fill="none"/>
+          <path d="M 380,200 Q 320,190 240,180 Q 160,170 100,180" stroke="#94989D" stroke-width="1" fill="none"/>
+          <g><circle cx="320" cy="138" r="9" fill="none" stroke="#E20613" stroke-width="1"/><circle cx="320" cy="138" r="3.5" fill="#E20613"/><title>aare-bern (active)</title></g>
+          <g><circle cx="290" cy="148" r="6" fill="none" stroke="#666A70" stroke-width="0.8"/><circle cx="290" cy="148" r="2.5" fill="#131313"/><title>aare-thun</title></g>
+          <g><circle cx="380" cy="125" r="5" fill="none" stroke="#666A70" stroke-width="0.8"/><circle cx="380" cy="125" r="2.5" fill="#131313"/><title>aare-hagneck</title></g>
+          <g><circle cx="600" cy="110" r="7" fill="none" stroke="#666A70" stroke-width="0.8"/><circle cx="600" cy="110" r="2.5" fill="#131313"/><title>rhine-basel</title></g>
+          <g><circle cx="660" cy="120" r="5" fill="none" stroke="#666A70" stroke-width="0.8"/><circle cx="660" cy="120" r="2.5" fill="#131313"/><title>rhine-rekingen</title></g>
+          <g><circle cx="420" cy="155" r="6" fill="none" stroke="#666A70" stroke-width="0.8"/><circle cx="420" cy="155" r="2.5" fill="#131313"/><title>reuss-luzern</title></g>
+          <g><circle cx="540" cy="135" r="6" fill="none" stroke="#666A70" stroke-width="0.8"/><circle cx="540" cy="135" r="2.5" fill="#131313"/><title>limmat-zurich</title></g>
+          <g><circle cx="680" cy="155" r="5" fill="none" stroke="#666A70" stroke-width="0.8"/><circle cx="680" cy="155" r="2.5" fill="#131313"/><title>inn-martina</title></g>
+          <g><circle cx="180" cy="195" r="5" fill="none" stroke="#666A70" stroke-width="0.8"/><circle cx="180" cy="195" r="2.5" fill="#131313"/><title>rhone-porte</title></g>
+          <g><circle cx="350" cy="158" r="4" fill="none" stroke="#666A70" stroke-width="0.8"/><circle cx="350" cy="158" r="2" fill="#131313"/><title>brienzersee</title></g>
+        </svg>
+      </div>
+      <div class="chart-panel">
+        <div class="meta">aare-bern · patchtst · forecast_at 2026-05-13 05:00 UTC · horizon 72h</div>
+        <div id="chart"></div>
+      </div>
+      <div class="kpi-strip">
+        <div class="cell"><div class="label">MAE</div><div class="value">8.42<span class="unit">m³/s</span></div></div>
+        <div class="cell"><div class="label">RMSE</div><div class="value">11.27<span class="unit">m³/s</span></div></div>
+        <div class="cell"><div class="label">Coverage @ 90</div><div class="value">88.5<span class="unit">%</span></div></div>
+        <div class="cell"><div class="label">Model · Horizon</div><div class="value" style="font-size: 14px; font-family: var(--sans); font-weight: 500;">patchtst <span class="unit">72h</span></div></div>
+      </div>
+      <div class="alert-panel">
+        <h3>Alert timeline</h3>
+        <span class="right">2026-05-09 → 2026-05-13 · 3 rules</span>
+        <div class="alert-row"><span class="name watch">Basel watch <span class="station-id">rhine-basel</span></span>
+          <div class="track"><div class="seg watch" style="left:12%;width:18%"></div><div class="seg watch" style="left:55%;width:9%"></div></div></div>
+        <div class="alert-row"><span class="name elevated">Bern Q95 elevated <span class="station-id">aare-bern</span></span>
+          <div class="track"><div class="seg elevated" style="left:28%;width:14%"></div><div class="seg elevated" style="left:64%;width:22%"></div></div></div>
+        <div class="alert-row"><span class="name critical">Bern Q95 critical <span class="station-id">aare-bern</span></span>
+          <div class="track"><div class="seg critical" style="left:72%;width:6%"></div></div></div>
+      </div>
+    </div>
+
+    <aside class="chat">
+      <header><span>bi agent</span><span>○ idle</span></header>
+      <div class="stream">
+        <p class="opening">Ask in plain English. Examples: "Show stations where Q95 went above 850 last week." "Compare TimesNet and Chronos for Bern."</p>
+        <div class="msg-user"><span class="role">you</span>Show Bern Q95 next 72 hours</div>
+        <div class="tool">
+          <div class="name">[query_forecasts]</div>
+          <div class="input">{
+  "action": "summary",
+  "station_id": "aare-bern",
+  "model_id": "patchtst"
+}</div>
+          <div class="arrow">→ {"mean_at_h24": 412.4, "q05_at_h24": 388.0, "q95_at_h24": 437.1, "observed_recent_mean": 408.2, "units": "m³/s"}</div>
+        </div>
+        <div class="msg-agent"><span class="role">agent</span>Bern's 24-hour-ahead forecast: mean 412.4 m³/s, 90% CI [388.0, 437.1]. Within historical range; no alert thresholds projected to fire in the next 72 hours.</div>
+        <div class="suggestions">
+          <button>Compare PatchTST vs Chronos-2 for Bern</button>
+          <button>What's the forecast quality on this station last week?</button>
+          <button>Show me upstream stations with elevated risk</button>
+        </div>
+      </div>
+      <form onsubmit="event.preventDefault();"><input placeholder="Ask the bi agent…"/><button type="submit" class="send">Ask</button></form>
+    </aside>
+  </section>
+
+  <div class="palette-backdrop" id="palette">
+    <div class="palette">
+      <input placeholder="Type a command or search…"/>
+      <div class="group-title">Forecast</div>
+      <div class="cmd"><span class="dot"></span><span class="lbl">Open forecast canvas</span><span class="kbd">F</span></div>
+      <div class="cmd"><span class="dot"></span><span class="lbl">Run zero-shot Chronos-2</span><span class="kbd">⌘Z</span></div>
+      <div class="cmd"><span class="dot"></span><span class="lbl">Compare two models</span><span class="kbd">⌘M</span></div>
+      <div class="group-title">Studio</div>
+      <div class="cmd"><span class="dot"></span><span class="lbl">Go to Studio · Data</span><span class="kbd">1</span></div>
+      <div class="cmd"><span class="dot"></span><span class="lbl">Go to Studio · Train</span><span class="kbd">2</span></div>
+      <div class="cmd"><span class="dot"></span><span class="lbl">Go to Studio · Inference</span><span class="kbd">3</span></div>
+      <div class="cmd"><span class="dot"></span><span class="lbl">Go to Studio · Insight</span><span class="kbd">4</span></div>
+      <div class="group-title">Agents</div>
+      <div class="cmd"><span class="dot"></span><span class="lbl">Toggle BI agent sidebar</span><span class="kbd">B</span></div>
+      <div class="cmd"><span class="dot"></span><span class="lbl">Ask model agent</span><span class="kbd">M</span></div>
+      <div class="foot"><span>↑↓ navigate</span><span>↵ select</span><span>esc close</span><span>⌘K toggle</span></div>
+    </div>
+  </div>
+
+  <script>
+    const chart = echarts.init(document.getElementById('chart'));
+    const horizon = 72;
+    const baseTs = new Date('2026-05-13T05:00:00Z').getTime();
+    const t = Array.from({ length: horizon }, (_, i) => new Date(baseTs + i * 3600 * 1000).toISOString().slice(0, 13));
+    function rng(seed){return ()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};}
+    const r = rng(42);
+    const base = 408.2;
+    const mean = t.map((_, i) => base + 0.4 * i + (r() - 0.5) * 8.5);
+    const width = t.map((_, i) => 8.5 * (1 + i / horizon) * 1.96);
+    const q05 = mean.map((m, i) => m - width[i]);
+    const q95 = mean.map((m, i) => m + width[i]);
+    const observed = t.map((_, i) => i < 24 ? base + Math.sin(i / 6) * 12 + (r() - 0.5) * 4 : null);
+    chart.setOption({
+      grid: { left: 60, right: 18, top: 20, bottom: 40 },
+      textStyle: { fontFamily: 'Switzer, sans-serif', color: '#131313' },
+      tooltip: { trigger: 'axis', backgroundColor: '#FFFFFF', borderColor: '#E8E7E2', textStyle: { color: '#131313', fontFamily: 'JetBrains Mono', fontSize: 12 } },
+      xAxis: { type: 'category', data: t, axisLine: { lineStyle: { color: '#E8E7E2' } }, axisTick: { show: false }, axisLabel: { color: '#666A70', fontSize: 10, fontFamily: 'JetBrains Mono', formatter: v => v.slice(5, 13).replace('T',' ') }, splitLine: { show: false } },
+      yAxis: { type: 'value', name: 'm³/s', nameTextStyle: { color: '#94989D', fontFamily: 'JetBrains Mono', fontSize: 10 }, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: '#666A70', fontSize: 11, fontFamily: 'JetBrains Mono' }, splitLine: { lineStyle: { color: '#E8E7E2', type: 'dashed' } } },
+      dataZoom: [
+        { type: 'inside', start: 0, end: 100 },
+        { type: 'slider', height: 16, bottom: 8, borderColor: '#E8E7E2', fillerColor: 'rgba(226,6,19,0.18)', handleStyle: { color: '#B00010' }, textStyle: { color: '#94989D', fontFamily: 'JetBrains Mono', fontSize: 10 } }
+      ],
+      series: [
+        { name: 'Q05', type: 'line', data: q05, lineStyle: { opacity: 0 }, stack: 'fan', symbol: 'none', silent: true },
+        { name: 'Q95', type: 'line', data: q95.map((hi, i) => hi - q05[i]), lineStyle: { opacity: 0 }, areaStyle: { color: 'rgba(226,6,19,0.18)' }, stack: 'fan', symbol: 'none', silent: true },
+        { name: 'Mean', type: 'line', data: mean, smooth: false, symbol: 'none', lineStyle: { color: '#E20613', width: 1.5, type: 'dashed' }, z: 5 },
+        { name: 'Observed', type: 'line', data: observed, smooth: false, connectNulls: false, symbol: 'none', lineStyle: { color: '#131313', width: 1.5 }, z: 6 }
+      ]
+    });
+    window.addEventListener('resize', () => chart.resize());
+
+    const items = document.querySelectorAll('#stations li');
+    items.forEach(li => li.addEventListener('click', () => { items.forEach(x => x.classList.remove('active')); li.classList.add('active'); }));
+    window.addEventListener('keydown', e => {
+      if (e.target.tagName === 'INPUT') return;
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); document.getElementById('palette').classList.toggle('open'); return; }
+      if (e.key === 'Escape') { document.getElementById('palette').classList.remove('open'); return; }
+      const active = document.querySelector('#stations li.active');
+      if (!active) return;
+      let idx = [...items].indexOf(active);
+      if (e.key === 'j' || e.key === 'ArrowDown') { idx = Math.min(items.length - 1, idx + 1); e.preventDefault(); }
+      else if (e.key === 'k' || e.key === 'ArrowUp') { idx = Math.max(0, idx - 1); e.preventDefault(); }
+      else return;
+      items.forEach(x => x.classList.remove('active'));
+      items[idx].classList.add('active');
+    });
+    document.getElementById('palette').addEventListener('click', e => { if (e.target.id === 'palette') e.currentTarget.classList.remove('open'); });
+  </script>
+</body>
+</html>

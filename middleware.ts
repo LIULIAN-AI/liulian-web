@@ -1,37 +1,17 @@
-import { locales, defaultLocale } from './i18n';
+/**
+ * Demo-minimal middleware — no redirects, no Clerk, no next-intl
+ * gating. Lets / fall through to (marketing)/page.tsx.
+ *
+ * Original (neobanker /homepage redirect + intl cookie logic) preserved
+ * at middleware.original.ts for M2 restoration.
+ */
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-// 简单的中间件配置，避免next-intl中间件导致的路由问题
-export function middleware(request: NextRequest) {
-  // 获取当前路径
-  const pathname = request.nextUrl.pathname;
-  
-  // 处理根路径重定向
-  if (pathname === '/') {
-    const url = request.nextUrl.clone();
-    url.pathname = `/homepage`;
-    return NextResponse.redirect(url);
-  }
-  
-  // 从cookie获取语言设置
-  const localeCookie = request.cookies.get('NEXT_LOCALE');
-  const locale = localeCookie?.value || defaultLocale;
-  
-  // 创建响应
-  const response = NextResponse.next();
-  
-  // 如果语言cookie不存在或无效，设置默认语言
-  if (!localeCookie || !locales.includes(locale as typeof locales[number])) {
-    response.cookies.set('NEXT_LOCALE', defaultLocale, {
-      path: '/',
-      sameSite: 'lax'
-    });
-  }
-  
-  return response;
+export function middleware(_request: NextRequest) {
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|.*\\..*).*)']
-}
+  matcher: ['/((?!_next|api|favicon.ico).*)'],
+};

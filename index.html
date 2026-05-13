@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LIULIAN · Demo Index</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,WONK@0,9..144,300..900,0..1;1,9..144,300..900,0..1&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --canvas-warm: #FBFBFA;
+      --ink: #131313;
+      --ink-muted: #666A70;
+      --ink-faint: #94989D;
+      --hairline: #E8E7E2;
+      --bern: #E20613;
+      --surface: #FFFFFF;
+      --serif: 'Fraunces', serif;
+      --sans: 'Switzer', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+    body { margin: 0; background: var(--canvas-warm); color: var(--ink); font-family: var(--sans); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px; }
+    .wrap { max-width: 720px; }
+    h1 { font-family: var(--serif); font-weight: 500; font-variation-settings: "opsz" 96, "WONK" 0; font-size: 72px; letter-spacing: -0.035em; line-height: 0.95; margin: 0 0 8px; }
+    h1 .u { font-style: italic; font-variation-settings: "opsz" 96, "WONK" 1, "wght" 600; color: var(--bern); }
+    .pretitle { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 24px; }
+    p.tagline { font-size: 17px; color: var(--ink-muted); max-width: 55ch; margin: 0 0 40px; }
+    ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+    li a { display: grid; grid-template-columns: 200px 1fr auto; align-items: center; gap: 16px; padding: 16px 20px; background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; text-decoration: none; color: var(--ink); transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1), border-color 150ms; }
+    li a:hover { border-color: var(--ink-faint); transform: translateX(4px); }
+    li .name { font-family: var(--serif); font-size: 20px; font-weight: 500; letter-spacing: -0.01em; }
+    li .desc { font-size: 13px; color: var(--ink-muted); }
+    li .arrow { color: var(--bern); font-family: var(--mono); }
+    .small { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); margin-top: 32px; }
+    .small code { background: rgba(226,6,19,0.06); padding: 2px 6px; border-radius: 3px; color: var(--bern); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="pretitle">Liquid Intelligence · Unified Logic · Interactive Adaptive Networks</p>
+    <h1>LI<span class="u">U</span>LIAN</h1>
+    <p class="tagline">Open-source production stack for spatio-temporal AI. Demo index — three pages running locally, fonts loaded from CDN, charts inline.</p>
+    <ul>
+      <li><a href="standalone-landing.html"><span class="name">Landing</span><span class="desc">Editorial-magazine hero · three pillars · CTA</span><span class="arrow">→</span></a></li>
+      <li><a href="standalone-forecast.html"><span class="name">Forecast Canvas</span><span class="desc">Map · Q05/Q95 fan · KPI · alert ribbon · BI agent</span><span class="arrow">→</span></a></li>
+      <li><a href="standalone-studio.html"><span class="name">Studio</span><span class="desc">4-tab IA · Data · Train · Inference · Insight</span><span class="arrow">→</span></a></li>
+    </ul>
+    <div class="small">
+      Backend live at <code>http://localhost:8000/api/docs</code> · <code>GET /healthz</code> · 7 routers · 6/6 tests pass<br>
+      Static pages served via <code>python3 -m http.server 8888</code>
+    </div>
+  </div>
+</body>
+</html>
