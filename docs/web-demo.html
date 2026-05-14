@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LIULIAN · Web Demo</title>
+  <meta name="viewport" content="width=1280" />
+  <meta name="theme-color" content="#FBFBFA" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,WONK@0,9..144,300..900,0..1;1,9..144,300..900,0..1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --canvas-warm: #FBFBFA;
+      --surface: #FFFFFF;
+      --ink: #131313;
+      --ink-muted: #666A70;
+      --ink-faint: #94989D;
+      --hairline: #E8E7E2;
+      --bern: #E20613;
+      --yellow-pale: #FBF1D9;
+      --amber: #946400;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Switzer', system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; min-width: 1280px; background: var(--canvas-warm); font-family: var(--sans); }
+    /* min-width: 1280px forces horizontal scroll on phones so the full desktop UI shows */
+
+    .mock-banner {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--yellow-pale);
+      border-bottom: 1px solid var(--amber);
+      padding: 8px 16px;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+    .mock-banner strong { color: #6e4a00; }
+    .mock-banner a {
+      color: var(--amber);
+      text-decoration: underline;
+      margin-left: 8px;
+    }
+
+    .tabs {
+      position: sticky; top: 30px; z-index: 99;
+      display: flex;
+      gap: 0;
+      background: var(--canvas-warm);
+      border-bottom: 1px solid var(--hairline);
+      padding: 0 24px;
+      align-items: center;
+      height: 48px;
+      box-shadow: 0 2px 8px rgba(19,19,19,0.02);
+    }
+    .tabs .brand {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 16px;
+      letter-spacing: -0.005em;
+      margin-right: 24px;
+      color: var(--ink);
+    }
+    .tabs .brand .u { font-style: italic; color: var(--bern); }
+    .tabs button {
+      background: none;
+      border: none;
+      padding: 14px 16px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      cursor: pointer;
+      position: relative;
+    }
+    .tabs button:hover { color: var(--ink); }
+    .tabs button.active { color: var(--ink); font-weight: 600; }
+    .tabs button.active::after {
+      content: '';
+      position: absolute;
+      left: 16px; right: 16px;
+      bottom: -1px;
+      height: 2px;
+      background: var(--bern);
+    }
+    .tabs .spacer { flex: 1; }
+    .tabs .hint {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    iframe {
+      display: block;
+      width: 100%;
+      height: calc(100vh - 78px);
+      min-height: 800px;
+      border: 0;
+      background: var(--canvas-warm);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mock-banner" role="status">
+    ⚠ <strong>MOCK preview</strong> — all data hardcoded · static HTML · BI canvas needs ≥ 1280px <a href="index.html">← back</a>
+  </div>
+
+  <nav class="tabs">
+    <span class="brand">LI<span class="u">U</span>LIAN</span>
+    <button data-page="standalone-landing.html" class="active">Landing</button>
+    <button data-page="standalone-forecast.html">Forecast Canvas</button>
+    <button data-page="standalone-studio.html">Studio</button>
+    <span class="spacer"></span>
+    <span class="hint">Web mode · forced desktop layout · phone scrolls →</span>
+  </nav>
+
+  <iframe id="frame" src="standalone-landing.html" title="LIULIAN web demo"></iframe>
+
+  <script>
+    const frame = document.getElementById('frame');
+    document.querySelectorAll('.tabs button').forEach(b => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('.tabs button').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        frame.src = b.dataset.page;
+      });
+    });
+
+    // Allow ?page=X URL param to deep-link
+    const params = new URLSearchParams(location.search);
+    const initial = params.get('page');
+    if (initial) {
+      const btn = document.querySelector(`button[data-page="${initial}"]`);
+      if (btn) btn.click();
+    }
+  </script>
+</body>
+</html>

@@ -2,98 +2,281 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>LIULIAN · Demo Index</title>
+  <title>LIULIAN · Demo Hub</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="LIULIAN demo — landing, BI canvas, Studio, mobile preview" />
+  <meta name="description" content="LIULIAN — pick a viewing mode: Web or App preview." />
   <meta name="theme-color" content="#FBFBFA" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,WONK@0,9..144,300..900,0..1;1,9..144,300..900,0..1&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,WONK@0,9..144,300..900,0..1;1,9..144,300..900,0..1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet">
   <style>
     :root {
       --canvas-warm: #FBFBFA;
+      --surface: #FFFFFF;
       --ink: #131313;
       --ink-muted: #666A70;
       --ink-faint: #94989D;
       --hairline: #E8E7E2;
       --bern: #E20613;
-      --surface: #FFFFFF;
+      --bern-tint: #FDEBEC;
+      --yellow-pale: #FBF1D9;
+      --amber: #946400;
       --serif: 'Fraunces', serif;
       --sans: 'Switzer', system-ui, sans-serif;
       --mono: 'JetBrains Mono', monospace;
     }
     *, *::before, *::after { box-sizing: border-box; }
     html, body { margin: 0; background: var(--canvas-warm); color: var(--ink); font-family: var(--sans); min-height: 100vh; }
-    .wrap { max-width: 720px; margin: 0 auto; padding: 56px 24px 80px; }
-    h1 { font-family: var(--serif); font-weight: 500; font-variation-settings: "opsz" 96, "WONK" 0; font-size: clamp(48px, 12vw, 88px); letter-spacing: -0.035em; line-height: 0.95; margin: 0 0 8px; }
-    h1 .u { font-style: italic; font-variation-settings: "opsz" 96, "WONK" 1, "wght" 600; color: var(--bern); }
-    .pretitle { font-family: var(--mono); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 24px; }
-    p.tagline { font-size: 17px; line-height: 1.55; color: var(--ink-muted); max-width: 55ch; margin: 0 0 40px; }
-    ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
-    li a { display: grid; grid-template-columns: 180px 1fr auto; align-items: center; gap: 16px; padding: 18px 22px; background: var(--surface); border: 1px solid var(--hairline); border-radius: 12px; text-decoration: none; color: var(--ink); transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), border-color 200ms; }
-    li a:hover, li a:focus-visible { border-color: var(--ink-faint); transform: translateX(4px); outline: none; }
-    li .name { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.01em; }
-    li .desc { font-size: 13px; color: var(--ink-muted); }
-    li .arrow { color: var(--bern); font-family: var(--mono); font-size: 18px; }
-    .badge { display: inline-block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--bern); background: rgba(226,6,19,0.06); padding: 2px 8px; border-radius: 4px; margin-left: 8px; vertical-align: middle; }
-    .small { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); margin-top: 40px; line-height: 1.7; }
-    .small code { background: rgba(226,6,19,0.06); padding: 2px 6px; border-radius: 3px; color: var(--bern); font-size: 10px; }
+
+    /* MOCK banner — sticky top, persistent across all demo pages */
+    .mock-banner {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--yellow-pale);
+      border-bottom: 1px solid var(--amber);
+      padding: 8px 16px;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+      line-height: 1.4;
+    }
+    .mock-banner strong { color: #6e4a00; }
+
+    .wrap { max-width: 760px; margin: 0 auto; padding: 56px 24px 80px; }
+
+    .pretitle {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin: 0 0 24px;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-variation-settings: "opsz" 96, "WONK" 0;
+      font-size: clamp(48px, 12vw, 88px);
+      letter-spacing: -0.035em;
+      line-height: 0.95;
+      margin: 0 0 8px;
+    }
+    h1 .u {
+      font-style: italic;
+      font-variation-settings: "opsz" 96, "WONK" 1, "wght" 600;
+      color: var(--bern);
+    }
+    p.tagline {
+      font-size: 17px;
+      line-height: 1.55;
+      color: var(--ink-muted);
+      max-width: 55ch;
+      margin: 0 0 48px;
+    }
+
+    /* Two big buttons */
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 720px) { .buttons { grid-template-columns: 1fr; } }
+
+    .big-btn {
+      display: grid;
+      grid-template-rows: auto auto auto;
+      gap: 12px;
+      padding: 32px 28px;
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: 16px;
+      text-decoration: none;
+      color: var(--ink);
+      transition:
+        transform 250ms cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 250ms,
+        box-shadow 250ms;
+      position: relative;
+      overflow: hidden;
+    }
+    .big-btn:hover, .big-btn:focus-visible {
+      transform: translateY(-4px);
+      border-color: var(--ink-faint);
+      box-shadow: 0 12px 32px rgba(19,19,19,0.08);
+      outline: none;
+    }
+    .big-btn.recommended {
+      border-color: var(--bern);
+      background:
+        linear-gradient(to bottom, var(--bern-tint) 0%, transparent 60px),
+        var(--surface);
+    }
+    .big-btn.recommended::before {
+      content: "recommended for your device";
+      position: absolute;
+      top: 14px; right: 14px;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--bern);
+      background: var(--surface);
+      padding: 3px 8px;
+      border-radius: 9999px;
+      border: 1px solid var(--bern);
+    }
+
+    .big-btn .icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: var(--canvas-warm);
+      border: 1px solid var(--hairline);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono);
+      font-size: 22px;
+      color: var(--ink-muted);
+    }
+    .big-btn.web .icon { background: var(--canvas-warm); }
+    .big-btn.app .icon { background: var(--canvas-warm); }
+
+    .big-btn .name {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 32px;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin: 0;
+    }
+    .big-btn .desc {
+      font-size: 14px;
+      color: var(--ink-muted);
+      line-height: 1.45;
+      margin: 0;
+    }
+    .big-btn .desc strong { color: var(--ink); font-weight: 500; }
+    .big-btn .arrow {
+      position: absolute;
+      bottom: 24px; right: 28px;
+      color: var(--bern);
+      font-family: var(--mono);
+      font-size: 24px;
+      transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .big-btn:hover .arrow { transform: translateX(6px); }
+
+    /* Hint footer */
+    .device-hint {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink-faint);
+      letter-spacing: 0.04em;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .device-hint .pill {
+      display: inline-block;
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: 9999px;
+      padding: 2px 10px;
+      margin: 0 4px;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--ink-muted);
+    }
+    .device-hint .pill.active {
+      background: var(--bern-tint);
+      border-color: var(--bern);
+      color: var(--bern);
+    }
+
+    /* Extras */
+    .extras {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--hairline);
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink-faint);
+      line-height: 1.9;
+    }
+    .extras a { color: var(--ink-muted); text-decoration: none; }
+    .extras a:hover { color: var(--bern); }
+    .extras code { background: rgba(226,6,19,0.06); padding: 2px 6px; border-radius: 3px; color: var(--bern); font-size: 10px; }
+
     @media (max-width: 600px) {
       .wrap { padding: 32px 16px 60px; }
-      li a { grid-template-columns: 1fr auto; gap: 4px; padding: 16px 18px; }
-      li .desc { grid-column: 1 / -1; }
-      li .name { font-size: 19px; }
+      .big-btn { padding: 24px 20px; }
+      .big-btn .name { font-size: 26px; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
+
+  <div class="mock-banner" role="status">
+    ⚠ <strong>MOCK preview</strong> — all data hardcoded in static HTML · live backend not deployed yet · purpose: showcase brand + UX design
+  </div>
+
+  <main class="wrap">
     <p class="pretitle">Liquid Intelligence · Unified Logic · Interactive Adaptive Networks</p>
     <h1>LI<span class="u">U</span>LIAN</h1>
-    <p class="tagline">Open-source production stack for spatio-temporal AI. <strong>Demo index</strong> — open any card below; works on desktop and mobile.</p>
+    <p class="tagline">Open-source production stack for spatio-temporal AI. Pick a viewing mode — both work on any device.</p>
 
-    <ul>
-      <li>
-        <a href="standalone-landing.html">
-          <span class="name">Landing</span>
-          <span class="desc">Editorial-magazine hero · three pillars · live counters</span>
-          <span class="arrow">→</span>
-        </a>
-      </li>
-      <li>
-        <a href="standalone-forecast.html">
-          <span class="name">Forecast Canvas <span class="badge">desktop</span></span>
-          <span class="desc">Stations · Swiss map · Q05-Q95 fan · KPI · alert ribbon · BI agent · ⌘K palette</span>
-          <span class="arrow">→</span>
-        </a>
-      </li>
-      <li>
-        <a href="standalone-studio.html">
-          <span class="name">Studio <span class="badge">desktop</span></span>
-          <span class="desc">4-tab IA · Data · Train · Inference · Insight (press 1/2/3/4)</span>
-          <span class="arrow">→</span>
-        </a>
-      </li>
-      <li>
-        <a href="mobile-preview.html">
-          <span class="name">Mobile <span class="badge">phone</span></span>
-          <span class="desc">3-tab native-feel preview · Home · Forecast · Alerts</span>
-          <span class="arrow">→</span>
-        </a>
-      </li>
-      <li>
-        <a href="screenshots/">
-          <span class="name">Screenshots</span>
-          <span class="desc">All pages captured at desktop + mobile widths · click to view</span>
-          <span class="arrow">→</span>
-        </a>
-      </li>
-    </ul>
+    <div class="buttons">
+      <a href="web-demo.html" class="big-btn web" data-mode="web">
+        <div class="icon">▦</div>
+        <div>
+          <div class="name">Web</div>
+          <div class="desc">
+            <strong>Landing · Forecast Canvas · Studio</strong><br>
+            Desktop layout · BI canvas needs width · phone scrolls horizontally so you see the full design
+          </div>
+        </div>
+        <div class="arrow">→</div>
+      </a>
+      <a href="mobile-preview.html" class="big-btn app" data-mode="app">
+        <div class="icon">▢</div>
+        <div>
+          <div class="name">App</div>
+          <div class="desc">
+            <strong>iOS-style native preview</strong><br>
+            Phone frame · 3 tabs (Home · Forecast · Alerts) · renders the same on desktop and mobile
+          </div>
+        </div>
+        <div class="arrow">→</div>
+      </a>
+    </div>
 
-    <p class="small">
-      Hosted on GitHub Pages from <code>liulian-ai/liulian-web</code>. All pages serve static HTML with brand fonts from Google Fonts + Fontshare and ECharts from jsDelivr — no build step. <strong>Forecast Canvas</strong> + <strong>Studio</strong> are desktop-only by design (BI canvas needs width); the rest scale to phone.
+    <p class="device-hint">
+      You're on
+      <span class="pill" id="pill-desktop">desktop</span>
+      <span class="pill" id="pill-mobile">mobile</span>
+      · either button always shows that mode regardless of device
     </p>
-  </div>
+
+    <div class="extras">
+      <p style="margin: 0 0 6px;"><strong style="color: var(--ink);">Direct links</strong></p>
+      <a href="standalone-landing.html">→ Landing only</a> ·
+      <a href="standalone-forecast.html">→ Forecast canvas only</a> ·
+      <a href="standalone-studio.html">→ Studio only</a><br>
+      <a href="screenshots/">→ All screenshots (desktop + mobile)</a> ·
+      <a href="https://github.com/liulian-ai">→ GitHub org</a>
+      <br><br>
+      <p style="margin: 0; color: var(--ink-faint);">Hosted on GitHub Pages from <code>liulian-ai/liulian-web</code> · static HTML, no build step.</p>
+    </div>
+  </main>
+
+  <script>
+    // Auto-detect device + mark recommended button
+    const mobile = window.innerWidth < 768 || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    const recBtn = document.querySelector('.big-btn.' + (mobile ? 'app' : 'web'));
+    if (recBtn) recBtn.classList.add('recommended');
+    document.getElementById('pill-' + (mobile ? 'mobile' : 'desktop')).classList.add('active');
+  </script>
 </body>
 </html>
