@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LIULIAN — Liquid Intelligence for Time</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Open-source production stack for spatio-temporal AI: a research-grade model zoo wrapped in production-grade BI." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@200,300,400,500,600,700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Tokens from @liulian/design-tokens — pinned snapshot of dist/tokens.css */
+    :root {
+      --canvas-warm: #FBFBFA;
+      --canvas-soft: #F7F6F3;
+      --surface-pure: #FFFFFF;
+      --ink-charcoal: #131313;
+      --ink-soft: #34373B;
+      --ink-muted: #666A70;
+      --ink-faint: #94989D;
+      --hairline: #E8E7E2;
+      --hairline-strong: #DEDCD4;
+      --unibe-red: #E20613;
+      --unibe-red-deep: #B00010;
+      --unibe-red-tint: #FDEBEC;
+
+      --serif: 'Fraunces', 'Times New Roman', serif;
+      --sans:  'Switzer', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      --mono:  'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      background: var(--canvas-warm);
+      color: var(--ink-charcoal);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.6;
+      font-feature-settings: "ss01","ss02","kern";
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Subtle red radial spots — depth without flatness. opacity 0.018-0.025 (per gui-demo) */
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      pointer-events: none;
+      width: 60vw;
+      height: 60vw;
+      border-radius: 50%;
+      filter: blur(40px);
+      z-index: 0;
+    }
+    body::before {
+      top: -20vw; left: -20vw;
+      background: radial-gradient(circle, var(--unibe-red) 0%, transparent 70%);
+      opacity: 0.022;
+    }
+    body::after {
+      bottom: -20vw; right: -20vw;
+      background: radial-gradient(circle, var(--unibe-red) 0%, transparent 70%);
+      opacity: 0.018;
+    }
+
+    /* SVG turbulence grain (6%) */
+    .grain {
+      position: fixed; inset: 0; pointer-events: none;
+      opacity: 0.06;
+      mix-blend-mode: multiply;
+      z-index: 1;
+    }
+
+    /* Top eyebrow strip */
+    .eyebrow {
+      position: relative; z-index: 10;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 32px 0;
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .eyebrow .mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .eyebrow .mark::before {
+      content: "";
+      width: 6px; height: 6px;
+      background: var(--unibe-red);
+      border-radius: 50%;
+    }
+
+    /* Hero — editorial-magazine register, NOT SaaS-default */
+    .hero {
+      position: relative; z-index: 10;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 96px 32px 64px;
+    }
+    .hero .pretitle {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin: 0 0 24px;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-variation-settings: "opsz" 144, "SOFT" 20, "WONK" 0;
+      font-size: clamp(56px, 9vw, 144px);
+      line-height: 0.92;
+      letter-spacing: -0.035em;
+      margin: 0;
+      color: var(--ink-charcoal);
+    }
+    .hero h1 .accent {
+      font-style: italic;
+      font-variation-settings: "opsz" 144, "SOFT" 50, "WONK" 1, "wght" 600;
+      color: var(--unibe-red);
+    }
+    .hero .tagline {
+      max-width: 60ch;
+      margin: 40px 0 0;
+      font-size: 18px;
+      line-height: 1.55;
+      color: var(--ink-soft);
+    }
+    .hero .tagline em {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    /* Live counter strip — JetBrains Mono, tabular nums */
+    .counter {
+      margin-top: 56px;
+      padding: 14px 0;
+      border-top: 1px solid var(--hairline);
+      border-bottom: 1px solid var(--hairline);
+      display: flex;
+      gap: 32px;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .counter .stat strong {
+      color: var(--ink-charcoal);
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    /* Three editorial bands — separated by 1px vertical rules, NOT cards */
+    .bands {
+      position: relative; z-index: 10;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 96px 32px;
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr 1px 1fr;
+      gap: 48px;
+    }
+    .bands .rule {
+      background: var(--hairline);
+      height: 100%;
+      width: 1px;
+    }
+    .band h2 {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-variation-settings: "opsz" 28;
+      font-size: 28px;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin: 0 0 20px;
+      color: var(--ink-charcoal);
+    }
+    .band p {
+      max-width: 36ch;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--ink-soft);
+      margin: 0 0 24px;
+    }
+    .band .chart {
+      height: 120px;
+      border: 1px solid var(--hairline);
+      border-radius: 10px;
+      background: var(--surface-pure);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      position: relative;
+      overflow: hidden;
+    }
+    .band .anchor {
+      margin-top: 20px;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 13px;
+      color: var(--ink-muted);
+    }
+
+    /* SVG charts inside band cards (illustrative) */
+    .band .chart svg { width: 100%; height: 100%; }
+    .forecast-line { stroke: var(--ink-charcoal); fill: none; stroke-width: 1.5; }
+    .forecast-pred { stroke: var(--unibe-red); fill: none; stroke-width: 1.5; stroke-dasharray: 3 3; }
+    .forecast-fan  { fill: var(--unibe-red); opacity: 0.18; }
+
+    /* CTA — text-arrow only, no button chrome */
+    .cta {
+      position: relative; z-index: 10;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 32px 96px;
+      text-align: center;
+    }
+    .cta a {
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: -0.015em;
+      color: var(--ink-charcoal);
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 12px;
+      transition: gap 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cta a:hover { gap: 20px; }
+    .cta a .arrow {
+      font-family: var(--sans);
+      font-weight: 400;
+      color: var(--unibe-red);
+    }
+
+    /* Footer */
+    footer {
+      position: relative; z-index: 10;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px;
+      border-top: 1px solid var(--hairline);
+      display: flex; justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    /* Responsive collapse */
+    @media (max-width: 880px) {
+      .bands { grid-template-columns: 1fr; }
+      .bands .rule { display: none; }
+      .counter { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg">
+    <filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.85" stitchTiles="stitch"/></filter>
+    <rect width="100%" height="100%" filter="url(#noise)" />
+  </svg>
+
+  <div class="eyebrow" role="banner">
+    <span class="mark">University of Bern · Spatio-Temporal Research Platform</span>
+    <span class="env">v0.6.0 · Bern · Hydrology Lab</span>
+  </div>
+
+  <main class="hero">
+    <p class="pretitle">Liquid Intelligence · Unified Logic · Interactive Adaptive Networks</p>
+    <h1>LI<span class="accent">U</span>LIAN</h1>
+    <p class="tagline">
+      Open-source production stack for spatio-temporal AI: a
+      <em>research-grade model zoo</em> wrapped in
+      <em>production-grade BI</em>.
+    </p>
+
+    <div class="counter" aria-label="Live platform counters">
+      <span class="stat"><strong>2,143</strong> sensors live</span>
+      <span class="stat"><strong>30+</strong> models in benchmark</span>
+      <span class="stat"><strong>3</strong> agents ready</span>
+      <span class="stat"><strong>17</strong> datasets indexed</span>
+    </div>
+  </main>
+
+  <section class="bands" aria-label="Platform pillars">
+    <article class="band">
+      <h2>Manifest</h2>
+      <p>Every dataset starts with a contract. Schema, topology, integrity hash. Reproducible by design.</p>
+      <div class="chart" aria-label="Manifest YAML snippet">
+        <pre style="margin:0;font-family:var(--mono);font-size:9px;line-height:1.4;color:var(--ink-soft);text-align:left;padding:14px;">version: 1.0
+dataset: swiss-river-1990
+fields:
+  - {name: discharge, units: m³/s}
+  - {name: temp_c,    units: °C}
+topology: edges/aare.json
+integrity: sha256:7af1c…</pre>
+      </div>
+      <p class="anchor">"Every dataset starts with a contract."</p>
+    </article>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <article class="band">
+      <h2>Train</h2>
+      <p>Thirty models, one runtime. PatchTST, TimesNet, Chronos zero-shot, TSL graphs. Single-command benchmarks.</p>
+      <div class="chart" aria-label="Loss curve">
+        <svg viewBox="0 0 240 100" preserveAspectRatio="none">
+          <polyline class="forecast-line" points="0,85 24,72 48,58 72,48 96,40 120,33 144,27 168,22 192,18 216,15 240,13" />
+          <polyline class="forecast-pred" points="0,82 24,68 48,52 72,42 96,35 120,29 144,24 168,20 192,17 216,15 240,14" />
+        </svg>
+      </div>
+      <p class="anchor">"Thirty models, one runtime."</p>
+    </article>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <article class="band">
+      <h2>Forecast</h2>
+      <p>From prediction to a hydrologist's risk brief, in twenty seconds. Probabilistic intervals, alert thresholds, exportable.</p>
+      <div class="chart" aria-label="Forecast fan">
+        <svg viewBox="0 0 240 100" preserveAspectRatio="none">
+          <path class="forecast-fan" d="M 0,55 L 24,52 L 48,48 L 72,42 L 96,38 L 120,32 L 144,30 L 168,28 L 192,32 L 216,38 L 240,40 L 240,72 L 216,70 L 192,66 L 168,62 L 144,58 L 120,54 L 96,58 L 72,62 L 48,68 L 24,72 L 0,75 Z" />
+          <polyline class="forecast-line" points="0,65 24,62 48,58 72,52 96,48 120,42 144,40 168,38" />
+          <polyline class="forecast-pred" points="168,38 192,40 216,46 240,50" />
+        </svg>
+      </div>
+      <p class="anchor">"To a hydrologist's risk brief, in twenty seconds."</p>
+    </article>
+  </section>
+
+  <div class="cta">
+    <a href="/forecast">Open SwissRiver demo <span class="arrow">→</span></a>
+  </div>
+
+  <footer>
+    <span>© 2026 LIULIAN · MIT License</span>
+    <span>Designed in Bern · Built with University of Bern PRG</span>
+  </footer>
+
+</body>
+</html>

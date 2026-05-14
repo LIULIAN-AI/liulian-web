@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LIULIAN · Mobile (preview)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#FBFBFA" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,WONK@0,9..144,300..900,0..1;1,9..144,300..900,0..1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+  <style>
+    :root {
+      --canvas-warm: #FBFBFA;
+      --surface: #FFFFFF;
+      --surface-shade: #FAFAF9;
+      --ink: #131313;
+      --ink-soft: #34373B;
+      --ink-muted: #666A70;
+      --ink-faint: #94989D;
+      --hairline: #E8E7E2;
+      --bern: #E20613;
+      --bern-tint: #FDEBEC;
+      --bern-deep: #B00010;
+      --yellow-pale: #FBF1D9;
+      --amber: #946400;
+      --green-pale: #E5F0E7;
+      --green: #2E7D43;
+      --serif: 'Fraunces', serif;
+      --sans: 'Switzer', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: #E8E7E2; }
+    body {
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--sans); color: var(--ink);
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    /* Phone frame — appears on desktop; hidden on real mobile */
+    .phone {
+      width: 390px;
+      height: 844px;
+      background: var(--canvas-warm);
+      border-radius: 48px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 24px 48px rgba(19,19,19,0.18), 0 0 0 12px #131313, 0 0 0 13px #34373B;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+    /* On real phones, fill the screen instead */
+    @media (max-width: 600px) {
+      body { background: var(--canvas-warm); }
+      .phone {
+        width: 100vw; height: 100dvh;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+
+    /* Status bar (iOS-style) */
+    .statusbar {
+      height: 44px;
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0 28px;
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .statusbar .time { justify-self: start; font-feature-settings: 'tnum'; }
+    .statusbar .notch { width: 100px; height: 28px; background: #131313; border-radius: 14px; }
+    .statusbar .icons { justify-self: end; display: flex; gap: 6px; font-size: 11px; color: var(--ink-muted); }
+    @media (max-width: 600px) { .statusbar { display: none; } }  /* real phone has its own status bar */
+
+    /* Scientific running header */
+    .running {
+      padding: 4px 20px 8px;
+      font-family: var(--mono); font-size: 9px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--ink-faint);
+      border-bottom: 1px solid var(--hairline);
+    }
+    .running .brand { color: var(--ink); font-weight: 600; font-size: 11px; letter-spacing: -0.005em; text-transform: none; margin-right: 6px; }
+
+    /* Content area */
+    main { height: calc(100% - 44px - 28px - 80px); overflow-y: auto; padding: 20px; }
+    @media (max-width: 600px) { main { height: calc(100dvh - 80px - 28px); } }
+
+    /* Tab content switching */
+    .screen { display: none; animation: fadeIn 200ms cubic-bezier(0.16, 1, 0.3, 1); }
+    .screen.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+    /* Hero greeting (Home) */
+    h1.greeting {
+      font-family: var(--serif); font-weight: 500;
+      font-variation-settings: "opsz" 28;
+      font-size: 28px; letter-spacing: -0.02em;
+      margin: 8px 0 4px;
+    }
+    .greeting + p { color: var(--ink-muted); font-size: 14px; margin: 0 0 24px; }
+
+    .cta-primary {
+      display: block; width: 100%;
+      background: var(--ink); color: var(--surface);
+      border: none; border-radius: 12px;
+      padding: 16px;
+      font-family: var(--sans); font-size: 15px; font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 28px;
+    }
+    .cta-primary:active { background: var(--ink-soft); }
+
+    /* Section heading */
+    .section-h {
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--ink-faint);
+      margin: 0 0 10px;
+    }
+
+    /* Alert card */
+    .alert-card {
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      display: grid;
+      grid-template-columns: 8px 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+    .alert-card .dot { width: 8px; height: 8px; border-radius: 9999px; }
+    .alert-card.elevated .dot { background: var(--bern); }
+    .alert-card.watch .dot { background: var(--amber); }
+    .alert-card .body .name { font-size: 14px; font-weight: 500; }
+    .alert-card .body .meta { font-family: var(--mono); font-size: 10px; color: var(--ink-faint); margin-top: 2px; }
+    .alert-card .ago { font-family: var(--mono); font-size: 10px; color: var(--ink-muted); letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
+
+    /* Station picker (forecast tab) */
+    .picker {
+      display: flex; gap: 6px;
+      overflow-x: auto;
+      padding: 0 0 8px;
+      margin: 0 0 16px;
+      scrollbar-width: none;
+    }
+    .picker::-webkit-scrollbar { display: none; }
+    .picker .chip {
+      flex-shrink: 0;
+      padding: 6px 12px;
+      border: 1px solid var(--hairline);
+      border-radius: 9999px;
+      background: var(--surface);
+      font-size: 12px;
+      color: var(--ink-muted);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .picker .chip.active {
+      background: var(--ink); color: var(--surface); border-color: var(--ink);
+    }
+
+    /* Forecast chart container */
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .chart-card .title { font-family: var(--serif); font-weight: 500; font-size: 18px; letter-spacing: -0.01em; margin: 0 0 2px; }
+    .chart-card .meta { font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
+    .chart-card #mobchart { height: 200px; margin-top: 8px; }
+
+    /* KPI mini */
+    .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .kpi .lbl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 4px; }
+    .kpi .val { font-family: var(--mono); font-size: 20px; font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+    .kpi .unit { font-size: 11px; color: var(--ink-muted); margin-left: 3px; }
+
+    /* Alerts tab — ribbon-style */
+    .alert-section { margin-bottom: 24px; }
+    .alert-section h3 {
+      font-family: var(--serif); font-weight: 500;
+      font-size: 17px; letter-spacing: -0.01em;
+      margin: 0 0 12px;
+      display: flex; justify-content: space-between; align-items: baseline;
+    }
+    .alert-section h3 .count { font-family: var(--mono); font-size: 10px; color: var(--ink-faint); letter-spacing: 0.06em; text-transform: uppercase; }
+    .alert-list .alert-item {
+      border-left: 1px solid var(--hairline);
+      padding: 10px 0 10px 14px;
+      margin-bottom: 4px;
+      position: relative;
+    }
+    .alert-list .alert-item::before {
+      content: ''; position: absolute;
+      width: 8px; height: 8px;
+      border-radius: 9999px;
+      left: -4.5px; top: 14px;
+    }
+    .alert-item.critical::before { background: var(--bern); }
+    .alert-item.elevated::before { background: var(--bern-deep); }
+    .alert-item.watch::before { background: var(--amber); }
+    .alert-item.resolved::before { background: var(--ink-faint); }
+    .alert-item .name { font-size: 14px; font-weight: 500; }
+    .alert-item.critical .name { font-style: italic; }
+    .alert-item.elevated .name { color: var(--bern-deep); }
+    .alert-item .meta { font-family: var(--mono); font-size: 10px; color: var(--ink-faint); margin-top: 2px; }
+    .alert-item .body { font-size: 13px; color: var(--ink-muted); margin-top: 4px; }
+
+    /* Tab bar (iOS style) */
+    .tabbar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 80px;
+      background: rgba(251,251,250,0.94);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--hairline);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      padding: 8px 0 24px;
+    }
+    .tab {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px;
+      color: var(--ink-faint);
+      cursor: pointer;
+      font-size: 10px;
+      font-family: var(--mono);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: none; border: none;
+    }
+    .tab.active { color: var(--bern); }
+    .tab svg { width: 24px; height: 24px; }
+    .tab.active svg path,
+    .tab.active svg circle,
+    .tab.active svg line,
+    .tab.active svg polyline { stroke: var(--bern); }
+
+    /* Quick forecast sheet (mock) */
+    .sheet-trigger { margin-top: 8px; color: var(--ink-muted); font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; background: none; border: none; padding: 0; font-family: var(--sans); }
+
+    /* Misc */
+    a { color: inherit; }
+    .demo-note { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: rgba(19,19,19,0.85); color: white; padding: 8px 14px; border-radius: 9999px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; pointer-events: none; z-index: 50; }
+    @media (max-width: 600px) { .demo-note { display: none; } }
+  </style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- Status bar -->
+  <div class="statusbar">
+    <span class="time">9:41</span>
+    <span class="notch"></span>
+    <span class="icons">5G · 100%</span>
+  </div>
+
+  <!-- Scientific running header -->
+  <div class="running">
+    <span class="brand">LIULIAN</span> · MOBILE · 2026-05-14 · AARE-BERN
+  </div>
+
+  <main>
+
+    <!-- HOME -->
+    <section class="screen active" data-screen="home">
+      <h1 class="greeting">Good morning, Linlin.</h1>
+      <p>2 alerts elevated · 4 forecasts updated overnight.</p>
+
+      <button class="cta-primary" onclick="show('forecast')">Run quick forecast →</button>
+
+      <p class="section-h">Recent alerts</p>
+      <div class="alert-card elevated">
+        <span class="dot"></span>
+        <div class="body">
+          <div class="name">Bern · Q95 elevated</div>
+          <div class="meta">aare-bern · q95 &gt; 850 m³/s</div>
+        </div>
+        <span class="ago">2h ago</span>
+      </div>
+      <div class="alert-card watch">
+        <span class="dot"></span>
+        <div class="body">
+          <div class="name">Basel · Watch state</div>
+          <div class="meta">rhine-basel · q95 &gt; 1500 m³/s</div>
+        </div>
+        <span class="ago">14h ago</span>
+      </div>
+
+      <p class="section-h" style="margin-top: 24px;">Recent forecasts</p>
+      <div class="alert-card" style="grid-template-columns: 1fr auto;">
+        <div class="body">
+          <div class="name">aare-bern · patchtst</div>
+          <div class="meta">72h horizon · Q05-Q95 fan</div>
+        </div>
+        <span class="ago">05:00 UTC</span>
+      </div>
+      <div class="alert-card" style="grid-template-columns: 1fr auto;">
+        <div class="body">
+          <div class="name">aare-bern · chronos-2</div>
+          <div class="meta">72h horizon · zero-shot</div>
+        </div>
+        <span class="ago">05:00 UTC</span>
+      </div>
+      <div class="alert-card" style="grid-template-columns: 1fr auto;">
+        <div class="body">
+          <div class="name">rhine-basel · patchtst</div>
+          <div class="meta">72h horizon · Q05-Q95 fan</div>
+        </div>
+        <span class="ago">05:00 UTC</span>
+      </div>
+    </section>
+
+    <!-- FORECAST -->
+    <section class="screen" data-screen="forecast">
+      <h1 class="greeting" style="margin-bottom: 12px;">Forecast</h1>
+
+      <div class="picker">
+        <button class="chip active">Bern</button>
+        <button class="chip">Thun</button>
+        <button class="chip">Hagneck</button>
+        <button class="chip">Basel</button>
+        <button class="chip">Luzern</button>
+        <button class="chip">Zürich</button>
+        <button class="chip">Brienz</button>
+      </div>
+
+      <div class="chart-card">
+        <div class="title">aare-bern</div>
+        <div class="meta">patchtst · 72h · Q05-Q95</div>
+        <div id="mobchart"></div>
+      </div>
+
+      <p class="section-h">Quality vs ground truth</p>
+      <div class="kpis">
+        <div class="kpi"><div class="lbl">MAE</div><div class="val">8.42<span class="unit">m³/s</span></div></div>
+        <div class="kpi"><div class="lbl">RMSE</div><div class="val">11.27<span class="unit">m³/s</span></div></div>
+        <div class="kpi"><div class="lbl">Coverage @ 90</div><div class="val">88.5<span class="unit">%</span></div></div>
+        <div class="kpi"><div class="lbl">Horizon</div><div class="val">72<span class="unit">h</span></div></div>
+      </div>
+
+      <button class="sheet-trigger">↗ Open in /forecast on desktop for full canvas</button>
+    </section>
+
+    <!-- ALERTS -->
+    <section class="screen" data-screen="alerts">
+      <h1 class="greeting" style="margin-bottom: 16px;">Alerts</h1>
+
+      <div class="alert-section">
+        <h3>Today <span class="count">3 firing</span></h3>
+        <div class="alert-list">
+          <div class="alert-item critical">
+            <div class="name">Bern Q95 critical</div>
+            <div class="meta">aare-bern · 14:22 UTC · q95 &gt; 1200 m³/s</div>
+            <div class="body">Observed 1247 m³/s; predicted 24h mean 1180. Notify on-call.</div>
+          </div>
+          <div class="alert-item elevated">
+            <div class="name">Bern Q95 elevated</div>
+            <div class="meta">aare-bern · 11:08 UTC · q95 &gt; 850 m³/s</div>
+            <div class="body">Crossed elevated threshold; check upstream precipitation drivers.</div>
+          </div>
+          <div class="alert-item watch">
+            <div class="name">Basel watch</div>
+            <div class="meta">rhine-basel · 09:30 UTC · q95 &gt; 1500 m³/s</div>
+            <div class="body">Approaching watch threshold; no action required.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert-section">
+        <h3>Yesterday <span class="count">2 resolved</span></h3>
+        <div class="alert-list">
+          <div class="alert-item resolved">
+            <div class="name">Bern Q95 elevated · resolved</div>
+            <div class="meta">aare-bern · 2026-05-13 · 23:42 UTC</div>
+            <div class="body">Discharge fell below threshold for 3 consecutive intervals.</div>
+          </div>
+          <div class="alert-item resolved">
+            <div class="name">Thun forecast drift · resolved</div>
+            <div class="meta">aare-thun · 2026-05-13 · 18:11 UTC</div>
+            <div class="body">Model retrained against last 12h; drift normalised.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Tab bar -->
+  <nav class="tabbar">
+    <button class="tab active" data-tab="home" onclick="show('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11 12 3 21 11"/><path d="M5 10v11h14V10"/></svg>
+      Home
+    </button>
+    <button class="tab" data-tab="forecast" onclick="show('forecast')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 17 8 12 13 14 21 6"/></svg>
+      Forecast
+    </button>
+    <button class="tab" data-tab="alerts" onclick="show('alerts')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3a6 6 0 0 0-6 6v4l-2 3h16l-2-3V9a6 6 0 0 0-6-6Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+      Alerts
+    </button>
+  </nav>
+
+</div>
+
+<div class="demo-note">tap tabs · scroll content · resize to 390px or smaller for phone view</div>
+
+<script>
+  function show(name) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.dataset.screen === name));
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+    if (name === 'forecast') drawChart();
+  }
+
+  let chart;
+  function drawChart() {
+    if (chart) return;
+    const el = document.getElementById('mobchart');
+    if (!el) return;
+    chart = echarts.init(el);
+    const h = 72;
+    const baseTs = new Date('2026-05-14T05:00:00Z').getTime();
+    const t = Array.from({ length: h }, (_, i) => new Date(baseTs + i * 3600 * 1000).toISOString().slice(5, 13));
+    function rng(seed){return ()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};}
+    const r = rng(42);
+    const base = 408.2;
+    const mean = t.map((_, i) => base + 0.4 * i + (r() - 0.5) * 8.5);
+    const width = t.map((_, i) => 8.5 * (1 + i / h) * 1.96);
+    const q05 = mean.map((m, i) => m - width[i]);
+    const q95 = mean.map((m, i) => m + width[i]);
+    const observed = t.map((_, i) => i < 24 ? base + Math.sin(i / 6) * 12 + (r() - 0.5) * 4 : null);
+    chart.setOption({
+      grid: { left: 40, right: 12, top: 12, bottom: 22 },
+      textStyle: { fontFamily: 'Switzer, sans-serif', color: '#131313', fontSize: 10 },
+      tooltip: { trigger: 'axis', backgroundColor: '#FFFFFF', borderColor: '#E8E7E2', textStyle: { fontSize: 10 } },
+      xAxis: { type: 'category', data: t, axisLine: { lineStyle: { color: '#E8E7E2' } }, axisTick: { show: false }, axisLabel: { color: '#666A70', fontSize: 8, fontFamily: 'JetBrains Mono', formatter: v => v.slice(0, 5), interval: 11 }, splitLine: { show: false } },
+      yAxis: { type: 'value', axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: '#666A70', fontSize: 8, fontFamily: 'JetBrains Mono' }, splitLine: { lineStyle: { color: '#E8E7E2', type: 'dashed' } } },
+      series: [
+        { name: 'Q05', type: 'line', data: q05, lineStyle: { opacity: 0 }, stack: 'fan', symbol: 'none', silent: true },
+        { name: 'Q95', type: 'line', data: q95.map((hi, i) => hi - q05[i]), lineStyle: { opacity: 0 }, areaStyle: { color: 'rgba(226,6,19,0.18)' }, stack: 'fan', symbol: 'none', silent: true },
+        { name: 'Mean', type: 'line', data: mean, symbol: 'none', lineStyle: { color: '#E20613', width: 1.2, type: 'dashed' } },
+        { name: 'Observed', type: 'line', data: observed, connectNulls: false, symbol: 'none', lineStyle: { color: '#131313', width: 1.2 } }
+      ]
+    });
+  }
+  document.querySelectorAll('.picker .chip').forEach(c => c.addEventListener('click', e => {
+    document.querySelectorAll('.picker .chip').forEach(x => x.classList.remove('active'));
+    e.target.classList.add('active');
+  }));
+</script>
+
+</body>
+</html>

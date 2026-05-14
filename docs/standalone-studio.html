@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LIULIAN · Studio</title>
+  <meta name="viewport" content="width=1440" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@200,300,400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --canvas-warm: #FBFBFA;
+      --surface-pure: #FFFFFF;
+      --surface-shade: #FAFAF9;
+      --ink: #131313;
+      --ink-soft: #34373B;
+      --ink-muted: #666A70;
+      --ink-faint: #94989D;
+      --hairline: #E8E7E2;
+      --bern: #E20613;
+      --bern-deep: #B00010;
+      --serif: 'Fraunces', 'Times New Roman', serif;
+      --sans: 'Switzer', 'SF Pro Text', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--canvas-warm); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.5; font-feature-settings: "ss01","ss02","kern"; }
+    .studio { display: grid; grid-template-columns: 56px 1fr; grid-template-rows: 32px 1fr; min-height: 100vh; transition: grid-template-columns 200ms cubic-bezier(0.16, 1, 0.3, 1); }
+    .studio.expanded { grid-template-columns: 220px 1fr; }
+    .studio-header { grid-column: 1/-1; height: 32px; border-bottom: 1px solid var(--hairline); background: var(--canvas-warm); display: flex; align-items: center; padding: 0 16px 0 24px; gap: 16px; font-size: 11px; }
+    .studio-header .brand { color: var(--ink); font-weight: 600; font-size: 14px; }
+    .studio-header .running { color: var(--ink-muted); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.06em; font-size: 10px; }
+    .studio-header .running .dim { color: var(--ink-faint); }
+    .studio-header .shortcut { margin-left: auto; color: var(--ink-faint); font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .sidebar { border-right: 1px solid var(--hairline); padding: 12px 0; display: flex; flex-direction: column; gap: 2px; background: var(--canvas-warm); overflow: hidden; }
+    .tab { display: grid; grid-template-columns: 16px 1fr auto; align-items: center; gap: 8px; padding: 10px 14px; text-decoration: none; color: var(--ink-muted); font-size: 13px; transition: color 150ms, background 150ms; cursor: pointer; }
+    .tab:hover { color: var(--ink); background: var(--surface-shade); }
+    .tab.active { color: var(--ink); font-weight: 500; }
+    .tab .dot { width: 6px; height: 6px; border-radius: 9999px; background: transparent; margin-left: 5px; transition: background 150ms; }
+    .tab.active .dot { background: var(--bern); }
+    .tab .lbl { white-space: nowrap; opacity: 0; transition: opacity 200ms; }
+    .tab .kbd { font-size: 10px; color: var(--ink-faint); font-family: var(--mono); opacity: 0; transition: opacity 200ms; }
+    .studio.expanded .tab .lbl, .studio.expanded .tab .kbd { opacity: 1; }
+    .main { padding: 32px 40px 64px; max-width: 1280px; margin: 0 auto; width: 100%; }
+    .main h1 { font-family: var(--serif); font-weight: 500; font-variation-settings: "opsz" 38; font-size: 38px; letter-spacing: -0.02em; margin: 0 0 24px; }
+    .layout-2col { display: grid; grid-template-columns: 3fr 2fr; gap: 48px; }
+    .list-table { border: 1px solid var(--hairline); border-radius: 10px; background: var(--surface-pure); overflow: hidden; }
+    .list-head, .list-row { display: grid; grid-template-columns: 1fr 130px 90px 110px; align-items: center; }
+    .list-head { padding: 10px 16px; background: var(--surface-shade); border-bottom: 1px solid var(--hairline); font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
+    .list-row { padding: 12px 16px; border-bottom: 1px solid var(--hairline); font-size: 13px; cursor: pointer; }
+    .list-row:last-child { border-bottom: none; }
+    .list-row:hover { background: var(--surface-shade); }
+    .list-row .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 11px; color: var(--ink-muted); }
+    .list-row .id-sub { margin-left: 8px; font-family: var(--mono); font-size: 10px; color: var(--ink-faint); }
+    .status-running { font-style: italic; color: var(--ink); }
+    .status-failed { font-weight: 600; color: var(--bern-deep); }
+    .status-completed { color: var(--ink-muted); }
+    .status-pending { color: var(--ink-faint); }
+    .status-queued { color: var(--ink-faint); }
+    .explainer { font-family: var(--serif); font-size: 16px; line-height: 1.6; }
+    .explainer h2 { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 22px; letter-spacing: -0.01em; margin: 0 0 16px; }
+    .explainer p { color: var(--ink-soft); max-width: 36ch; margin: 0 0 14px; }
+    .footnote { font-family: var(--mono); font-style: normal; font-size: 11px; color: var(--ink-faint); letter-spacing: 0.04em; text-transform: uppercase; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+  </style>
+</head>
+<body>
+
+<div class="studio expanded" id="studio">
+  <header class="studio-header">
+    <span class="brand">LIULIAN</span>
+    <span class="running">Studio · <span class="dim">awaiting first run</span></span>
+    <span class="shortcut">⌘K palette · b agent · 1/2/3/4 tabs</span>
+  </header>
+
+  <aside class="sidebar">
+    <a class="tab active" data-tab="data"><span class="dot"></span><span class="lbl">Data</span><span class="kbd">1</span></a>
+    <a class="tab" data-tab="train"><span class="dot"></span><span class="lbl">Train</span><span class="kbd">2</span></a>
+    <a class="tab" data-tab="inference"><span class="dot"></span><span class="lbl">Inference</span><span class="kbd">3</span></a>
+    <a class="tab" data-tab="insight"><span class="dot"></span><span class="lbl">Insight</span><span class="kbd">4</span></a>
+  </aside>
+
+  <main class="main">
+    <!-- DATA -->
+    <section class="tab-content active" data-tab="data">
+      <h1>Data</h1>
+      <div class="layout-2col">
+        <div class="list-table">
+          <div class="list-head"><span>Manifest</span><span>Stations</span><span>Features</span><span>Horizon</span></div>
+          <div class="list-row"><span>Swiss-River 1990<span class="id-sub">swiss-river-1990</span></span><span class="mono">28</span><span class="mono">5</span><span class="mono">168h</span></div>
+          <div class="list-row"><span>Swiss-River 2010<span class="id-sub">swiss-river-2010</span></span><span class="mono">45</span><span class="mono">5</span><span class="mono">168h</span></div>
+          <div class="list-row"><span>Electricity Load (UCI)<span class="id-sub">electricity</span></span><span class="mono">321</span><span class="mono">1</span><span class="mono">96h</span></div>
+          <div class="list-row"><span>ETT-h1<span class="id-sub">etth1</span></span><span class="mono">1</span><span class="mono">7</span><span class="mono">720h</span></div>
+          <div class="list-row"><span>PEMS-Bay Traffic<span class="id-sub">traffic</span></span><span class="mono">325</span><span class="mono">1</span><span class="mono">24h</span></div>
+        </div>
+        <aside class="explainer">
+          <h2>What is a dataset?</h2>
+          <p>A LIULIAN dataset is a folder of time-series shards plus a YAML manifest that pins the schema, topology, and an integrity hash. The manifest is the contract; the shards are interchangeable.</p>
+          <p>Click any row to inspect the manifest, see field types with example values, and the SHA-256 of the data behind this version of the contract.</p>
+          <p class="footnote">⌘K → "new dataset"</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- TRAIN -->
+    <section class="tab-content" data-tab="train">
+      <h1>Train</h1>
+      <div class="layout-2col">
+        <div class="list-table">
+          <div class="list-head"><span>Run</span><span>Model</span><span>Status</span><span>Started</span></div>
+          <div class="list-row"><span>swiss-river-1990 / lstm / entity=none<span class="id-sub">seed=42</span></span><span class="mono">lstm</span><span class="status-completed">completed</span><span class="mono">05-12 14:38</span></div>
+          <div class="list-row"><span>swiss-river-1990 / patchtst / entity=none<span class="id-sub">seed=42</span></span><span class="mono">patchtst</span><span class="status-running">running</span><span class="mono">05-13 04:21</span></div>
+          <div class="list-row"><span>swiss-river-1990 / chronos-2 / entity=none<span class="id-sub">zero-shot</span></span><span class="mono">chronos-2</span><span class="status-pending">pending</span><span class="mono">—</span></div>
+          <div class="list-row"><span>swiss-river-1990 / itransformer / entity=hash<span class="id-sub">seed=7</span></span><span class="mono">itransformer</span><span class="status-failed">failed</span><span class="mono">05-12 22:04</span></div>
+          <div class="list-row"><span>etth1 / timesnet / entity=onehot<span class="id-sub">seed=1</span></span><span class="mono">timesnet</span><span class="status-completed">completed</span><span class="mono">05-11 19:17</span></div>
+          <div class="list-row"><span>electricity / mamba / entity=embed<span class="id-sub">seed=42</span></span><span class="mono">mamba</span><span class="status-completed">completed</span><span class="mono">05-10 11:02</span></div>
+        </div>
+        <aside class="explainer">
+          <h2>What is a run?</h2>
+          <p>A run is one training trial. Created by an experiment (which packages config + hyperparameter search). Compare them in the table to the left; ⌘O on the focused row to open the run's loss curves and metrics.</p>
+          <p>Status uses typography, not colour: <em>italic</em> is running, <strong>bold</strong> is failed.</p>
+          <p class="footnote">⌘K → "compare runs"</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- INFERENCE -->
+    <section class="tab-content" data-tab="inference">
+      <h1>Inference</h1>
+      <div class="layout-2col">
+        <div class="list-table">
+          <div class="list-head"><span>Forecast</span><span>Model</span><span>Horizon</span><span>At (UTC)</span></div>
+          <div class="list-row"><span>aare-bern<span class="id-sub">e3a91c5b</span></span><span class="mono">patchtst</span><span class="mono">72h</span><span class="mono">2026-05-13 05:00</span></div>
+          <div class="list-row"><span>aare-bern<span class="id-sub">f9d72e44</span></span><span class="mono">chronos-2</span><span class="mono">72h</span><span class="mono">2026-05-13 05:00</span></div>
+          <div class="list-row"><span>aare-thun<span class="id-sub">a14882f7</span></span><span class="mono">patchtst</span><span class="mono">72h</span><span class="mono">2026-05-13 05:00</span></div>
+          <div class="list-row"><span>rhine-basel<span class="id-sub">c20a37d1</span></span><span class="mono">patchtst</span><span class="mono">72h</span><span class="mono">2026-05-13 05:00</span></div>
+          <div class="list-row"><span>reuss-luzern<span class="id-sub">b87e019a</span></span><span class="mono">patchtst</span><span class="mono">72h</span><span class="mono">2026-05-13 05:00</span></div>
+        </div>
+        <aside class="explainer">
+          <h2>What is a forecast?</h2>
+          <p>A forecast is a triplet: a model, a dataset, and a future window. It carries the predicted mean and Q05–Q95 prediction intervals at every horizon step.</p>
+          <p>Open the BI canvas (<a href="standalone-forecast.html">/forecast</a>) to overlay multiple forecasts on the same station, or compare a model against Chronos-2 zero-shot for an apples-to-apples baseline.</p>
+          <p class="footnote">⌘K → "open in BI canvas"</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- INSIGHT -->
+    <section class="tab-content" data-tab="insight">
+      <h1>Insight</h1>
+      <div class="layout-2col">
+        <div class="list-table">
+          <div class="list-head"><span>Report</span><span>Panels</span><span>Public</span><span>Updated</span></div>
+          <div class="list-row"><span>Swiss-River — Overview<span class="id-sub">swiss-river-overview</span></span><span class="mono">4</span><span class="mono">yes</span><span class="mono">2026-05-12</span></div>
+          <div class="list-row"><span><em style="font-style:italic;color:#94989D">No more reports yet. Save a BI canvas from /forecast to create one.</em></span><span></span><span></span><span></span></div>
+        </div>
+        <aside class="explainer">
+          <h2>What is a report?</h2>
+          <p>A report is a saved BI canvas layout: panels + filters + an optional public-share slug. It freezes a question in a way that anyone with the URL can re-open.</p>
+          <p>Build one in /forecast, then "Save report" from the toolbar. Public reports are read-only; the same URL renders both the live data and a PDF on demand.</p>
+          <p class="footnote">⌘K → "export PDF"</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  // Tab switching
+  const tabs = document.querySelectorAll('.tab');
+  const contents = document.querySelectorAll('.tab-content');
+  function show(tabId) {
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabId));
+    contents.forEach(c => c.classList.toggle('active', c.dataset.tab === tabId));
+  }
+  tabs.forEach(t => t.addEventListener('click', () => show(t.dataset.tab)));
+
+  // Keyboard shortcuts: 1/2/3/4 → tabs, ⌘K → palette (TODO), b → toggle agent
+  window.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === '1') show('data');
+    else if (e.key === '2') show('train');
+    else if (e.key === '3') show('inference');
+    else if (e.key === '4') show('insight');
+  });
+</script>
+</body>
+</html>
