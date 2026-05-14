@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>LIULIAN · Demo Index</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="LIULIAN demo — landing, BI canvas, Studio, mobile preview" />
+  <meta name="theme-color" content="#FBFBFA" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,WONK@0,9..144,300..900,0..1;1,9..144,300..900,0..1&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
@@ -20,36 +23,77 @@
       --sans: 'Switzer', system-ui, sans-serif;
       --mono: 'JetBrains Mono', monospace;
     }
-    body { margin: 0; background: var(--canvas-warm); color: var(--ink); font-family: var(--sans); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px; }
-    .wrap { max-width: 720px; }
-    h1 { font-family: var(--serif); font-weight: 500; font-variation-settings: "opsz" 96, "WONK" 0; font-size: 72px; letter-spacing: -0.035em; line-height: 0.95; margin: 0 0 8px; }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--canvas-warm); color: var(--ink); font-family: var(--sans); min-height: 100vh; }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 56px 24px 80px; }
+    h1 { font-family: var(--serif); font-weight: 500; font-variation-settings: "opsz" 96, "WONK" 0; font-size: clamp(48px, 12vw, 88px); letter-spacing: -0.035em; line-height: 0.95; margin: 0 0 8px; }
     h1 .u { font-style: italic; font-variation-settings: "opsz" 96, "WONK" 1, "wght" 600; color: var(--bern); }
-    .pretitle { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 24px; }
-    p.tagline { font-size: 17px; color: var(--ink-muted); max-width: 55ch; margin: 0 0 40px; }
+    .pretitle { font-family: var(--mono); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 24px; }
+    p.tagline { font-size: 17px; line-height: 1.55; color: var(--ink-muted); max-width: 55ch; margin: 0 0 40px; }
     ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
-    li a { display: grid; grid-template-columns: 200px 1fr auto; align-items: center; gap: 16px; padding: 16px 20px; background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; text-decoration: none; color: var(--ink); transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1), border-color 150ms; }
-    li a:hover { border-color: var(--ink-faint); transform: translateX(4px); }
-    li .name { font-family: var(--serif); font-size: 20px; font-weight: 500; letter-spacing: -0.01em; }
+    li a { display: grid; grid-template-columns: 180px 1fr auto; align-items: center; gap: 16px; padding: 18px 22px; background: var(--surface); border: 1px solid var(--hairline); border-radius: 12px; text-decoration: none; color: var(--ink); transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), border-color 200ms; }
+    li a:hover, li a:focus-visible { border-color: var(--ink-faint); transform: translateX(4px); outline: none; }
+    li .name { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.01em; }
     li .desc { font-size: 13px; color: var(--ink-muted); }
-    li .arrow { color: var(--bern); font-family: var(--mono); }
-    .small { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); margin-top: 32px; }
-    .small code { background: rgba(226,6,19,0.06); padding: 2px 6px; border-radius: 3px; color: var(--bern); }
+    li .arrow { color: var(--bern); font-family: var(--mono); font-size: 18px; }
+    .badge { display: inline-block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--bern); background: rgba(226,6,19,0.06); padding: 2px 8px; border-radius: 4px; margin-left: 8px; vertical-align: middle; }
+    .small { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); margin-top: 40px; line-height: 1.7; }
+    .small code { background: rgba(226,6,19,0.06); padding: 2px 6px; border-radius: 3px; color: var(--bern); font-size: 10px; }
+    @media (max-width: 600px) {
+      .wrap { padding: 32px 16px 60px; }
+      li a { grid-template-columns: 1fr auto; gap: 4px; padding: 16px 18px; }
+      li .desc { grid-column: 1 / -1; }
+      li .name { font-size: 19px; }
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <p class="pretitle">Liquid Intelligence · Unified Logic · Interactive Adaptive Networks</p>
     <h1>LI<span class="u">U</span>LIAN</h1>
-    <p class="tagline">Open-source production stack for spatio-temporal AI. Demo index — three pages running locally, fonts loaded from CDN, charts inline.</p>
+    <p class="tagline">Open-source production stack for spatio-temporal AI. <strong>Demo index</strong> — open any card below; works on desktop and mobile.</p>
+
     <ul>
-      <li><a href="standalone-landing.html"><span class="name">Landing</span><span class="desc">Editorial-magazine hero · three pillars · CTA</span><span class="arrow">→</span></a></li>
-      <li><a href="standalone-forecast.html"><span class="name">Forecast Canvas</span><span class="desc">Map · Q05/Q95 fan · KPI · alert ribbon · BI agent</span><span class="arrow">→</span></a></li>
-      <li><a href="standalone-studio.html"><span class="name">Studio</span><span class="desc">4-tab IA · Data · Train · Inference · Insight</span><span class="arrow">→</span></a></li>
+      <li>
+        <a href="standalone-landing.html">
+          <span class="name">Landing</span>
+          <span class="desc">Editorial-magazine hero · three pillars · live counters</span>
+          <span class="arrow">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="standalone-forecast.html">
+          <span class="name">Forecast Canvas <span class="badge">desktop</span></span>
+          <span class="desc">Stations · Swiss map · Q05-Q95 fan · KPI · alert ribbon · BI agent · ⌘K palette</span>
+          <span class="arrow">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="standalone-studio.html">
+          <span class="name">Studio <span class="badge">desktop</span></span>
+          <span class="desc">4-tab IA · Data · Train · Inference · Insight (press 1/2/3/4)</span>
+          <span class="arrow">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="mobile-preview.html">
+          <span class="name">Mobile <span class="badge">phone</span></span>
+          <span class="desc">3-tab native-feel preview · Home · Forecast · Alerts</span>
+          <span class="arrow">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="screenshots/">
+          <span class="name">Screenshots</span>
+          <span class="desc">All pages captured at desktop + mobile widths · click to view</span>
+          <span class="arrow">→</span>
+        </a>
+      </li>
     </ul>
-    <div class="small">
-      Backend live at <code>http://localhost:8000/api/docs</code> · <code>GET /healthz</code> · 7 routers · 6/6 tests pass<br>
-      Static pages served via <code>python3 -m http.server 8888</code>
-    </div>
+
+    <p class="small">
+      Hosted on GitHub Pages from <code>liulian-ai/liulian-web</code>. All pages serve static HTML with brand fonts from Google Fonts + Fontshare and ECharts from jsDelivr — no build step. <strong>Forecast Canvas</strong> + <strong>Studio</strong> are desktop-only by design (BI canvas needs width); the rest scale to phone.
+    </p>
   </div>
 </body>
 </html>
