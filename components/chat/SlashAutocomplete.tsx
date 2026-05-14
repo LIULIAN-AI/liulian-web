@@ -87,7 +87,7 @@ export default function SlashAutocomplete({
                 )}
               </span>
               <span className={styles.slashMenuItemDesc}>{t(`commands.desc_${cmd.key}`)}</span>
-              <span className={`${styles.slashMenuItemTag} ${tagTint}`}>{cmd.category === 'banking' ? t('commands.neobanker') : t('commands.general')}</span>
+              <span className={`${styles.slashMenuItemTag} ${tagTint}`}>{cmd.category === 'banking' ? t('commands.liulian') : t('commands.general')}</span>
             </button>
           );
         })}

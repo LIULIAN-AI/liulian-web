@@ -10,7 +10,7 @@ if %errorLevel% neq 0 (
 )
 
 echo =======================================================
-echo                NEOBANKER前端部署脚本
+echo                LIULIAN 前端部署脚本
 
 echo 当前用户: %USERNAME%
 echo 当前目录: %CD%
@@ -18,8 +18,8 @@ echo 开始部署时间: %date% %time%
 echo =======================================================
 
 :: 1. 项目配置
-set "PROJECT_NAME=neobanker-frontend-mvp-v3"
-set "SOURCE_PATH=D:\HongKongNew\neobanker-frontend-mvp-v3"
+set "PROJECT_NAME=liulian-web"
+set "SOURCE_PATH=D:\liulian\liulian-web"
 set "HONGKONG_BASE=D:\hongkong"
 set "BACKUP_PATH=%HONGKONG_BASE%\backup\%PROJECT_NAME%"
 set "DEPLOY_PATH=%HONGKONG_BASE%\var\www\%PROJECT_NAME%"

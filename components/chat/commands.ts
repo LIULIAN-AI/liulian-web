@@ -106,7 +106,7 @@ export const COMMANDS: CommandDef[] = [
     run: (ctx) => ctx.exportTranscript(),
   },
 
-  // ── Neobanker-specific ─────────────────────────────────
+  // ── LIULIAN-specific ─────────────────────────────────
   {
     key: 'compare',
     category: 'banking',

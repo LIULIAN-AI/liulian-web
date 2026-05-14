@@ -1,9 +1,9 @@
 /**
  * Demo-minimal root layout — bypasses Clerk + next-intl + contentlayer
  * so the /forecast and /studio Day-1 pages can render without all of
- * neobanker's auth/i18n/content infrastructure wired up.
+ * liulian's auth/i18n/content infrastructure wired up.
  *
- * The full neobanker-derived layout is preserved at app/layout.original.tsx
+ * The full liulian-derived layout is preserved at app/layout.original.tsx
  * and gets restored at M2 when we wire Clerk + next-intl properly.
  */
 

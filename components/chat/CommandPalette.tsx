@@ -162,7 +162,7 @@ export default function CommandPalette({ open, onClose, onRun }: CommandPaletteP
                   )}
                   {grouped.banking.length > 0 && (
                     <>
-                      <li className={styles.commandPaletteSection}>{t('commands.neobanker')}</li>
+                      <li className={styles.commandPaletteSection}>{t('commands.liulian')}</li>
                       {grouped.banking.map((cmd, idx) => {
                         const flatIdx = grouped.general.length + idx;
                         return (

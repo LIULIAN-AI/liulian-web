@@ -1,6 +1,6 @@
 # Quality + Security Baselines (Frontend)
 
-> Standard: [`<workspace-root>/repos/neobanker-agent/docs/standards/code-quality-and-security-tools.md`](../../../../neobanker-agent/docs/standards/code-quality-and-security-tools.md)
+> Standard: [`<workspace-root>/repos/liulian-agent/docs/standards/code-quality-and-security-tools.md`](../../../../liulian-agent/docs/standards/code-quality-and-security-tools.md)
 
 ## Files
 
@@ -33,7 +33,7 @@
 
 ```bash
 docker exec my-ubuntu-dev bash -lc '
-  cd /workspace/repos/neobanker-frontend-MVP-V3
+  cd /workspace/repos/liulian-web
   npm audit --json > tests/baselines/quality/npm-audit.json 2>/dev/null
 '
 ```
@@ -42,11 +42,11 @@ docker exec my-ubuntu-dev bash -lc '
 
 ```bash
 # Terminal A: start dev server
-docker exec my-ubuntu-dev bash -lc 'cd /workspace/repos/neobanker-frontend-MVP-V3 && npm run dev'
+docker exec my-ubuntu-dev bash -lc 'cd /workspace/repos/liulian-web && npm run dev'
 
 # Terminal B: run LHCI
 docker exec my-ubuntu-dev bash -lc '
-  cd /workspace/repos/neobanker-frontend-MVP-V3
+  cd /workspace/repos/liulian-web
   npx -y @lhci/cli@0.13 autorun \
     --collect.url=http://127.0.0.1:3000/homepage \
     --collect.url=http://127.0.0.1:3000/bank-info/demo-bank/overview \
@@ -57,4 +57,4 @@ docker exec my-ubuntu-dev bash -lc '
 
 ## Gate thresholds
 
-See [`<workspace-root>/repos/neobanker-agent/docs/standards/code-quality-and-security-tools.md` §2.1](../../../../neobanker-agent/docs/standards/code-quality-and-security-tools.md).
+See [`<workspace-root>/repos/liulian-agent/docs/standards/code-quality-and-security-tools.md` §2.1](../../../../liulian-agent/docs/standards/code-quality-and-security-tools.md).

@@ -1,4 +1,4 @@
-# Neobanker Frontend
+# LIULIAN Frontend
 
 Next.js 14 前端，包含 AI 银行分析聊天助手、多语言(EN/zh-CN/zh-HK)支持、银行信息展示页面。
 
@@ -24,7 +24,7 @@ npm run dev          # http://localhost:3000
 ## 服务器部署
 
 > 部署手动操作清单（包含前端 + Agent + GitHub 设置）：
-> **[`neobanker-agent/docs/deployment.md` §0](../neobanker-agent/docs/deployment.md)**
+> **[`liulian-agent/docs/deployment.md` §0](../liulian-agent/docs/deployment.md)**
 
 前端部署需要：
 

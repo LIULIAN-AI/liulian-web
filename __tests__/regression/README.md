@@ -1,6 +1,6 @@
 # Frontend regression test catalog
 
-> Standard: [`repos/neobanker-agent/docs/standards/test-discipline.md`](../../../neobanker-agent/docs/standards/test-discipline.md) §11
+> Standard: [`repos/liulian-agent/docs/standards/test-discipline.md`](../../../liulian-agent/docs/standards/test-discipline.md) §11
 
 ## Why this directory exists
 

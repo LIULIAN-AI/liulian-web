@@ -4,7 +4,7 @@
  * Chat sidebar for the BI agent.
  *
  * Connects to liulian-agent at /agents/bi/invoke via Server-Sent Events
- * (same wire-shape as neobanker-agent: thinking / trace / intent /
+ * (same wire-shape as liulian-agent: thinking / trace / intent /
  * tool_call / tool_result / response / suggestions / done).
  *
  * Render style per PLATFORM_DESIGN.md §4.3: *notebook, not chat*.

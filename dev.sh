@@ -2,7 +2,7 @@
 set -e # 遇到错误立即退出
 
 # 配置变量
-PROJECT_NAME="neobanker"
+PROJECT_NAME="liulian"
 SOURCE_PATH="$(pwd)" # 不能使用git pull 的代码路径
 BACKUP_PATH="/home/ecs-user/backup/${PROJECT_NAME}"
 DEPLOY_PATH="/home/ecs-user/www/${PROJECT_NAME}"

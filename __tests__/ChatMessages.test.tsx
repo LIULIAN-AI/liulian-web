@@ -84,6 +84,6 @@ describe('ChatMessages', () => {
 
   it('shows a default self-introduction when chat is empty', () => {
     renderWithIntl(<ChatMessages messages={[]} activeTraces={[]} isStreaming={false} />);
-    expect(screen.getByText(/Neobanker Assistant/)).toBeInTheDocument();
+    expect(screen.getByText(/LIULIAN Assistant/)).toBeInTheDocument();
   });
 });

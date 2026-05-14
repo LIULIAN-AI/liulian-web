@@ -9,7 +9,7 @@ export default function HeaderBar() {
   const t = useTranslations('Assistant');
   return (
     <header className={styles.headerBar}>
-      <div className={styles.headerLogo}>Neobanker</div>
+      <div className={styles.headerLogo}>LIULIAN</div>
       <BankSelector />
       <div className={styles.headerActions}>
         <button className={styles.headerActionBtn} title="Settings">

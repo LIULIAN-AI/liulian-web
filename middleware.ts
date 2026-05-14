@@ -2,7 +2,7 @@
  * Demo-minimal middleware — no redirects, no Clerk, no next-intl
  * gating. Lets / fall through to (marketing)/page.tsx.
  *
- * Original (neobanker /homepage redirect + intl cookie logic) preserved
+ * Original (liulian /homepage redirect + intl cookie logic) preserved
  * at middleware.original.ts for M2 restoration.
  */
 import { NextResponse } from 'next/server';

@@ -100,7 +100,7 @@ export default function Footer() {
   const newBottomLeftMiddleRightLinks = [
     {
       link: '/',
-      alt: 'aboutNeobanker',
+      alt: 'aboutLIULIAN',
     },
     {
       link: '/',
@@ -130,7 +130,7 @@ export default function Footer() {
     <div className={styles.newBottomLeft}>
       <div className={styles.newBottomLeftTop}>
         <div className={styles.newBottomLeftTopIconText}>
-          <Image className={styles.newBottomLeftTopIconTextIcon} src="/images/footer/neobankerRed.svg" alt="eoBanker" width={32} height={32} />
+          <Image className={styles.newBottomLeftTopIconTextIcon} src="/images/footer/liulianRed.svg" alt="eoBanker" width={32} height={32} />
           <span className={styles.newBottomLeftTopIconTextText}>eoBanker</span>
         </div>
         <div className={styles.newBottomLeftTopLinks}>
@@ -170,7 +170,7 @@ export default function Footer() {
     </div>
     <div onClick={handleAboutUs} className={styles.newBottomRight}>
       <div className={styles.newBottomRightTop}>
-        <Image className={styles.newBottomRightTopImage} src="/images/footer/neobankerWhite.svg" alt="neoBankerWhite" width={89.2} height={88.765} />
+        <Image className={styles.newBottomRightTopImage} src="/images/footer/liulianWhite.svg" alt="neoBankerWhite" width={89.2} height={88.765} />
         <div className={styles.newBottomRightTopAboutUs}>{t('about')}</div>
       </div>
       <div className={styles.newBottomRightMiddle}>
@@ -183,7 +183,7 @@ export default function Footer() {
           ))
         }
       </div>
-      <div className={styles.newBottomRightBottom}>{t('aboutNeobankerDescription')}</div>
+      <div className={styles.newBottomRightBottom}>{t('aboutLIULIANDescription')}</div>
     </div>
   </div>)
 }

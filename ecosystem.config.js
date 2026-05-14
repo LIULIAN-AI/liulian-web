@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'neobanker-frontend-app', // 你的应用名称，在 PM2 列表中显示
+      name: 'liulian-web-app', // 你的应用名称，在 PM2 列表中显示
       // script: 'node_modules/next/dist/bin/next', // Next.js 的启动脚本路径
       script: 'node_modules/.bin/next',
       args: 'start -p 3000', // 传递给脚本的参数，即 `next start`

@@ -3,14 +3,14 @@
  * so Day-1 /forecast and /studio pages can compile without those deps
  * being fully configured.
  *
- * Full neobanker-derived config preserved at next.config.original.js.
+ * Full liulian-derived config preserved at next.config.original.js.
  */
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
   eslint: { ignoreDuringBuilds: true },
-  typescript: { ignoreBuildErrors: true }, // we'll re-enable when neobanker pages are migrated
+  typescript: { ignoreBuildErrors: true }, // we'll re-enable when liulian pages are migrated
   images: { unoptimized: true, remotePatterns: [{ protocol: 'https', hostname: '**' }] },
 };
 

@@ -1,5 +1,5 @@
 {
-  "name": "neobanker-dev-container",
+  "name": "liulian-dev-container",
   "build": {
     "dockerfile": "Dockerfile",
     "context": ".."

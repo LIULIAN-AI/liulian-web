@@ -75,7 +75,7 @@ export const MOCK_BANKS: MockBankData[] = [
       tag: ['Digital Bank', 'SME Focus', 'Retail'],
       logoLink: '/images/defaultBank.svg',
       status: 'Live',
-      website: 'https://demo.neobanker.local',
+      website: 'https://demo.liulian.local',
       following: false,
     },
     about: {
@@ -124,8 +124,8 @@ export const MOCK_BANKS: MockBankData[] = [
       { label: 'NPL Ratio', value: 0.8, unit: '%', change: -0.1 },
     ],
     owners: [
-      { name: 'Nova Financial Group', percent: 61.0, website: 'https://demo.neobanker.local/investors' },
-      { name: 'Eastbridge Capital', percent: 24.5, website: 'https://demo.neobanker.local/investors' },
+      { name: 'Nova Financial Group', percent: 61.0, website: 'https://demo.liulian.local/investors' },
+      { name: 'Eastbridge Capital', percent: 24.5, website: 'https://demo.liulian.local/investors' },
     ],
     campaigns: [
       { name: 'Nova Everyday Cashback', channel: 'Social + OOH', status: 'Live', reach: '2.3M' },

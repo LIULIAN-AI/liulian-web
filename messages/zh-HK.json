@@ -9,10 +9,10 @@
     "profile": "個人資料",
     "reportDebug": "報告錯誤",
     "support": "支援與聯絡",
-    "aboutNeobanker": "關於 Nbanker",
+    "aboutLIULIAN": "關於 Nbanker",
     "copyright": "所有權利保留 ©2024 數字金融服務研究中心有限公司",
-    "aboutNeobankerDescription": "我們為數字銀行從業者提供直觀易用、富有洞察的統計數據與深度分析",
-    "neobanks": "Neobanks",
+    "aboutLIULIANDescription": "我們為數字銀行從業者提供直觀易用、富有洞察的統計數據與深度分析",
+    "neobanks": "LIULIANs",
     "dataDriven": "數據驅動",
     "innovation": "創新",
     "signIn": "登入",
@@ -86,8 +86,8 @@
     "newPasswordInput": "輸入您的新密碼"
   },
   "HomePage": {
-    "title": "Neobanker - 現代銀行解決方案",
-    "description": "Neobanker 是一家現代銀行，為您提供安全便捷的財務管理方式。",
+    "title": "LIULIAN - 現代銀行解決方案",
+    "description": "LIULIAN 是一家現代銀行，為您提供安全便捷的財務管理方式。",
     "subtitle": "富有洞察力、精准的統計與數據",
     "search": "搜尋",
     "searchPlaceholder": "搜尋您感興趣的銀行、技術或產品",
@@ -280,7 +280,7 @@
     "passion": "激情",
     "professional": "專業",
     "supportOrWorkWithUs": "支持或與我們合作",
-    "neobanks": "Neobanks",
+    "neobanks": "LIULIANs",
     "dataDriven": "數據驅動",
     "innovation": "創新",
     "contactUs": "聯繫我們",
@@ -291,7 +291,7 @@
   },
   "Chat": {
     "intro": {
-      "title": "你好，我係你嘅 Neobanker 智能助手。",
+      "title": "你好，我係你嘅 LIULIAN 智能助手。",
       "text": "你可以詢問銀行概覽、領導層、產品或財務資訊，亦可以撳頁面上嘅小助手圖示附加上下文。",
       "analysisTitle": "正在進行深度專業分析與交叉驗證",
       "analysisHint": "為確保金融級準確性，可能需要稍等片刻。",
@@ -356,7 +356,7 @@
       "responseFeedback": "回覆反饋"
     },
     "panel": {
-      "title": "Neobanker 智能助手",
+      "title": "LIULIAN 智能助手",
       "transcriptCopied": "對話紀錄已複製到剪貼簿。",
       "transcriptCopyFailed": "無法複製 — 剪貼簿不可用。",
       "currentChat": "目前對話",
@@ -401,7 +401,7 @@
       "sessionNamePlaceholder": "對話名稱",
       "summarizePrompt": "請總結我哋到目前為止嘅對話，包括關鍵主題同決定。",
       "renameHintFull": "重新命名對話 —「{title}」",
-      "transcriptTitle": "Neobanker 智能助手對話紀錄",
+      "transcriptTitle": "LIULIAN 智能助手對話紀錄",
       "transcriptYou": "你",
       "transcriptAssistant": "助手",
       "transcriptContext": "已附加上下文：{component}"
@@ -587,7 +587,7 @@
       "closeCommandPalette": "關閉命令面板",
       "commandPalette": "命令面板",
       "general": "通用",
-      "neobanker": "銀行專屬",
+      "liulian": "銀行專屬",
       "noMatches": "冇匹配",
       "slashCommands": "斜杠命令",
       "desc_summary": "總結目前對話",

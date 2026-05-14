@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'neobanker_demo_mode';
+const STORAGE_KEY = 'liulian_demo_mode';
 
 function canUseBrowserStorage(): boolean {
   return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';

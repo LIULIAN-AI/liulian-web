@@ -9,10 +9,10 @@
     "profile": "Profile",
     "reportDebug": "Report Bugs",
     "support": "Support & Contact",
-    "aboutNeobanker": "About Nbanker",
+    "aboutLIULIAN": "About Nbanker",
     "copyright": "All Rights Reserved ©2024 Digital Financial Services Research Center Limited",
-    "aboutNeobankerDescription": "We Empower Neobank-er With Insightful Statistics And Data In A User-friendly Manner",
-    "neobanks": "Neobanks",
+    "aboutLIULIANDescription": "We Empower LIULIAN-er With Insightful Statistics And Data In A User-friendly Manner",
+    "neobanks": "LIULIANs",
     "dataDriven": "Data-Driven",
     "innovation": "Innovation",
     "signIn": "Sign In",
@@ -86,8 +86,8 @@
     "newPasswordInput": "Enter your new password"
   },
   "HomePage": {
-    "title": "Neobanker - Modern Banking Solutions",
-    "description": "Neobanker is a modern bank that provides you with a secure and convenient way to manage your finances.",
+    "title": "LIULIAN - Modern Banking Solutions",
+    "description": "LIULIAN is a modern bank that provides you with a secure and convenient way to manage your finances.",
     "subtitle": "Insightful, Precise Statistics & Data",
     "search": "Search",
     "searchPlaceholder": "Search your interested Banks, Technologies or a Products",
@@ -256,8 +256,8 @@
   },
   "AboutUs": {
     "aboutUs": "About Us",
-    "aboutUsDescription": "Made for Neobankers, Made by Nbanker",
-    "aboutUsTitle": "1st Global Boutique Neobanks Platform",
+    "aboutUsDescription": "Made for LIULIANs, Made by Nbanker",
+    "aboutUsTitle": "1st Global Boutique LIULIANs Platform",
     "whatWeOffer": "What we offer",
     "customizedProfessional247": "Customized professional 24/7",
     "accessibleDecisionMakingSupport": "Accessible decision-making support",
@@ -280,7 +280,7 @@
     "passion": "Passion",
     "professional": "Professional",
     "supportOrWorkWithUs": "Support or Work with Us",
-    "neobanks": "Neobanks",
+    "neobanks": "LIULIANs",
     "dataDriven": "Data-Driven",
     "innovation": "Innovation",
     "contactUs": "Contact us",
@@ -291,7 +291,7 @@
   },
   "Chat": {
     "intro": {
-      "title": "Hi, I'm your Neobanker Assistant.",
+      "title": "Hi, I'm your LIULIAN Assistant.",
       "text": "Ask me about bank overviews, leadership, products or financials — or click a small assistant icon on the page to attach context.",
       "analysisTitle": "Performing deep professional analysis and cross-verification",
       "analysisHint": "This may take a moment longer to ensure finance-grade accuracy.",
@@ -356,7 +356,7 @@
       "responseFeedback": "Response feedback"
     },
     "panel": {
-      "title": "Neobanker Assistant",
+      "title": "LIULIAN Assistant",
       "transcriptCopied": "Transcript copied to clipboard.",
       "transcriptCopyFailed": "Could not copy — clipboard unavailable.",
       "currentChat": "Current chat",
@@ -401,7 +401,7 @@
       "sessionNamePlaceholder": "Session name",
       "summarizePrompt": "Summarize our conversation so far with key topics and decisions.",
       "renameHintFull": "Rename session — \"{title}\"",
-      "transcriptTitle": "Neobanker Assistant Transcript",
+      "transcriptTitle": "LIULIAN Assistant Transcript",
       "transcriptYou": "You",
       "transcriptAssistant": "Assistant",
       "transcriptContext": "Context attached: {component}"
@@ -587,7 +587,7 @@
       "closeCommandPalette": "Close command palette",
       "commandPalette": "Command palette",
       "general": "General",
-      "neobanker": "Neobanker",
+      "liulian": "LIULIAN",
       "noMatches": "No matches",
       "slashCommands": "Slash commands",
       "desc_summary": "Summarize the current conversation",

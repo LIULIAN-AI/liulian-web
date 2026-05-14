@@ -139,7 +139,7 @@ export function InjectContextButton({
       sourceId: sourceId,
       sourcePath,
     });
-    event.dataTransfer.setData('application/x-neobanker-context', payload);
+    event.dataTransfer.setData('application/x-liulian-context', payload);
     event.dataTransfer.setData('text/plain', `[Context: ${component}]`);
     event.dataTransfer.effectAllowed = 'copy';
   };

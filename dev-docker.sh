@@ -40,8 +40,8 @@ echo "=== 4. 项目依赖 ==="
 npm install
 
 echo "=== 5. 启动前端项目 ==="
-chmod +x repos/neobanker-frontend-MVP-V3/dev.sh
-cd repos/neobanker-frontend-MVP-V3/
+chmod +x repos/liulian-web/dev.sh
+cd repos/liulian-web/
 # Ensure Clerk env vars are valid before starting (prevents atob errors at module load)
 export NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
 export NEXT_PUBLIC_CLERK_SIGN_UP_URL="/sign-up"
@@ -75,7 +75,7 @@ if command -v uv >/dev/null 2>&1; then
   uv --version || true
 fi
 
-cd /workspace/repos/neobanker-agent
+cd /workspace/repos/liulian-agent
 
 # 在当前工程创建虚拟环境（会创建 .venv）
 uv venv
@@ -88,29 +88,29 @@ uv sync --all-extras
 # 或仅 sync（根据项目情况）
 uv sync
 
-# 创建 Agent 日志目录（统一放在 neobanker-agent 仓库内）
-mkdir -p /workspace/repos/neobanker-agent/logs/runtime
-mkdir -p /workspace/repos/neobanker-agent/logs/sessions
+# 创建 Agent 日志目录（统一放在 liulian-agent 仓库内）
+mkdir -p /workspace/repos/liulian-agent/logs/runtime
+mkdir -p /workspace/repos/liulian-agent/logs/sessions
 mkdir -p /workspace/logs
 
 # 迁移旧路径日志（若存在）
-if [ -f /workspace/logs/agent.log ] && [ ! -f /workspace/repos/neobanker-agent/logs/runtime/agent.log ]; then
-  mv /workspace/logs/agent.log /workspace/repos/neobanker-agent/logs/runtime/agent.log
+if [ -f /workspace/logs/agent.log ] && [ ! -f /workspace/repos/liulian-agent/logs/runtime/agent.log ]; then
+  mv /workspace/logs/agent.log /workspace/repos/liulian-agent/logs/runtime/agent.log
 fi
-if [ -f /workspace/logs/agent.pid ] && [ ! -f /workspace/repos/neobanker-agent/logs/runtime/agent.pid ]; then
-  mv /workspace/logs/agent.pid /workspace/repos/neobanker-agent/logs/runtime/agent.pid
+if [ -f /workspace/logs/agent.pid ] && [ ! -f /workspace/repos/liulian-agent/logs/runtime/agent.pid ]; then
+  mv /workspace/logs/agent.pid /workspace/repos/liulian-agent/logs/runtime/agent.pid
 fi
 
 # 会话日志目录默认落到 agent 仓库
-export AGENT_SESSION_LOG_DIR=/workspace/repos/neobanker-agent/logs/sessions
+export AGENT_SESSION_LOG_DIR=/workspace/repos/liulian-agent/logs/sessions
 
 # 用 uv 运行 uvicorn（热重载），并放后台；把 PID 写入文件
-uv run uvicorn main:app --reload --host 0.0.0.0 --port 8000 > /workspace/repos/neobanker-agent/logs/runtime/agent.log 2>&1 &
-echo $! > /workspace/repos/neobanker-agent/logs/runtime/agent.pid
+uv run uvicorn main:app --reload --host 0.0.0.0 --port 8000 > /workspace/repos/liulian-agent/logs/runtime/agent.log 2>&1 &
+echo $! > /workspace/repos/liulian-agent/logs/runtime/agent.pid
 
 # 保留旧路径为软链接，兼容现有查看命令
-ln -sfn /workspace/repos/neobanker-agent/logs/runtime/agent.log /workspace/logs/agent.log
-ln -sfn /workspace/repos/neobanker-agent/logs/runtime/agent.pid /workspace/logs/agent.pid
+ln -sfn /workspace/repos/liulian-agent/logs/runtime/agent.log /workspace/logs/agent.log
+ln -sfn /workspace/repos/liulian-agent/logs/runtime/agent.pid /workspace/logs/agent.pid
 
 # 查看后台进程
 ps aux | grep -E 'uvicorn|uv run' | grep -v grep
@@ -122,7 +122,7 @@ ss -ltnp | grep ':8000' || netstat -ltnp | grep ':8000'
 curl -sS http://127.0.0.1:8000/health | jq . || curl -sS http://127.0.0.1:8000/health
 
 # 查看最近日志输出
-tail -n 200 /workspace/repos/neobanker-agent/logs/runtime/agent.log
+tail -n 200 /workspace/repos/liulian-agent/logs/runtime/agent.log
 
 
 # 推荐
@@ -140,7 +140,7 @@ ps -fp 11981
 ps aux | grep -E 'uv run|uvicorn' | grep -v grep
 
 # 推荐查看统一路径
-tail -n 200 /workspace/repos/neobanker-agent/logs/runtime/agent.log
+tail -n 200 /workspace/repos/liulian-agent/logs/runtime/agent.log
 
 # 如果没有日志文件，查看 nohup.out（若用 nohup）
 tail -n 200 nohup.out || true
@@ -154,7 +154,7 @@ tail -n 200 nohup.out || true
 # =====================================================================
 if [ "${SETUP_SWAGGER:-0}" = "1" ]; then
   echo "=== [Optional] 启用 Agent Swagger UI ==="
-  AGENT_ENV=/workspace/repos/neobanker-agent/.env
+  AGENT_ENV=/workspace/repos/liulian-agent/.env
   if [ -f "$AGENT_ENV" ]; then
     if grep -q '^AGENT_ENABLE_SWAGGER=' "$AGENT_ENV"; then
       sed -i 's/^AGENT_ENABLE_SWAGGER=.*/AGENT_ENABLE_SWAGGER=true/' "$AGENT_ENV"
@@ -173,11 +173,11 @@ fi
 # 可选：Storybook（Frontend）
 # 用法：SETUP_STORYBOOK=1 bash dev-docker.sh
 # 默认端口 6006（需 docker run 时映射 -p 6006:6006）
-# 启动：cd repos/neobanker-frontend-MVP-V3 && npm run storybook
+# 启动：cd repos/liulian-web && npm run storybook
 # =====================================================================
 if [ "${SETUP_STORYBOOK:-0}" = "1" ]; then
   echo "=== [Optional] 安装 Storybook ==="
-  cd /workspace/repos/neobanker-frontend-MVP-V3 || exit 1
+  cd /workspace/repos/liulian-web || exit 1
   if [ ! -d ".storybook" ]; then
     # --skip-install: storybook 自带 npm install 会和我们的 lockfile 打架
     npx --yes storybook@latest init --type nextjs --skip-install --yes || true

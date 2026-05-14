@@ -11,8 +11,8 @@ env:
   DEPLOY_HOST: 158.132.12.57
   DEPLOY_PORT: 10022
   DEPLOY_USER: wenjixu
-  FRONTEND_DIR: ~/neobanker/frontend
-  PM2_APP_NAME: neobanker-frontend-app
+  FRONTEND_DIR: ~/liulian/frontend
+  PM2_APP_NAME: liulian-web-app
 
 jobs:
   # ─────────────────────────────────────────

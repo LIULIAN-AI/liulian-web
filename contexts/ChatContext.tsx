@@ -14,8 +14,8 @@ import type {
 } from '@/components/chat/types';
 import { CONTEXT_CHIP_KEYS } from '@/components/chat/types';
 
-const CHAT_STORAGE_KEY = 'neobanker_chat_state_v1';
-const ONLINE_MODE_STORAGE_KEY = 'neobanker_online_mode_v1';
+const CHAT_STORAGE_KEY = 'liulian_chat_state_v1';
+const ONLINE_MODE_STORAGE_KEY = 'liulian_online_mode_v1';
 const MAX_PERSISTED_MESSAGES = 200;
 const MAX_ARCHIVES = 20;
 

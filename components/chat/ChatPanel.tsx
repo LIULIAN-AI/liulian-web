@@ -198,7 +198,7 @@ export default function ChatPanel({ persona, standalone }: ChatPanelProps) {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `neobanker-chat-${Date.now()}.md`;
+    link.download = `liulian-chat-${Date.now()}.md`;
     link.click();
     URL.revokeObjectURL(url);
   }, [state.messages, t]);
@@ -496,7 +496,7 @@ export default function ChatPanel({ persona, standalone }: ChatPanelProps) {
 
   // ── Drag-drop card injection ─────────────────────────────────────
   const handleDragOver = (event: React.DragEvent) => {
-    if (event.dataTransfer.types.includes('application/x-neobanker-context')) {
+    if (event.dataTransfer.types.includes('application/x-liulian-context')) {
       event.preventDefault();
       setIsDropping(true);
     }
@@ -507,7 +507,7 @@ export default function ChatPanel({ persona, standalone }: ChatPanelProps) {
   const handleDrop = (event: React.DragEvent) => {
     event.preventDefault();
     setIsDropping(false);
-    const raw = event.dataTransfer.getData('application/x-neobanker-context');
+    const raw = event.dataTransfer.getData('application/x-liulian-context');
     if (!raw) return;
     try {
       const { component, data, sourceId, sourcePath } = JSON.parse(raw);
