@@ -68,7 +68,13 @@
       LiulianText,
       LiulianButton,
       LiulianCard,
+      LiulianInput,
+      LiulianTab,
+      LiulianListItem,
     } from '@liulian/ui-react';
+
+    // Tiny state hook reusing React from import-map
+    import { useState as _useState } from 'react';
 
     // Tiny JSX-less helpers since we don't have a JSX compiler in-browser.
     const e = (type, props, ...children) => h(type, { ...(props || {}), children: children.length === 1 ? children[0] : children });
@@ -152,8 +158,50 @@
               e(LiulianText, { variant: 'body', color: 'var(--color-ink-muted)' }, 'border 2px UniBe red')
             )
           )
+        ),
+
+        // Inputs
+        es('div', { className: 'section' },
+          e('p', { className: 'label' }, 'LiulianInput'),
+          es('div', { className: 'col' },
+            e(LiulianInput, { value: '', onChange: () => {}, label: 'Station', placeholder: 'e.g. aare-bern' }),
+            e(LiulianInput, { value: 'abc', onChange: () => {}, label: 'Validated', errorText: 'Must start with a letter' }),
+            e(LiulianInput, { value: 'read-only', onChange: () => {}, label: 'Readonly', readonly: true }),
+            e(LiulianInput, { value: 'disabled', onChange: () => {}, label: 'Disabled', disabled: true }),
+            e(LiulianInput, { value: '', onChange: () => {}, variant: 'textarea', label: 'Notes', placeholder: 'Longer text…' })
+          )
+        ),
+
+        // Tabs
+        es('div', { className: 'section' },
+          e('p', { className: 'label' }, 'LiulianTab'),
+          e(TabDemo, null)
+        ),
+
+        // ListItems
+        es('div', { className: 'section' },
+          e('p', { className: 'label' }, 'LiulianListItem'),
+          es('div', { className: 'col', style: { gap: 0 } },
+            e(LiulianListItem, { primary: 'aare-bern', secondary: '142 cm · forecast +6', variant: 'navigation', onPress: () => {} }),
+            e(LiulianListItem, { primary: 'rhein-rheinfelden', secondary: '78 cm · stable', variant: 'selectable', selected: true, onPress: () => {} }),
+            e(LiulianListItem, { primary: 'ticino-bellinzona', secondary: '210 cm · -3 / 24h', variant: 'multiSelectable', selected: false, onPress: () => {} }),
+            e(LiulianListItem, { primary: 'limmat-baden', secondary: 'static, no chevron', variant: 'content' })
+          )
         )
       );
+    }
+
+    function TabDemo() {
+      const [active, setActive] = _useState('forecast');
+      return e(LiulianTab, {
+        items: [
+          { id: 'landing', label: 'LANDING' },
+          { id: 'forecast', label: 'FORECAST' },
+          { id: 'studio', label: 'STUDIO' },
+        ],
+        activeId: active,
+        onChange: setActive,
+      });
     }
 
     const root = createRoot(document.getElementById('app'));

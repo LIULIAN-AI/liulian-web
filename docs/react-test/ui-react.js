@@ -315,9 +315,323 @@ function LiulianCard({
   }
   return /* @__PURE__ */ jsx3("div", { style, children: inner });
 }
+
+// src/LiulianInput.tsx
+import { useState as useState3 } from "react";
+import { jsx as jsx4, jsxs as jsxs2 } from "react/jsx-runtime";
+function LiulianInput({
+  value,
+  onChange,
+  variant = "text",
+  size = "md",
+  label,
+  placeholder,
+  helpText,
+  errorText,
+  disabled = false,
+  readonly = false,
+  ariaLabel
+}) {
+  const [focused, setFocused] = useState3(false);
+  const hasError = !!errorText;
+  const borderColor = hasError ? "var(--color-unibe-red-text)" : focused ? "var(--color-unibe-red)" : "var(--color-hairline)";
+  const bg = disabled || readonly ? "var(--color-surface-shade)" : "var(--color-surface-pure)";
+  const height = variant === "textarea" ? "80px" : size === "sm" ? "var(--control-height-sm)" : "var(--control-height-md)";
+  const fieldStyle = {
+    width: "100%",
+    height: variant === "textarea" ? void 0 : height,
+    minHeight: variant === "textarea" ? height : void 0,
+    padding: variant === "textarea" ? "8px 12px" : "0 12px",
+    background: bg,
+    color: "var(--color-ink-charcoal)",
+    fontFamily: "var(--font-body)",
+    fontSize: "var(--fontsize-md)",
+    border: `1px solid ${borderColor}`,
+    borderRadius: "var(--radius-sm)",
+    outline: "none",
+    opacity: disabled ? 0.4 : 1,
+    cursor: disabled ? "not-allowed" : "text",
+    caretColor: "var(--color-unibe-red)",
+    boxSizing: "border-box",
+    resize: variant === "textarea" ? "vertical" : void 0,
+    fontWeight: 400
+  };
+  return /* @__PURE__ */ jsxs2("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: [
+    label && /* @__PURE__ */ jsx4("label", { style: {
+      fontFamily: "var(--font-body)",
+      fontSize: "var(--fontsize-md)",
+      fontWeight: 500,
+      color: "var(--color-ink-charcoal)"
+    }, children: label }),
+    variant === "textarea" ? /* @__PURE__ */ jsx4(
+      "textarea",
+      {
+        style: fieldStyle,
+        value,
+        placeholder,
+        disabled,
+        readOnly: readonly,
+        "aria-label": ariaLabel ?? label,
+        "aria-invalid": hasError,
+        onFocus: () => setFocused(true),
+        onBlur: () => setFocused(false),
+        onChange: (e) => onChange(e.target.value)
+      }
+    ) : /* @__PURE__ */ jsx4(
+      "input",
+      {
+        style: fieldStyle,
+        type: variant === "password" ? "password" : variant === "number" ? "number" : variant === "search" ? "search" : "text",
+        value,
+        placeholder,
+        disabled,
+        readOnly: readonly,
+        "aria-label": ariaLabel ?? label,
+        "aria-invalid": hasError,
+        onFocus: () => setFocused(true),
+        onBlur: () => setFocused(false),
+        onChange: (e) => onChange(e.target.value)
+      }
+    ),
+    hasError ? /* @__PURE__ */ jsx4("span", { style: {
+      fontFamily: "var(--font-body)",
+      fontSize: "var(--fontsize-xs)",
+      color: "var(--color-unibe-red-text)"
+    }, children: errorText }) : helpText ? /* @__PURE__ */ jsx4("span", { style: {
+      fontFamily: "var(--font-body)",
+      fontSize: "var(--fontsize-xs)",
+      color: "var(--color-ink-muted)"
+    }, children: helpText }) : null
+  ] });
+}
+
+// src/LiulianTab.tsx
+import { useRef, useLayoutEffect, useState as useState4 } from "react";
+import { jsx as jsx5, jsxs as jsxs3 } from "react/jsx-runtime";
+function LiulianTab({ items, activeId, onChange, variant = "default" }) {
+  const containerRef = useRef(null);
+  const itemRefs = useRef(/* @__PURE__ */ new Map());
+  const [indicator, setIndicator] = useState4({ x: 0, w: 0 });
+  useLayoutEffect(() => {
+    const el = itemRefs.current.get(activeId);
+    const container = containerRef.current;
+    if (!el || !container) return;
+    const cr = container.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+    setIndicator({ x: er.left - cr.left, w: er.width });
+  }, [activeId, items]);
+  const height = variant === "compact" ? "var(--control-height-sm)" : "var(--control-height-md)";
+  return /* @__PURE__ */ jsxs3(
+    "div",
+    {
+      ref: containerRef,
+      style: {
+        position: "relative",
+        display: "flex",
+        height,
+        background: "var(--color-canvas-warm)",
+        borderBottom: "1px solid var(--color-hairline)",
+        boxSizing: "border-box"
+      },
+      children: [
+        items.map((item) => {
+          const active = item.id === activeId;
+          const style = {
+            height,
+            padding: "0 var(--spacing-4)",
+            background: "transparent",
+            border: "none",
+            cursor: item.disabled ? "not-allowed" : "pointer",
+            opacity: item.disabled ? 0.4 : 1,
+            fontFamily: "var(--font-mono)",
+            fontSize: "var(--fontsize-xs)",
+            fontWeight: active ? 500 : 400,
+            letterSpacing: "0.10em",
+            textTransform: "uppercase",
+            color: active ? "var(--color-ink-charcoal)" : "var(--color-ink-muted)"
+          };
+          return /* @__PURE__ */ jsx5(
+            "button",
+            {
+              ref: (el) => {
+                if (el) itemRefs.current.set(item.id, el);
+              },
+              role: "tab",
+              "aria-selected": active,
+              disabled: item.disabled,
+              style,
+              onClick: () => {
+                if (!item.disabled) onChange(item.id);
+              },
+              children: item.label
+            },
+            item.id
+          );
+        }),
+        /* @__PURE__ */ jsx5(
+          "div",
+          {
+            "aria-hidden": true,
+            style: {
+              position: "absolute",
+              left: 0,
+              bottom: -1,
+              transform: `translateX(${indicator.x}px)`,
+              width: indicator.w,
+              height: 2,
+              background: "var(--color-unibe-red)",
+              transition: "transform var(--motion-duration-fast) var(--motion-ease-out-quart), width var(--motion-duration-fast) var(--motion-ease-out-quart)"
+            }
+          }
+        )
+      ]
+    }
+  );
+}
+
+// src/LiulianListItem.tsx
+import { useState as useState5 } from "react";
+import { Fragment as Fragment2, jsx as jsx6, jsxs as jsxs4 } from "react/jsx-runtime";
+function LiulianListItem({
+  primary,
+  secondary,
+  leadingIcon,
+  variant = "content",
+  selected = false,
+  disabled = false,
+  onPress,
+  ariaLabel
+}) {
+  const [hovered, setHovered] = useState5(false);
+  const isInteractive = variant !== "content";
+  const bg = selected && (variant === "selectable" || variant === "multiSelectable") ? "var(--color-unibe-red-tint)" : hovered && isInteractive && !disabled ? "var(--color-canvas-warm)" : "transparent";
+  const style = {
+    display: "flex",
+    alignItems: "center",
+    gap: "var(--spacing-3)",
+    padding: "var(--spacing-3) var(--spacing-4)",
+    minHeight: 48,
+    width: "100%",
+    background: bg,
+    border: "none",
+    cursor: isInteractive && !disabled ? "pointer" : "default",
+    opacity: disabled ? 0.4 : 1,
+    textAlign: "left",
+    fontFamily: "inherit",
+    color: "inherit",
+    transition: "background-color var(--motion-duration-fast) linear",
+    boxSizing: "border-box"
+  };
+  const inner = /* @__PURE__ */ jsxs4(Fragment2, { children: [
+    leadingIcon && /* @__PURE__ */ jsx6(
+      "span",
+      {
+        "aria-hidden": true,
+        style: {
+          width: 16,
+          height: 16,
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily: "var(--font-mono)",
+          fontSize: "var(--fontsize-xs)",
+          color: "var(--color-ink-muted)"
+        },
+        children: leadingIcon
+      }
+    ),
+    /* @__PURE__ */ jsxs4("div", { style: { display: "flex", flexDirection: "column", gap: 4, flex: 1 }, children: [
+      /* @__PURE__ */ jsx6("span", { style: {
+        fontFamily: "var(--font-body)",
+        fontSize: "var(--fontsize-md)",
+        fontWeight: 500,
+        color: "var(--color-ink-charcoal)"
+      }, children: primary }),
+      secondary && /* @__PURE__ */ jsx6("span", { style: {
+        fontFamily: "var(--font-body)",
+        fontSize: "var(--fontsize-xs)",
+        color: "var(--color-ink-muted)"
+      }, children: secondary })
+    ] }),
+    variant === "navigation" && /* @__PURE__ */ jsx6(
+      "span",
+      {
+        "aria-hidden": true,
+        style: {
+          fontFamily: "var(--font-display)",
+          fontSize: 20,
+          color: "var(--color-ink-faint)"
+        },
+        children: "\u203A"
+      }
+    ),
+    variant === "selectable" && /* @__PURE__ */ jsx6(
+      "span",
+      {
+        "aria-hidden": true,
+        style: {
+          width: 16,
+          height: 16,
+          borderRadius: "50%",
+          background: selected ? "var(--color-unibe-red)" : "transparent",
+          border: selected ? "none" : "1.5px solid var(--color-hairline-strong)",
+          color: "var(--color-surface-pure)",
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: 10,
+          fontFamily: "var(--font-body)"
+        },
+        children: selected ? "\u2713" : ""
+      }
+    ),
+    variant === "multiSelectable" && /* @__PURE__ */ jsx6(
+      "span",
+      {
+        "aria-hidden": true,
+        style: {
+          width: 16,
+          height: 16,
+          borderRadius: "var(--radius-sm)",
+          background: selected ? "var(--color-unibe-red)" : "transparent",
+          border: selected ? "none" : "1.5px solid var(--color-hairline-strong)",
+          color: "var(--color-surface-pure)",
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: 10,
+          fontFamily: "var(--font-body)"
+        },
+        children: selected ? "\u2713" : ""
+      }
+    )
+  ] });
+  if (isInteractive) {
+    return /* @__PURE__ */ jsx6(
+      "button",
+      {
+        type: "button",
+        style,
+        disabled,
+        "aria-label": ariaLabel,
+        "aria-pressed": selected,
+        onMouseEnter: () => setHovered(true),
+        onMouseLeave: () => setHovered(false),
+        onClick: () => {
+          if (!disabled) onPress?.();
+        },
+        children: inner
+      }
+    );
+  }
+  return /* @__PURE__ */ jsx6("div", { style, children: inner });
+}
 export {
   LiulianButton,
   LiulianCard,
+  LiulianInput,
+  LiulianListItem,
+  LiulianTab,
   LiulianText
 };
 //# sourceMappingURL=index.js.map
