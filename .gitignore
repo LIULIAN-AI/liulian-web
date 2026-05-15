@@ -40,3 +40,7 @@ Thumbs.db
 
 # ─── Storybook build output ────────────────────────────────────────────────
 storybook-static/
+
+# ─── @liulian/ui-react ─────────────────────────────────────────────────────
+packages/*/node_modules/
+packages/*/dist/

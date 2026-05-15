@@ -1,0 +1,36 @@
+{
+  "name": "@liulian/ui-react",
+  "version": "0.1.0",
+  "description": "LIULIAN UI React component library — Button / Card / Text / etc. matching liulian-design-system ui-spec.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  },
+  "keywords": ["liulian", "design-system", "react", "ui"],
+  "license": "MIT",
+  "author": "Linlin Jia <linlin.jia@unibe.ch>"
+}

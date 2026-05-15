@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LIULIAN UI · React Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,WONK@0,9..144,300..900,0..1;1,9..144,300..900,0..1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+  <link href="./tokens.css" rel="stylesheet">
+
+  <!-- Import-map: React from CDN, @liulian/ui-react from local ESM bundle -->
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.3.1",
+      "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+      "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+      "@liulian/ui-react": "./ui-react.js"
+    }
+  }
+  </script>
+
+  <style>
+    body {
+      margin: 0;
+      background: var(--color-canvas-warm);
+      color: var(--color-ink-charcoal);
+      font-family: 'Switzer', system-ui, sans-serif;
+      min-height: 100vh;
+      padding: 32px;
+    }
+    .root { max-width: 720px; margin: 0 auto; }
+    .section { margin-bottom: 48px; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .col { display: flex; flex-direction: column; gap: 12px; }
+    .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--color-ink-faint);
+      margin: 0 0 12px;
+    }
+    .mock-banner {
+      background: var(--color-status-amber-pale);
+      border: 1px solid var(--color-status-amber);
+      color: var(--color-status-amber);
+      padding: 8px 16px;
+      margin: -32px -32px 32px;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .mock-banner a { color: var(--color-status-amber); }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script type="module">
+    import { createRoot } from 'react-dom/client';
+    import { jsx as h, jsxs as hs, Fragment as F } from 'react/jsx-runtime';
+    import {
+      LiulianText,
+      LiulianButton,
+      LiulianCard,
+    } from '@liulian/ui-react';
+
+    // Tiny JSX-less helpers since we don't have a JSX compiler in-browser.
+    const e = (type, props, ...children) => h(type, { ...(props || {}), children: children.length === 1 ? children[0] : children });
+    const es = (type, props, ...children) => hs(type, { ...(props || {}), children });
+
+    function App() {
+      return es('div', { className: 'root' },
+        e('div', { className: 'mock-banner' },
+          '⚠ ', e('strong', null, 'mock preview'), ' — @liulian/ui-react gallery · static · ',
+          e('a', { href: '../' }, '← back to hub')
+        ),
+
+        // Header
+        es('div', { className: 'section' },
+          e(LiulianText, { variant: 'monoLabel', color: 'var(--color-ink-faint)' }, 'LIULIAN · WEB REACT'),
+          e(LiulianText, { variant: 'heading' }, 'Component Gallery'),
+          e(LiulianText, { variant: 'body', color: 'var(--color-ink-muted)' },
+            '@liulian/ui-react — same spec as iOS / Android / HarmonyOS, web React impl.')
+        ),
+
+        // Text variants
+        es('div', { className: 'section' },
+          e('p', { className: 'label' }, 'LiulianText'),
+          es('div', { className: 'col' },
+            e(LiulianText, { variant: 'displayShort' }, 'displayShort 56'),
+            e(LiulianText, { variant: 'heading' }, 'heading 38'),
+            e(LiulianText, { variant: 'title' }, 'title 28'),
+            e(LiulianText, { variant: 'subtitle' }, 'subtitle 18'),
+            e(LiulianText, { variant: 'body' }, 'body 13.5 — default paragraph'),
+            e(LiulianText, { variant: 'bodyStrong' }, 'bodyStrong 13.5/500'),
+            e(LiulianText, { variant: 'caption', color: 'var(--color-ink-muted)' }, 'caption 10.5 muted'),
+            e(LiulianText, { variant: 'monoLabel', color: 'var(--color-ink-faint)' }, 'monoLabel 10.5 uppercase')
+          )
+        ),
+
+        // Buttons
+        es('div', { className: 'section' },
+          e('p', { className: 'label' }, 'LiulianButton'),
+          e('p', { className: 'label' }, 'variants'),
+          es('div', { className: 'row' },
+            e(LiulianButton, { variant: 'primary', onPress: () => alert('Primary') }, 'Primary'),
+            e(LiulianButton, { variant: 'secondary' }, 'Secondary'),
+            e(LiulianButton, { variant: 'ghost' }, 'Ghost'),
+            e(LiulianButton, { variant: 'danger' }, 'Danger')
+          ),
+          e('p', { className: 'label' }, 'sizes'),
+          es('div', { className: 'row' },
+            e(LiulianButton, { size: 'sm' }, 'Small'),
+            e(LiulianButton, { size: 'md' }, 'Medium'),
+            e(LiulianButton, { size: 'lg' }, 'Large')
+          ),
+          e('p', { className: 'label' }, 'states'),
+          es('div', { className: 'row' },
+            e(LiulianButton, { loading: true }, 'Loading'),
+            e(LiulianButton, { disabled: true }, 'Disabled')
+          )
+        ),
+
+        // Cards
+        es('div', { className: 'section' },
+          e('p', { className: 'label' }, 'LiulianCard'),
+          es('div', { className: 'col' },
+            e(LiulianCard, { size: 'compact' },
+              e(LiulianText, { variant: 'title' }, 'Compact card'),
+              e(LiulianText, { variant: 'body', color: 'var(--color-ink-muted)' }, 'padding spacing.s4 (16)')
+            ),
+            e(LiulianCard, null,
+              e(LiulianText, { variant: 'title' }, 'Default card'),
+              e(LiulianText, { variant: 'body', color: 'var(--color-ink-muted)' }, 'padding spacing.s6 (24)')
+            ),
+            e(LiulianCard, { size: 'spacious' },
+              e(LiulianText, { variant: 'title' }, 'Spacious card'),
+              e(LiulianText, { variant: 'body', color: 'var(--color-ink-muted)' }, 'padding spacing.s7 (32)')
+            ),
+            e(LiulianCard, { interactive: true, onPress: () => alert('Pressed!') },
+              e(LiulianText, { variant: 'title' }, 'Interactive card'),
+              e(LiulianText, { variant: 'body', color: 'var(--color-ink-muted)' }, 'hover lifts -2px with shadow.raise')
+            ),
+            e(LiulianCard, { selected: true },
+              e(LiulianText, { variant: 'title' }, 'Selected card'),
+              e(LiulianText, { variant: 'body', color: 'var(--color-ink-muted)' }, 'border 2px UniBe red')
+            )
+          )
+        )
+      );
+    }
+
+    const root = createRoot(document.getElementById('app'));
+    root.render(e(App));
+  </script>
+</body>
+</html>
