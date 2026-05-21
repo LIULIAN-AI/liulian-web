@@ -3,10 +3,14 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { useChatContext } from '@/components/chat/hooks/useChatContext';
-import { useOptionalCanvasContext } from '@/components/assistant/hooks/useCanvasContext';
-import REGISTRY from '@/components/assistant/widgets/registry';
-import type { WidgetInstance, WidgetType } from '@/components/assistant/types';
-import styles from '@/components/assistant/assistant.module.css';
+import { useOptionalCanvasContext } from '@/hooks/useCanvasContext';
+// stub: empty registry until LIULIAN widget registry lands
+const REGISTRY: Record<string, React.FC<Record<string, unknown>>> = {};
+// stub: types from legacy assistant
+type WidgetInstance = Record<string, unknown>;
+type WidgetType = string;
+// stub: empty styles module (legacy assistant CSS removed)
+const styles: Record<string, string> = new Proxy({}, { get: () => '' });
 
 interface InlineChatProps {
   widgetContext: Record<string, any>;

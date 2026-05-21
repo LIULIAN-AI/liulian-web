@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<!--
+  LIULIAN · web-demo · 2026-05-21
+  Single-file React-via-Babel implementation of the Claude Design
+  handoff (liulian-handoff-claude-design-2026.05.21.zip · README in
+  references/). All buttons are wired with mock state — interactions
+  produce a toast that explicitly labels them (mock).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>LIULIAN · web demo</title>
+<meta name="viewport" content="width=1440" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@200,300,400,500,600,700&display=swap" rel="stylesheet" />
+
+<style>
+:root {
+  --canvas-warm:#FBFBFA; --canvas-soft:#F7F6F3; --canvas-warmer:#F2F0EA;
+  --surface:#FFFFFF; --surface-shade:#FAFAF9;
+  --ink:#131313; --ink-strong:#1F1F1F; --ink-soft:#34373B;
+  --ink-muted:#666A70; --ink-faint:#94989D; --ink-quiet:#C0C2C5;
+  --bern:#E20613; --bern-deep:#B00010; --bern-tint:#FDEBEC; --bern-tint-2:#FAD9DC; --bern-text:#9F2F2D;
+  --green:#2E7D43; --green-pale:#E5F0E7; --blue:#1F6C9F; --blue-pale:#E1F1FB;
+  --amber:#946400; --amber-pale:#FBF1D9;
+  --ocean:#0066B3; --grass:#509A39; --apricot:#E6863A;
+  --hairline:#E8E7E2; --hairline-strong:#DEDCD4; --hairline-stronger:#C9C7BF;
+  --serif:'Fraunces','Times New Roman',serif;
+  --sans:'Switzer','SF Pro Text',system-ui,sans-serif;
+  --mono:'JetBrains Mono','SF Mono',ui-monospace,monospace;
+  --r-sm:4px; --r-md:10px; --r-lg:14px;
+  --ease:cubic-bezier(0.22,1,0.36,1);
+  --header-h:38px; --sub-h:34px; --sidebar-w:208px;
+}
+*,*::before,*::after { box-sizing:border-box; }
+html,body { margin:0; background:var(--canvas-warm); color:var(--ink); font-family:var(--sans); font-size:14px; line-height:1.5; font-feature-settings:"ss01","ss02","kern","cv11"; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+.mono { font-family:var(--mono); font-variant-numeric:tabular-nums; }
+.meta { font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-faint); font-weight:500; }
+.meta-strong { color:var(--ink); } .meta-soft { color:var(--ink-muted); }
+.hairline { border:1px solid var(--hairline); }
+.display { font-family:var(--serif); font-weight:400; font-variation-settings:"opsz" 48; letter-spacing:-0.02em; line-height:1.05; color:var(--ink); }
+.display-italic { font-family:var(--serif); font-style:italic; font-weight:400; font-variation-settings:"opsz" 38,"SOFT" 50; color:var(--ink-soft); }
+.wonk { font-family:var(--serif); font-variation-settings:"opsz" 96,"WONK" 1; font-weight:500; }
+.card { background:var(--surface); border:1px solid var(--hairline); border-radius:var(--r-md); }
+.card-shade { background:var(--surface-shade); }
+.pill { display:inline-flex; align-items:center; gap:6px; padding:2px 8px; border:1px solid var(--hairline-strong); border-radius:9999px; font-family:var(--mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-muted); background:var(--surface); }
+.pill.live { color:var(--bern); border-color:var(--bern-tint-2); background:var(--bern-tint); }
+.pill.dim { color:var(--ink-faint); }
+*::-webkit-scrollbar { width:9px; height:9px; }
+*::-webkit-scrollbar-track { background:transparent; }
+*::-webkit-scrollbar-thumb { background:var(--hairline-strong); border-radius:9999px; border:2px solid var(--canvas-warm); }
+*::-webkit-scrollbar-thumb:hover { background:var(--hairline-stronger); }
+::selection { background:var(--bern-tint); color:var(--bern-deep); }
+kbd,.kbd { font-family:var(--mono); font-size:10px; letter-spacing:0.04em; color:var(--ink-muted); border:1px solid var(--hairline-strong); border-bottom-width:2px; border-radius:4px; padding:1px 5px; background:var(--canvas-soft); min-width:16px; display:inline-flex; justify-content:center; }
+.btn { font-family:var(--sans); font-size:12.5px; font-weight:500; padding:6px 12px; border-radius:6px; border:1px solid var(--hairline-strong); background:var(--surface); color:var(--ink); cursor:pointer; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; transition:background 150ms var(--ease),border-color 150ms var(--ease); }
+.btn:hover { background:var(--canvas-warmer); }
+.btn.primary { background:var(--ink); color:#fff; border-color:var(--ink); }
+.btn.primary:hover { background:#000; }
+.btn.danger { background:var(--bern); color:#fff; border-color:var(--bern); }
+.btn.ghost { background:transparent; border-color:transparent; color:var(--ink-muted); }
+.btn.ghost:hover { background:var(--surface-shade); color:var(--ink); }
+.btn.sm { font-size:11.5px; padding:4px 8px; }
+.ribbon-left { position:relative; }
+.ribbon-left::before { content:""; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--bern); }
+.div-h { height:1px; background:var(--hairline); }
+.div-v { width:1px; background:var(--hairline); align-self:stretch; }
+:focus { outline:none; }
+:focus-visible { outline:2px solid var(--bern); outline-offset:2px; }
+
+/* Toast for mock actions */
+.toast-host { position:fixed; bottom:24px; right:24px; z-index:300; display:flex; flex-direction:column; gap:8px; pointer-events:none; }
+.toast { background:var(--ink); color:#fff; padding:10px 14px; border-radius:8px; font-size:12.5px; font-family:var(--sans); box-shadow:0 8px 24px rgba(0,0,0,0.22); display:flex; gap:10px; align-items:center; pointer-events:auto; animation:tin 200ms var(--ease); max-width:380px; }
+.toast .tag { font-family:var(--mono); font-size:9px; padding:2px 6px; border-radius:9999px; background:var(--bern); color:#fff; letter-spacing:0.06em; text-transform:uppercase; }
+@keyframes tin { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+/* Doorway hero */
+.doorway-bg { background:radial-gradient(circle at 25% 30%,var(--bern-tint) 0%,transparent 35%),radial-gradient(circle at 75% 70%,var(--amber-pale) 0%,transparent 40%),var(--canvas-warm); }
+
+/* Sidebar */
+.sidebar { background:var(--canvas-soft); border-right:1px solid var(--hairline); height:calc(100vh - var(--header-h)); position:sticky; top:var(--header-h); overflow:auto; padding:18px 0; }
+.sidebar .head { padding:0 22px 14px; }
+.sidebar .group-label { font-family:var(--mono); font-size:10px; letter-spacing:0.10em; text-transform:uppercase; color:var(--ink-faint); padding:14px 22px 4px; }
+.sidebar .nav-item { display:flex; align-items:center; padding:7px 22px; gap:14px; cursor:pointer; font-size:13.5px; color:var(--ink-soft); position:relative; }
+.sidebar .nav-item .num { font-family:var(--mono); font-size:10px; color:var(--ink-faint); width:14px; }
+.sidebar .nav-item:hover { background:var(--surface-shade); }
+.sidebar .nav-item.active { color:var(--ink); font-weight:500; background:var(--surface); }
+.sidebar .nav-item.active::before { content:""; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--bern); }
+.sidebar .nav-item .arrow { margin-left:auto; color:var(--ink-faint); }
+.sidebar .footer { position:absolute; bottom:0; left:0; right:0; padding:14px 22px; border-top:1px solid var(--hairline); font-family:var(--mono); font-size:10px; color:var(--ink-faint); letter-spacing:0.04em; text-transform:uppercase; line-height:1.7; }
+
+/* Running header */
+.header { height:var(--header-h); display:flex; align-items:center; padding:0 18px; border-bottom:1px solid var(--hairline); background:var(--canvas-warm); position:sticky; top:0; z-index:50; gap:14px; }
+.header .brand { font-family:var(--serif); font-weight:500; font-variation-settings:"opsz" 28; letter-spacing:0.02em; font-size:15px; }
+.header .sep { color:var(--ink-quiet); }
+.header .breadcrumb { font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-muted); }
+.header .breadcrumb b { color:var(--ink); font-weight:500; }
+.header .right { margin-left:auto; display:flex; align-items:center; gap:10px; }
+.header .timestamp { font-family:var(--mono); font-size:10.5px; color:var(--ink-soft); }
+
+/* Today */
+.today-shell { padding:30px 56px 60px; max-width:1500px; }
+.today-h1 { font-size:60px; line-height:1.05; letter-spacing:-0.025em; font-family:var(--serif); font-weight:400; font-variation-settings:"opsz" 96; }
+.today-h1 em { font-style:italic; font-variation-settings:"opsz" 84,"SOFT" 50,"WONK" 1; color:var(--ink-soft); }
+.today-lead { font-family:var(--serif); font-size:22px; line-height:1.45; color:var(--ink); font-variation-settings:"opsz" 32; max-width:62ch; margin-top:24px; }
+.today-lead em { font-style:italic; font-variation-settings:"opsz" 28,"SOFT" 50; color:var(--ink-soft); }
+.today-meta { display:flex; gap:12px; align-items:center; font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-faint); margin:18px 0 8px; }
+.today-meta .dot { color:var(--bern); }
+.today-aside { margin-top:42px; font-family:var(--serif); font-size:14px; font-style:italic; color:var(--ink-muted); font-variation-settings:"opsz" 18,"SOFT" 50; max-width:62ch; }
+
+.suggest-card { display:flex; gap:12px; align-items:flex-start; padding:14px 16px; cursor:pointer; transition:background 150ms var(--ease); border-radius:var(--r-md); }
+.suggest-card:hover { background:var(--canvas-warmer); }
+.suggest-card .arrow { color:var(--bern); margin-top:2px; font-family:var(--mono); }
+.suggest-card .title { font-weight:500; color:var(--ink); font-size:13.5px; }
+.suggest-card .sub { font-family:var(--mono); font-size:10.5px; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-faint); margin-top:4px; }
+
+.tri-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:32px; margin-top:54px; padding-top:30px; border-top:1px solid var(--hairline); }
+.tri-col .col-h { display:flex; align-items:baseline; gap:14px; margin-bottom:18px; }
+.tri-col .col-h .title { font-family:var(--serif); font-style:italic; font-size:20px; color:var(--ink); font-variation-settings:"opsz" 28,"SOFT" 50; }
+.tri-col .col-h .count { font-family:var(--mono); font-size:12px; color:var(--ink-faint); }
+.tri-col .col-h .badge { margin-left:auto; font-family:var(--mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-faint); }
+.list-row { background:var(--surface); border:1px solid var(--hairline); border-radius:var(--r-md); padding:11px 14px; margin-bottom:8px; display:flex; align-items:flex-start; gap:10px; cursor:pointer; }
+.list-row:hover { background:var(--canvas-warmer); }
+.list-row.attn { border-left:2px solid var(--bern); }
+.list-row .dot { width:6px; height:6px; border-radius:50%; background:var(--ink-faint); margin-top:8px; }
+.list-row .dot.red { background:var(--bern); }
+.list-row .body { flex:1; }
+.list-row .title { font-size:13.5px; color:var(--ink); }
+.list-row .title b { font-weight:500; }
+.list-row .sub { font-family:var(--mono); font-size:10.5px; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-faint); margin-top:3px; }
+.list-row .right { font-family:var(--mono); font-size:10.5px; color:var(--ink-faint); margin-top:2px; }
+
+.progress { height:5px; background:var(--canvas-warmer); border-radius:9999px; overflow:hidden; margin-top:8px; }
+.progress > i { display:block; height:100%; background:var(--ink); border-radius:9999px; }
+
+/* Page shell (non-Today) */
+.page-shell { padding:36px 56px 60px; max-width:1500px; }
+.page-h1 { font-family:var(--serif); font-weight:400; font-variation-settings:"opsz" 72; letter-spacing:-0.022em; font-size:46px; line-height:1.05; }
+.page-h1 em { font-style:italic; font-variation-settings:"opsz" 60,"SOFT" 50,"WONK" 1; color:var(--ink-soft); }
+.page-sub { font-family:var(--serif); font-style:italic; font-size:16px; color:var(--ink-muted); font-variation-settings:"opsz" 24,"SOFT" 50; margin-top:8px; max-width:60ch; }
+.page-sections-meta { font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-faint); margin-top:14px; }
+
+/* Tables */
+.tbl { width:100%; border-collapse:collapse; font-size:13px; }
+.tbl thead th { font-family:var(--mono); font-size:10.5px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-faint); padding:9px 12px; text-align:left; border-bottom:1px solid var(--hairline); background:var(--canvas-soft); }
+.tbl tbody td { padding:11px 12px; border-bottom:1px dashed var(--hairline); }
+.tbl tbody tr:hover { background:var(--canvas-warmer); }
+.tbl .num { font-family:var(--mono); font-variant-numeric:tabular-nums; text-align:right; }
+.tbl .status { font-family:var(--mono); font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; }
+.status-running   { color:var(--ocean); }
+.status-completed { color:var(--green); }
+.status-pending   { color:var(--ink-faint); }
+.status-failed    { color:var(--bern); }
+
+/* Project picker */
+.modal-scrim { position:fixed; inset:0; background:rgba(15,15,15,0.38); z-index:200; display:flex; align-items:center; justify-content:center; }
+.modal { background:var(--surface); border:1px solid var(--hairline); border-radius:var(--r-lg); width:680px; max-width:96vw; max-height:84vh; overflow:auto; box-shadow:0 24px 60px rgba(0,0,0,0.18); }
+.modal-h { padding:18px 22px; border-bottom:1px solid var(--hairline); display:flex; align-items:baseline; gap:14px; }
+.modal-h .ttl { font-family:var(--serif); font-style:italic; font-size:22px; font-variation-settings:"opsz" 28; }
+
+/* Command palette */
+.palette-overlay { position:fixed; inset:0; background:rgba(15,15,15,0.32); z-index:210; display:flex; flex-direction:column; align-items:center; padding-top:14vh; }
+.palette { width:620px; max-width:96vw; background:var(--surface); border:1px solid var(--hairline); border-radius:var(--r-lg); box-shadow:0 30px 60px rgba(0,0,0,0.22); }
+.palette input { all:unset; width:100%; padding:18px 22px; font-size:18px; font-family:var(--serif); font-style:italic; color:var(--ink); font-variation-settings:"opsz" 28; border-bottom:1px solid var(--hairline); }
+.palette input::placeholder { color:var(--ink-faint); }
+.palette ul { list-style:none; margin:0; padding:8px 0; max-height:340px; overflow:auto; }
+.palette li { padding:10px 22px; display:flex; gap:14px; cursor:pointer; align-items:center; }
+.palette li:hover, .palette li.active { background:var(--surface-shade); }
+.palette li .key { font-family:var(--mono); font-size:10px; color:var(--ink-faint); letter-spacing:0.04em; text-transform:uppercase; min-width:42px; }
+.palette li .name { flex:1; color:var(--ink); font-size:13.5px; }
+.palette li .scope { font-family:var(--mono); font-size:10px; color:var(--ink-faint); letter-spacing:0.04em; text-transform:uppercase; }
+
+/* Agent drawer */
+.agent-drawer { position:fixed; top:var(--header-h); right:0; bottom:0; width:420px; background:var(--surface); border-left:1px solid var(--hairline); box-shadow:-12px 0 36px rgba(0,0,0,0.06); z-index:60; display:flex; flex-direction:column; }
+.agent-drawer .ah { padding:14px 18px; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--hairline); }
+.agent-drawer .ah .name { font-family:var(--serif); font-style:italic; font-variation-settings:"opsz" 24,"SOFT" 50; font-size:18px; }
+.agent-drawer .messages { flex:1; padding:18px; overflow:auto; display:flex; flex-direction:column; gap:18px; }
+.msg-user { background:var(--canvas-warmer); padding:10px 14px; border-radius:14px 14px 4px 14px; align-self:flex-end; max-width:80%; font-size:13.5px; }
+.msg-agent { font-size:13.5px; }
+.msg-agent .step { font-family:var(--mono); font-size:10.5px; color:var(--ink-faint); letter-spacing:0.04em; text-transform:uppercase; margin-bottom:4px; }
+.msg-agent .body { line-height:1.55; color:var(--ink); }
+.msg-agent .body sup { color:var(--bern); margin:0 2px; font-family:var(--mono); cursor:pointer; }
+.agent-drawer .input-row { padding:12px 14px; border-top:1px solid var(--hairline); display:flex; gap:8px; align-items:center; background:var(--canvas-soft); }
+.agent-drawer .input-row input { flex:1; padding:9px 12px; border:1px solid var(--hairline-strong); border-radius:8px; font:inherit; font-size:13px; background:var(--surface); }
+.suggested-chips { padding:0 14px 12px; display:flex; flex-wrap:wrap; gap:6px; }
+.suggested-chips .chip { font-family:var(--mono); font-size:10.5px; padding:4px 8px; border:1px solid var(--hairline-strong); border-radius:9999px; color:var(--ink-soft); background:var(--surface); cursor:pointer; }
+.suggested-chips .chip:hover { background:var(--canvas-warmer); }
+</style>
+
+</head>
+<body>
+<div id="root"></div>
+<div id="toasts" class="toast-host"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin></script>
+
+<script type="text/babel" data-presets="env,react">
+// ============================================================
+// DATA · pruned from data.jsx for the demo
+// ============================================================
+const NAV = [
+  { id: "today",     label: "Today",      num: 0, group: "Now"      },
+  { id: "live",      label: "Forecast",   num: 1, group: "Live"     },
+  { id: "data",      label: "Data",       num: 2, group: "Workspace"},
+  { id: "visualize", label: "Visualize",  num: 3, group: "Workspace"},
+  { id: "train",     label: "Train",      num: 4, group: "Workspace"},
+  { id: "predict",   label: "Inference",  num: 5, group: "Workspace"},
+  { id: "reports",   label: "Reports",    num: 6, group: "Workspace"},
+  { id: "models",    label: "Models",     num: 7, group: "Library"  },
+  { id: "library",   label: "Library",    num: 8, group: "Library"  },
+  { id: "agent",     label: "Agent",      num: "a", group: "Library"},
+  { id: "settings",  label: "Settings",   num: ",", group: "System" },
+];
+const PROJECTS = [
+  { id: "aare-hydro",  name: "aare-hydro",  sub: "Swiss-River · BAFU",      role: "editor", current: true,  datasets: 6, models: 5, runs: 18 },
+  { id: "rhone-basin", name: "rhone-basin", sub: "Rhône tributaries · v0",  role: "owner",  current: false, datasets: 2, models: 1, runs: 4 },
+  { id: "etth-bench",  name: "etth-bench",  sub: "ETT-h1/h2 benchmarks",    role: "viewer", current: false, datasets: 2, models: 8, runs: 31 },
+  { id: "demo-energy", name: "demo-energy", sub: "Electricity sandbox",     role: "owner",  current: false, datasets: 1, models: 3, runs: 9 },
+];
+const DATASETS = [
+  { id: "swiss-river-1990", name: "Swiss-River 1990", sha: "b7f2a1ce", domain: "hydrology",
+    rows: 1840320, stations: 28, freq: "1h", range: "1990-01-01 → 2024-12-31", size: "412 MB",
+    license: "CC-BY 4.0", source: "BAFU · swisstopo", quality: 0.984 },
+  { id: "swiss-river-2010", name: "Swiss-River 2010", sha: "8c0e44a2", domain: "hydrology",
+    rows: 3149280, stations: 45, freq: "1h", range: "2010-01-01 → 2024-12-31", size: "684 MB",
+    license: "CC-BY 4.0", source: "BAFU", quality: 0.991 },
+  { id: "electricity", name: "Electricity (UCI)", sha: "21de9a3f", domain: "energy",
+    rows: 26304, stations: 321, freq: "1h", range: "2011 → 2014", size: "47 MB",
+    license: "Open Data", source: "UCI ML", quality: 1.00 },
+  { id: "etth1", name: "ETT-h1", sha: "5fa1b73a", domain: "energy",
+    rows: 17420, stations: 1, freq: "1h", range: "2016 → 2018", size: "1.6 MB",
+    license: "MIT", source: "zhouhaoyi", quality: 0.998 },
+];
+const MODELS = [
+  { id: "patchtst",     family: "Transformer (patched)", params: "8.4M",  ctx: "512",  status: "stable",   role: "supervised" },
+  { id: "itransformer", family: "Inverted Transformer",  params: "11.2M", ctx: "512",  status: "stable",   role: "supervised" },
+  { id: "timesnet",     family: "Temporal 2D-Vision",    params: "6.7M",  ctx: "336",  status: "stable",   role: "supervised" },
+  { id: "dlinear",      family: "Linear",                params: "0.04M", ctx: "336",  status: "baseline", role: "supervised" },
+  { id: "mamba",        family: "State-space",           params: "12.1M", ctx: "2048", status: "stable",   role: "supervised" },
+  { id: "chronos-2",    family: "Pretrained FM",         params: "200M",  ctx: "2048", status: "stable",   role: "zero-shot" },
+  { id: "timemoe",      family: "Mixture-of-Experts FM", params: "50M",   ctx: "2048", status: "preview",  role: "zero-shot" },
+  { id: "lstm",         family: "Recurrent",             params: "0.8M",  ctx: "168",  status: "baseline", role: "supervised" },
+];
+const RUNS = [
+  { id: "r-7c8a", dataset: "swiss-river-1990", model: "patchtst",     entity: "none",   seed: 42, status: "running",   dur: "39m",    mae: null, rmse: null, cov90: null },
+  { id: "r-7c89", dataset: "swiss-river-1990", model: "lstm",         entity: "none",   seed: 42, status: "completed", dur: "1h 12m", mae: 11.84, rmse: 16.92, cov90: 82.1 },
+  { id: "r-7c88", dataset: "swiss-river-1990", model: "chronos-2",    entity: "none",   seed: 0,  status: "pending",   dur: "—",      mae: null, rmse: null, cov90: null },
+  { id: "r-7c87", dataset: "swiss-river-1990", model: "itransformer", entity: "hash",   seed: 7,  status: "failed",    dur: "12m",    mae: null, rmse: null, cov90: null, err: "CUDA OOM at step 4096/18000" },
+  { id: "r-7c86", dataset: "etth1",            model: "timesnet",     entity: "onehot", seed: 1,  status: "completed", dur: "2h 04m", mae: 0.428, rmse: 0.611, cov90: 89.4 },
+  { id: "r-7c85", dataset: "electricity",      model: "mamba",        entity: "embed",  seed: 42, status: "completed", dur: "3h 47m", mae: 0.087, rmse: 0.142, cov90: 91.0 },
+  { id: "r-7c84", dataset: "swiss-river-1990", model: "patchtst",     entity: "embed",  seed: 1,  status: "completed", dur: "1h 38m", mae: 8.92, rmse: 12.04, cov90: 87.8 },
+  { id: "r-7c83", dataset: "swiss-river-1990", model: "patchtst",     entity: "none",   seed: 2,  status: "completed", dur: "1h 41m", mae: 8.42, rmse: 11.27, cov90: 88.5 },
+];
+const REPORTS = [
+  { id: "rpt-w19", title: "Weekly brief 2026-W19", status: "draft",     auto: true,  parts: 6, updated: "Thu 14:00" },
+  { id: "rpt-w18", title: "Weekly brief 2026-W18", status: "published", auto: true,  parts: 6, updated: "2026-05-12" },
+  { id: "rpt-bafu", title: "BAFU monthly report",  status: "published", auto: false, parts: 9, updated: "2026-05-01" },
+];
+
+// ============================================================
+// TOAST · used by every mock-action button
+// ============================================================
+const toastHost = document.getElementById("toasts");
+function showToast(msg, isMock = true) {
+  const el = document.createElement("div");
+  el.className = "toast";
+  el.innerHTML = (isMock ? '<span class="tag">mock</span>' : '') + '<span>' + msg + '</span>';
+  toastHost.appendChild(el);
+  setTimeout(() => { el.style.opacity = 0; el.style.transition = "opacity 240ms"; }, 2200);
+  setTimeout(() => el.remove(), 2700);
+}
+const mock = (label) => () => showToast(label);
+
+// ============================================================
+// SHARED ICON · simple SVG inline
+// ============================================================
+function Icon({ name, size = 14 }) {
+  const paths = {
+    sun:       'M12 4v2M12 18v2M4 12H2M22 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4 4.2 19.8M19.8 4.2l-1.4 1.4',
+    db:        'M3 5c0-1.7 4-3 9-3s9 1.3 9 3v14c0 1.7-4 3-9 3s-9-1.3-9-3V5Zm0 0c0 1.7 4 3 9 3s9-1.3 9-3M3 12c0 1.7 4 3 9 3s9-1.3 9-3',
+    chart:     'M3 21h18M5 17V9M11 17V5M17 17v-7',
+    sparkle:   'M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3ZM19 14l.9 2.5L22 17l-2.1 0.5L19 20l-0.9-2.5L16 17l2.1-0.5L19 14Z',
+    radio:     'M2 12a10 10 0 0 1 20 0M5.6 12a6.4 6.4 0 0 1 12.8 0M12 12v8',
+    pulse:     'M3 12h4l3-7 4 14 3-7h4',
+    paper:     'M5 4v16h14V8l-4-4H5Zm10 0v4h4M8 12h8M8 16h6',
+    box:       'M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5v-9ZM3.5 7.5l8.5 4.5 8.5-4.5M12 12v9',
+    book:      'M4 5a2 2 0 0 1 2-2h12v17H6a2 2 0 0 1-2-2V5Zm2 12h12',
+    agent:     'M12 2a6 6 0 0 0-6 6v6h12V8a6 6 0 0 0-6-6Zm0 14v6M9 18h6',
+    slider:    'M4 6h12M4 12h7M4 18h16M16 4v4M11 10v4M20 16v4',
+    palette:   'M8 7l4 10 4-10 4 10',
+    chev:      'M9 6l6 6-6 6',
+    plus:      'M12 5v14M5 12h14',
+    refresh:   'M3 12a9 9 0 0 1 15-6.7M21 4v5h-5M21 12a9 9 0 0 1-15 6.7M3 20v-5h5',
+    eye:       'M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z',
+  };
+  const d = paths[name] || 'M4 12h16';
+  return (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d={d}/></svg>);
+}
+const ICONS_FOR_NAV = { today:"sun", live:"pulse", data:"db", visualize:"chart", train:"sparkle", predict:"radio", reports:"paper", models:"box", library:"book", agent:"agent", settings:"slider" };
+
+// ============================================================
+// SHELL · header + sidebar
+// ============================================================
+function RunningHeader({ page, project, mode, onPalette, onAgent, onGuides, onBackHome, sidebarCollapsed, toggleSidebar }) {
+  const now = new Date().toISOString().slice(0, 19).replace("T", " ");
+  return (
+    <header className="header">
+      <button className="btn ghost" onClick={toggleSidebar} aria-label="toggle sidebar" style={{padding:"4px 6px"}}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="9" y1="4" x2="9" y2="20"/></svg>
+      </button>
+      <span className="brand" onClick={onBackHome} style={{cursor:"pointer"}}>LIULIAN</span>
+      <span className="sep">·</span>
+      <span className="breadcrumb"><b>{project.name}</b> ▾</span>
+      <span className="sep">·</span>
+      <span className="breadcrumb"><span className="meta-strong">{page.label.toUpperCase()}</span></span>
+      <div className="right">
+        <span className="pill live"><span style={{width:6,height:6,borderRadius:"50%",background:"var(--bern)"}}></span> LIVE</span>
+        <span className="timestamp">{now} UTC</span>
+        <span className="meta">main</span>
+        <button className="btn ghost sm" onClick={onGuides}>? GUIDES</button>
+        <button className="btn ghost sm" onClick={onPalette}><kbd>⌘</kbd><kbd>K</kbd> PALETTE</button>
+        <button className="btn ghost sm" onClick={onAgent}><span style={{width:6,height:6,borderRadius:"50%",background:"var(--bern)"}}></span> AGENT <kbd>b</kbd></button>
+        <div style={{width:26,height:26,borderRadius:"50%",background:"var(--canvas-warmer)",border:"1px solid var(--hairline)",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"var(--serif)",fontStyle:"italic",fontSize:11,color:"var(--ink-soft)",fontVariationSettings:'"opsz" 20'}}>lj</div>
+      </div>
+    </header>
+  );
+}
+
+function Sidebar({ page, setPage, collapsed }) {
+  // group by `group`, but preserve order
+  const groups = [];
+  for (const item of NAV) {
+    const g = groups.find(x => x.name === (item.group || ""));
+    if (g) g.items.push(item); else groups.push({ name: item.group || "", items: [item] });
+  }
+  return (
+    <aside className="sidebar" style={{padding: collapsed ? "18px 0" : undefined, width: collapsed ? 44 : "auto"}}>
+      {!collapsed && (
+        <div className="head">
+          <div style={{fontFamily:"var(--serif)",fontStyle:"italic",fontSize:16,color:"var(--ink)"}}>Studio</div>
+          <div className="meta" style={{marginTop:3,letterSpacing:"0.05em"}}>R2026 · V0.4.1</div>
+        </div>
+      )}
+      {groups.map(g => (
+        <React.Fragment key={g.name || "now"}>
+          {!collapsed && g.name && <div className="group-label">{g.name}</div>}
+          {g.items.map(it => (
+            <div key={it.id} className={"nav-item" + (page === it.id ? " active" : "")} onClick={() => setPage(it.id)}>
+              <span className="num">{collapsed ? "" : it.num}</span>
+              <span style={{display:"flex",gap:8,alignItems:"center"}}>
+                <span style={{color: page === it.id ? "var(--ink)" : "var(--ink-muted)"}}><Icon name={ICONS_FOR_NAV[it.id]||"db"} size={14}/></span>
+                {!collapsed && <span>{it.label}</span>}
+              </span>
+              {!collapsed && page === it.id && <span className="arrow">›</span>}
+            </div>
+          ))}
+        </React.Fragment>
+      ))}
+      {!collapsed && (
+        <div className="footer">
+          <div>? Guides &nbsp; <span style={{color:"var(--ink)"}}>7</span></div>
+          <div style={{marginTop:14,color:"var(--ink-faint)"}}>CLUSTER</div>
+          <div style={{color:"var(--ink-soft)",letterSpacing:0,textTransform:"none",fontFamily:"var(--mono)",fontSize:11,marginTop:3}}>
+            <span style={{display:"inline-block",width:6,height:6,borderRadius:"50%",background:"var(--green)",marginRight:6}}></span>ubelix · gpu-h100
+          </div>
+          <div>QUEUE · 3 · RUNNING · 1</div>
+        </div>
+      )}
+    </aside>
+  );
+}
+
+// ============================================================
+// PAGES
+// ============================================================
+function TodayPage({ onAgent, nav }) {
+  const stamp = "THU, 21 MAY 2026 12:34";
+  return (
+    <div className="today-shell">
+      <div className="today-meta">
+        TODAY · {stamp} · PROJECT · <span className="meta-strong">AARE-HYDRO</span>
+      </div>
+      <h1 className="today-h1">Good morning, <em>Linlin</em>.</h1>
+
+      <div style={{display:"grid",gridTemplateColumns:"minmax(0,1.5fr) 360px",gap:60,marginTop:24}}>
+        <div>
+          <div className="today-meta" style={{margin:"22px 0 8px"}}>
+            <span className="dot">●</span> AGENT · MORNING NOTE · DRAFTED 06:00
+          </div>
+          <p className="today-lead">Overnight the Aare basin held steady. <em>Bern's Q95 has begun a slow rise</em> — the next 36 hours look manageable, but a single threshold crossing is projected for Thursday afternoon. Two models disagree on Basel by more than 60 m³/s; worth a glance.</p>
+          <p className="today-aside">Three runs finished while you slept. Your sweep on PatchTST is 3 of 12 trials in.<br/>The weekly brief draft is ready for your review.</p>
+        </div>
+        <div>
+          <div className="meta" style={{marginBottom:14}}>AGENT SUGGESTS</div>
+          {[
+            { t: "Read Bern's 72h forecast", s: "Q95 critical · Thu 14:00", target:"live" },
+            { t: "Open the weekly brief draft", s: "2 panels need review", target:"reports" },
+            { t: "Compare PatchTST vs Chronos-2 …", s: "disagreement 64 m³/s", target:"train" },
+          ].map(s => (
+            <div key={s.t} className="suggest-card" onClick={() => nav(s.target)}>
+              <div className="arrow">→</div>
+              <div>
+                <div className="title">{s.t}</div>
+                <div className="sub">{s.s}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="tri-col">
+        <div>
+          <div className="col-h">
+            <span style={{color:"var(--bern)",fontSize:16}}>●</span>
+            <span className="title">Attention</span>
+            <span className="count mono">· 3</span>
+            <span className="badge">NEEDS YOUR EYES</span>
+          </div>
+          <div className="list-row attn" onClick={mock("open Bern · Q95 projected critical")}>
+            <div className="body">
+              <div className="title"><b>Bern · Q95 projected critical</b></div>
+              <div className="sub">aare-bern · Thu 14:00 UTC</div>
+            </div>
+            <div className="right">6h</div>
+          </div>
+          <div className="list-row attn" onClick={mock("open Basel · sustained watch band")}>
+            <div className="body">
+              <div className="title"><b>Basel · sustained watch band</b></div>
+              <div className="sub">rhine-basel · since Mon 18:00</div>
+            </div>
+            <div className="right">12h</div>
+          </div>
+          <div className="list-row" onClick={mock("open run r-7c87 (failed)")}>
+            <div className="body">
+              <div className="title"><b>r-7c87 · iTransformer failed</b></div>
+              <div className="sub">CUDA OOM at step 4096</div>
+            </div>
+            <div className="right">2d</div>
+          </div>
+        </div>
+        <div>
+          <div className="col-h">
+            <span style={{color:"var(--ink)",fontSize:16}}>●</span>
+            <span className="title">In flight</span>
+            <span className="count mono">· 4</span>
+            <span className="badge">RUNNING NOW</span>
+          </div>
+          {[
+            { n: "Sweep · patchtst",  p: 25, s: "3 / 12 trials · ETA 1h 14m" },
+            { n: "Re-import · BAFU daily", p: 89, s: "ingested 14k rows · 89%" },
+            { n: "Weekly brief · auto-draft", p: 40, s: "agent · 2/5 panels" },
+            { n: "r-7c8a · patchtst", p: 76, s: null },
+          ].map((r) => (
+            <div className="list-row" key={r.n} onClick={mock("open run · "+r.n)}>
+              <div className="body">
+                <div className="title">{r.n}</div>
+                {r.s && <div className="sub">{r.s}</div>}
+                <div className="progress"><i style={{width: r.p + "%"}}></i></div>
+              </div>
+              <div className="right">{r.p}%</div>
+            </div>
+          ))}
+        </div>
+        <div>
+          <div className="col-h">
+            <span style={{color:"var(--ink)",fontSize:16}}>●</span>
+            <span className="title">Continue</span>
+            <span className="count mono">· 4</span>
+            <span className="badge">PICKED UP LAST</span>
+          </div>
+          {[
+            { k: "DATASET", n: "Swiss-River 1990 · manifest", s: "you edited the pipeline · 17:42 yesterday" },
+            { k: "CELL",    n: "Bern · 7-day discharge",       s: "cell-001 · 1 unsaved change" },
+            { k: "REPORT",  n: "Bern Q95 · Watchdog",          s: "draft · 3 panels" },
+            { k: "AGENT",   n: "Compare PatchTST vs Chronos…", s: "thread th-001 · 14 messages" },
+          ].map((r) => (
+            <div className="list-row" key={r.n} onClick={mock("continue · "+r.n)}>
+              <div style={{width:60,fontFamily:"var(--mono)",fontSize:10.5,letterSpacing:"0.06em",textTransform:"uppercase",color:"var(--ink-faint)"}}>{r.k}</div>
+              <div className="body">
+                <div className="title">{r.n}</div>
+                <div className="sub">{r.s}</div>
+              </div>
+              <div className="right">›</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ForecastPage({ onAgent }) {
+  const chartRef = React.useRef(null);
+  React.useEffect(() => {
+    if (!chartRef.current || !window.echarts) return;
+    const chart = window.echarts.init(chartRef.current);
+    const t = Array.from({length: 60}, (_, i) => "2026-05-" + String(10 + Math.floor(i/24)).padStart(2,"0") + " " + String(i%24).padStart(2,"0") + ":00");
+    const obs = Array.from({length: 36}, (_, i) => 400 + Math.sin(i / 6) * 18 + (i / 36) * 20);
+    const mean = Array.from({length: 60}, (_, i) => i < 36 ? null : 420 + (i - 36) * 1.4 + Math.sin(i/4) * 6);
+    const q05  = mean.map(v => v === null ? null : v - 24 - Math.random() * 8);
+    const q95  = mean.map(v => v === null ? null : v + 28 + Math.random() * 8);
+    chart.setOption({
+      grid: { left: 56, right: 24, top: 26, bottom: 40 },
+      textStyle: { fontFamily: "Switzer, system-ui, sans-serif", color: "#131313" },
+      xAxis: { type: "category", data: t, axisLine: { lineStyle: { color: "#E8E7E2" }}, axisTick: { show: false }, axisLabel: { color: "#94989D", fontSize: 10, fontFamily: "JetBrains Mono", formatter: v => v.slice(5,10) }},
+      yAxis: { type: "value", axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: "#666A70", fontSize: 10.5, fontFamily: "JetBrains Mono" }, splitLine: { lineStyle: { color: "#E8E7E2", type: "dashed" }}, name: "m³/s", nameTextStyle: { color: "#94989D", fontFamily: "JetBrains Mono", fontSize: 10 }},
+      series: [
+        { name: "Q05",  type: "line", data: q05, lineStyle: { opacity: 0 }, stack: "fan", symbol: "none", silent: true },
+        { name: "Q95",  type: "line", data: q95.map((v,i) => v === null ? null : v - q05[i]), lineStyle: { opacity: 0 }, areaStyle: { color: "rgba(226,6,19,0.18)" }, stack: "fan", symbol: "none", silent: true },
+        { name: "Mean", type: "line", data: mean, smooth: false, symbol: "none", lineStyle: { color: "#E20613", width: 1.5, type: "dashed" }, z: 5 },
+        { name: "Obs",  type: "line", data: [...obs, ...Array(24).fill(null)], smooth: false, connectNulls: false, symbol: "none", lineStyle: { color: "#131313", width: 1.6 }, z: 6 },
+      ],
+    });
+    const ro = new ResizeObserver(() => chart.resize());
+    ro.observe(chartRef.current);
+    return () => { ro.disconnect(); chart.dispose(); };
+  }, []);
+  return (
+    <div className="page-shell">
+      <div style={{display:"flex",alignItems:"baseline",gap:14,marginBottom:8}}>
+        <h1 className="page-h1"><em>aare-bern</em></h1>
+        <span className="pill live"><span style={{width:6,height:6,borderRadius:"50%",background:"var(--bern)"}}></span> live</span>
+      </div>
+      <p className="page-sub">Aare river · 72-hour discharge forecast Q05–Q95 from PatchTST (entity=none, seed=42). Threshold crossing projected for Thursday 14:00 UTC.</p>
+      <div className="page-sections-meta">FORECAST · 72H · m³/s · BACKTEST MAE 8.42</div>
+
+      <div style={{display:"grid",gridTemplateColumns:"1fr 320px",gap:24,marginTop:24}}>
+        <div className="card" style={{padding:18}}>
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
+            <span className="meta meta-strong">Q05–Q95 fan · observed (charcoal) · mean (dashed red)</span>
+            <span style={{marginLeft:"auto"}}>
+              <button className="btn sm ghost" onClick={mock("export PNG")}>PNG</button>
+              <button className="btn sm ghost" onClick={mock("export CSV")}>CSV</button>
+              <button className="btn sm" onClick={mock("open in spec drawer")}>{`</> spec`}</button>
+            </span>
+          </div>
+          <div ref={chartRef} style={{height:360}}></div>
+        </div>
+        <div style={{display:"flex",flexDirection:"column",gap:14}}>
+          <div className="card" style={{padding:16}}>
+            <div className="meta" style={{marginBottom:8}}>FORECAST QUALITY · 24h</div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+              {[
+                { k: "MAE m³/s", v: "8.42", d: "−0.42" },
+                { k: "RMSE",     v: "11.27", d: "−0.31" },
+                { k: "CRPS",     v: "5.62",  d: "−0.18" },
+                { k: "Cov@90",   v: "88.5%", d: "+0.4" },
+              ].map(m => (
+                <div key={m.k}>
+                  <div className="meta" style={{fontSize:9.5}}>{m.k}</div>
+                  <div className="mono" style={{fontSize:22,fontWeight:500}}>{m.v}</div>
+                  <div className="mono" style={{fontSize:10.5,color:"var(--green)"}}>{m.d}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="card" style={{padding:16}}>
+            <div className="meta" style={{marginBottom:8}}>ALERT RULES · ACTIVE 3</div>
+            <div style={{display:"flex",flexDirection:"column",gap:8}}>
+              {[
+                { n: "Q95 > 850 m³/s", v: "2 · 1" },
+                { n: "anomaly z > 2.5", v: "1 · 0" },
+                { n: "lead-lag drift > 30%", v: "3 · 1" },
+              ].map(a => (
+                <div key={a.n} style={{display:"flex"}}>
+                  <span style={{flex:1,fontSize:12}}>{a.n}</span>
+                  <span className="mono" style={{fontSize:11,color:"var(--ink-faint)"}}>{a.v}</span>
+                </div>
+              ))}
+            </div>
+            <button className="btn sm" style={{marginTop:10}} onClick={mock("create alert rule")}>+ new rule</button>
+          </div>
+          <div className="card" style={{padding:16}}>
+            <div className="meta" style={{marginBottom:8}}>STATIONS · CROSS-FILTER</div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
+              {["aare-bern","aare-thun","aare-hagneck","rhine-basel","rhine-rekingen","reuss-luzern","limmat-zurich"].map(s => (
+                <span key={s} className="pill" onClick={mock("focus station: "+s)} style={{cursor:"pointer", background: s==="aare-bern"?"var(--bern-tint)":"var(--surface)", color: s==="aare-bern"?"var(--bern)":"var(--ink-soft)"}}>{s}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DataPage({ onAgent, nav }) {
+  const [active, setActive] = React.useState("swiss-river-1990");
+  const ds = DATASETS.find(d => d.id === active);
+  return (
+    <div className="page-shell">
+      <div style={{display:"flex",alignItems:"baseline",gap:14}}>
+        <h1 className="page-h1"><em>Data</em></h1>
+        <span className="pill">{DATASETS.length} datasets</span>
+        <span style={{marginLeft:"auto",display:"flex",gap:8}}>
+          <button className="btn sm" onClick={mock("import CSV / Arrow / Parquet")}>+ import</button>
+          <button className="btn sm" onClick={mock("create derived column")}>+ derived</button>
+          <button className="btn sm" onClick={mock("schedule ingest")}>schedule</button>
+        </span>
+      </div>
+      <p className="page-sub">Manifests, schema, quality. Edits land in a sandbox; commit to lift them into the canonical dataset.</p>
+
+      <div style={{display:"grid",gridTemplateColumns:"320px 1fr",gap:24,marginTop:20}}>
+        <div>
+          {DATASETS.map(d => (
+            <div key={d.id} onClick={() => setActive(d.id)} style={{padding:"12px 14px",border:"1px solid var(--hairline)",borderRadius:"10px",marginBottom:8,cursor:"pointer",background: active===d.id?"var(--bern-tint)":"var(--surface)",borderLeft: active===d.id?"2px solid var(--bern)":"1px solid var(--hairline)"}}>
+              <div style={{fontWeight:500,fontSize:13.5}}>{d.name}</div>
+              <div className="meta" style={{marginTop:3}}>{d.domain} · {d.range.split(" ")[0]} → {d.range.split("→ ")[1]}</div>
+              <div className="mono" style={{fontSize:10.5,color:"var(--ink-faint)",marginTop:3}}>{d.rows.toLocaleString()} rows · {d.size} · sha {d.sha}</div>
+            </div>
+          ))}
+        </div>
+        <div className="card" style={{padding:20}}>
+          <div style={{display:"flex",alignItems:"baseline",gap:12,marginBottom:14}}>
+            <span style={{fontFamily:"var(--serif)",fontStyle:"italic",fontSize:22,fontVariationSettings:'"opsz" 32'}}>{ds.name}</span>
+            <span className="meta">SHA {ds.sha}</span>
+            <span className="pill" style={{marginLeft:"auto"}}>quality {Math.round(ds.quality * 100)}%</span>
+            <button className="btn sm ghost" onClick={mock("rename dataset")}>rename</button>
+            <button className="btn sm ghost" onClick={mock("preview rows")}>preview</button>
+          </div>
+          <table className="tbl" style={{marginTop:10}}>
+            <thead><tr><th>Property</th><th>Value</th></tr></thead>
+            <tbody>
+              <tr><td className="meta">Rows</td><td className="num">{ds.rows.toLocaleString()}</td></tr>
+              <tr><td className="meta">Stations</td><td className="num">{ds.stations}</td></tr>
+              <tr><td className="meta">Frequency</td><td className="num">{ds.freq}</td></tr>
+              <tr><td className="meta">Range</td><td>{ds.range}</td></tr>
+              <tr><td className="meta">Size</td><td className="num">{ds.size}</td></tr>
+              <tr><td className="meta">Source</td><td>{ds.source}</td></tr>
+              <tr><td className="meta">License</td><td>{ds.license}</td></tr>
+            </tbody>
+          </table>
+          <div style={{display:"flex",gap:8,marginTop:18}}>
+            <button className="btn primary sm" onClick={mock("open in Forecast")}>open in Forecast →</button>
+            <button className="btn sm" onClick={mock("download manifest")}>manifest yaml</button>
+            <button className="btn sm" onClick={() => nav("visualize")}>visualize</button>
+            <button className="btn sm" onClick={() => nav("train")}>train on this →</button>
+            <button className="btn sm danger" style={{marginLeft:"auto"}} onClick={mock("delete dataset (confirm)")}>delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function VisualizePage() {
+  return (
+    <div className="page-shell">
+      <h1 className="page-h1"><em>Visualize</em></h1>
+      <p className="page-sub">Compose multi-panel canvases. Sketch a curve and the agent converts it to a chart spec, then renders against the active dataset.</p>
+      <div className="page-sections-meta">3 SAVED · 1 EDITING · LAST OPENED Tue 17:11</div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(3, 1fr)",gap:18,marginTop:24}}>
+        {[
+          { t: "Bern · 7-day discharge", k: "fan", s: "Q05–Q95 + threshold marker" },
+          { t: "Station cohort", k: "small-multiples", s: "5 stations · same axes" },
+          { t: "Seasonal heatmap", k: "heatmap", s: "year × week · mean discharge" },
+          { t: "Residual histogram", k: "hist", s: "PatchTST · seed=42" },
+          { t: "Correlation 8×8", k: "matrix", s: "Spearman ρ · 30d window" },
+          { t: "Map · station network", k: "geo", s: "swisstopo · 28 stations" },
+        ].map(c => (
+          <div key={c.t} className="card" style={{padding:16,cursor:"pointer"}} onClick={mock("open canvas · "+c.t)}>
+            <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between"}}>
+              <span style={{fontFamily:"var(--serif)",fontStyle:"italic",fontSize:17,fontVariationSettings:'"opsz" 24'}}>{c.t}</span>
+              <span className="meta">{c.k}</span>
+            </div>
+            <div style={{height:120,background:"var(--canvas-warmer)",borderRadius:8,marginTop:10,display:"flex",alignItems:"center",justifyContent:"center",color:"var(--ink-quiet)",fontFamily:"var(--mono)",fontSize:10,letterSpacing:"0.06em",textTransform:"uppercase"}}>preview · {c.k}</div>
+            <div className="meta" style={{marginTop:8}}>{c.s}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{display:"flex",gap:10,marginTop:24}}>
+        <button className="btn primary" onClick={mock("sketch a chart")}>✎ sketch a chart</button>
+        <button className="btn" onClick={mock("from picker → pick chart type")}>chart picker</button>
+        <button className="btn" onClick={mock("paste JSON spec")}>{`</> from spec`}</button>
+      </div>
+    </div>
+  );
+}
+
+function TrainPage() {
+  return (
+    <div className="page-shell">
+      <h1 className="page-h1"><em>Train</em></h1>
+      <p className="page-sub">Forks, sweeps and zero-shot baselines. Sweeps are tagged · seed locked · UBELIX-aware.</p>
+      <div style={{display:"flex",gap:8,margin:"18px 0 18px"}}>
+        <button className="btn primary" onClick={mock("new sweep · PatchTST × seed grid")}>+ new sweep</button>
+        <button className="btn" onClick={mock("fork run r-7c84")}>fork last</button>
+        <button className="btn" onClick={mock("compare 3 runs")}>compare</button>
+        <button className="btn" onClick={mock("attach to gpu-h100")}>attach gpu</button>
+      </div>
+
+      <div className="card" style={{overflow:"hidden"}}>
+        <table className="tbl">
+          <thead>
+            <tr><th>Run</th><th>Dataset</th><th>Model</th><th>Entity</th><th className="num">Seed</th><th>Status</th><th>Duration</th><th className="num">MAE</th><th className="num">RMSE</th><th className="num">Cov@90</th><th></th></tr>
+          </thead>
+          <tbody>
+            {RUNS.map(r => (
+              <tr key={r.id} onClick={mock("open run "+r.id)} style={{cursor:"pointer"}}>
+                <td className="mono">{r.id}</td>
+                <td className="meta-soft">{r.dataset}</td>
+                <td><b>{r.model}</b></td>
+                <td className="meta">{r.entity}</td>
+                <td className="num">{r.seed}</td>
+                <td><span className={"status status-"+r.status}>● {r.status}</span></td>
+                <td className="num">{r.dur}</td>
+                <td className="num">{r.mae ?? "—"}</td>
+                <td className="num">{r.rmse ?? "—"}</td>
+                <td className="num">{r.cov90 ?? "—"}</td>
+                <td className="meta">›</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function ModelsPage() {
+  return (
+    <div className="page-shell">
+      <h1 className="page-h1"><em>Models</em></h1>
+      <p className="page-sub">Tracked architectures and pretrained foundation models. Adapter contract: every entry implements <span className="mono">ExecutableModel</span>.</p>
+      <div className="card" style={{overflow:"hidden",marginTop:18}}>
+        <table className="tbl">
+          <thead><tr><th>Model</th><th>Family</th><th>Params</th><th>Context</th><th>Role</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            {MODELS.map(m => (
+              <tr key={m.id} onClick={mock("open model card · "+m.id)} style={{cursor:"pointer"}}>
+                <td><b className="mono">{m.id}</b></td>
+                <td>{m.family}</td>
+                <td className="mono">{m.params}</td>
+                <td className="mono">{m.ctx}</td>
+                <td className="meta">{m.role}</td>
+                <td><span className={"status " + (m.status === "stable" ? "status-completed" : m.status === "preview" ? "status-running" : "status-pending")}>● {m.status}</span></td>
+                <td className="meta">›</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function LibraryPage() {
+  return (
+    <div className="page-shell">
+      <h1 className="page-h1"><em>Library</em></h1>
+      <p className="page-sub">Shared adapters, prompt templates, custom scalers, plotting helpers.</p>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(3, 1fr)",gap:18,marginTop:24}}>
+        {[
+          { kind: "Plotting", n: "fanchart_q0595", who: "lj · 2026-05-12" },
+          { kind: "Scaler",   n: "EntityScaler",   who: "ms · 2026-05-08" },
+          { kind: "Adapter",  n: "tsl_adapter",    who: "lj · 2026-04-20" },
+          { kind: "Prompt",   n: "morning_brief",  who: "lj · 2026-05-09" },
+          { kind: "Manifest", n: "swissriver_v3",  who: "lj · 2026-05-12" },
+          { kind: "Notebook", n: "audit_h47_w",    who: "lj · 2026-05-04" },
+        ].map(it => (
+          <div key={it.n} className="card" style={{padding:14,cursor:"pointer"}} onClick={mock("open "+it.n)}>
+            <div className="meta">{it.kind.toUpperCase()}</div>
+            <div className="mono" style={{fontSize:14,fontWeight:500,margin:"6px 0"}}>{it.n}</div>
+            <div className="meta meta-soft">{it.who}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function InferencePage() {
+  return (
+    <div className="page-shell">
+      <h1 className="page-h1"><em>Inference</em></h1>
+      <p className="page-sub">Batch and online inference. Snapshot a run, expose a HTTP endpoint, or stream predictions to a webhook.</p>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(2, 1fr)",gap:18,marginTop:24}}>
+        {[
+          { n: "live-bern", desc: "Bern station · 1h cadence", base: "patchtst@r-7c84", calls: "12 481" },
+          { n: "etth1-zero-shot", desc: "Chronos-2 · cold start", base: "chronos-2", calls: "342" },
+        ].map(e => (
+          <div className="card" key={e.n} style={{padding:18,cursor:"pointer"}} onClick={mock("open endpoint · "+e.n)}>
+            <div style={{fontFamily:"var(--serif)",fontStyle:"italic",fontSize:20,fontVariationSettings:'"opsz" 28'}}>{e.n}</div>
+            <div className="meta" style={{marginTop:4}}>{e.desc}</div>
+            <div className="mono" style={{fontSize:12,color:"var(--ink-muted)",marginTop:10}}>base · {e.base}</div>
+            <div className="mono" style={{fontSize:12,color:"var(--ink-muted)"}}>calls · {e.calls}</div>
+          </div>
+        ))}
+      </div>
+      <button className="btn primary" style={{marginTop:18}} onClick={mock("create endpoint")}>+ new endpoint</button>
+    </div>
+  );
+}
+
+function ReportsPage() {
+  return (
+    <div className="page-shell">
+      <h1 className="page-h1"><em>Reports</em></h1>
+      <p className="page-sub">Weekly briefs, BAFU compliance reports, advisor decks. Agent drafts; you approve.</p>
+      <div className="card" style={{marginTop:24,overflow:"hidden"}}>
+        <table className="tbl">
+          <thead><tr><th>Title</th><th>Status</th><th>Auto-drafted</th><th>Parts</th><th>Updated</th></tr></thead>
+          <tbody>
+            {REPORTS.map(r => (
+              <tr key={r.id} onClick={mock("open report "+r.id)} style={{cursor:"pointer"}}>
+                <td><b>{r.title}</b></td>
+                <td className={"status "+(r.status==="published"?"status-completed":"status-running")}>● {r.status}</td>
+                <td className="meta">{r.auto ? "yes" : "no"}</td>
+                <td className="num">{r.parts}</td>
+                <td className="meta-soft">{r.updated}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <button className="btn primary" style={{marginTop:18}} onClick={mock("new report from template")}>+ new report</button>
+    </div>
+  );
+}
+
+function AgentPage({ onAgent }) {
+  return (
+    <div className="page-shell">
+      <h1 className="page-h1"><em>Agent</em></h1>
+      <p className="page-sub">Threads. Every action the agent has taken on your behalf, with the receipts.</p>
+      <div style={{display:"flex",flexDirection:"column",gap:10,marginTop:24}}>
+        {[
+          { n: "th-001", t: "Compare PatchTST vs Chronos-2 on Basel", msgs: 14, when: "2026-05-21 09:14" },
+          { n: "th-002", t: "Outline this week's brief",              msgs: 6,  when: "2026-05-20 06:11" },
+          { n: "th-003", t: "Investigate r-7c87 OOM",                  msgs: 9,  when: "2026-05-19 22:08" },
+        ].map(th => (
+          <div className="card" key={th.n} style={{padding:14,cursor:"pointer",display:"flex",alignItems:"baseline",gap:14}} onClick={onAgent}>
+            <span className="mono" style={{color:"var(--ink-faint)",fontSize:11}}>{th.n}</span>
+            <span style={{flex:1,fontSize:13.5}}>{th.t}</span>
+            <span className="mono" style={{fontSize:11,color:"var(--ink-faint)"}}>{th.msgs} msgs</span>
+            <span className="meta meta-soft">{th.when}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SettingsPage() {
+  return (
+    <div className="page-shell">
+      <div className="meta">SYSTEM</div>
+      <h1 className="page-h1" style={{marginTop:6}}>Settings</h1>
+      <p className="page-sub" style={{marginTop:8}}>Workspace · agent providers · storage · keyboard · permissions</p>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:18,marginTop:30}}>
+        <div className="card" style={{padding:20}}>
+          <div style={{fontFamily:"var(--serif)",fontStyle:"italic",fontSize:18,fontVariationSettings:'"opsz" 24'}}>Workspace</div>
+          <div className="div-h" style={{margin:"12px -20px"}}></div>
+          {[
+            ["NAME",    "liulian / aare-hydro"],
+            ["REGION",  "europe-west6 · Zürich"],
+            ["THEME",   "PAPER"],
+            ["DENSITY", "COMFORTABLE"],
+          ].map(([k, v]) => (
+            <div key={k} style={{display:"flex",alignItems:"center",margin:"10px 0"}}>
+              <span className="meta" style={{flexBasis:96}}>{k}</span>
+              <span className="mono">{v}</span>
+            </div>
+          ))}
+        </div>
+        <div className="card" style={{padding:20}}>
+          <div style={{fontFamily:"var(--serif)",fontStyle:"italic",fontSize:18,fontVariationSettings:'"opsz" 24'}}>Agent providers</div>
+          <div className="div-h" style={{margin:"12px -20px"}}></div>
+          {[
+            ["CLAUDE HAIKU 4.5",  "sk-…",       "ANTHROPIC", true],
+            ["DEEPSEEK-V3.2",     "API key …",  "DEEPSEEK",  true],
+            ["GLM-4.6",           "API key …",  "ZHIPU",     true],
+            ["GEMINI 2.5 FLASH",  "API key …",  "GOOGLE",    false],
+            ["QWEN3 (LOCAL)",     "—",          "OLLAMA",    false],
+          ].map(([k, v, who, set]) => (
+            <div key={k} style={{display:"flex",alignItems:"center",margin:"9px 0"}}>
+              <span className="meta" style={{flexBasis:160}}>{k}</span>
+              <span className="mono" style={{flex:1,color:"var(--ink-muted)"}}>{v}</span>
+              <span className="meta" style={{marginRight:8}}>{who}</span>
+              <span style={{width:8,height:8,borderRadius:"50%",background: set ? "var(--bern)" : "var(--ink-quiet)"}}></span>
+            </div>
+          ))}
+        </div>
+        <div className="card" style={{padding:20}}>
+          <div style={{fontFamily:"var(--serif)",fontStyle:"italic",fontSize:18,fontVariationSettings:'"opsz" 24'}}>Storage</div>
+          <div className="div-h" style={{margin:"12px -20px"}}></div>
+          {[
+            ["WARM TIER", "s3://liulian-warm · 1.4 GB / 50 GB"],
+            ["COLD TIER", "s3://liulian-cold · 38 GB / 1 TB"],
+            ["COMPUTE",   "UBELIX · gpu-h100 / gpu-a100 · paygo"],
+          ].map(([k, v]) => (
+            <div key={k} style={{display:"flex",alignItems:"center",margin:"10px 0"}}>
+              <span className="meta" style={{flexBasis:96}}>{k}</span>
+              <span className="mono">{v}</span>
+            </div>
+          ))}
+        </div>
+        <div className="card" style={{padding:20}}>
+          <div style={{fontFamily:"var(--serif)",fontStyle:"italic",fontSize:18,fontVariationSettings:'"opsz" 24'}}>Keyboard</div>
+          <div className="div-h" style={{margin:"12px -20px"}}></div>
+          {[
+            ["PALETTE",      "⌘ K"],
+            ["AGENT",        "B"],
+            ["QUICK NAV",    "1 – 8"],
+            ["NEXT STATION", "J / K"],
+            ["OPEN RUN",     "⌘ O"],
+            ["DIFF",         "⌘ D"],
+          ].map(([k, v]) => (
+            <div key={k} style={{display:"flex",alignItems:"center",margin:"9px 0"}}>
+              <span className="meta" style={{flexBasis:160}}>{k}</span>
+              {v.split(" ").map((token, i) => (token === "/" ? <span key={i} style={{margin:"0 5px"}}>/</span> : token === "–" ? <span key={i} style={{margin:"0 5px"}}>–</span> : <kbd key={i}>{token}</kbd>))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// DOORWAY · landing page (first thing a visitor sees)
+// ============================================================
+function Doorway({ onPick, onChat }) {
+  const [chat, setChat] = React.useState("");
+  return (
+    <div className="doorway-bg" style={{minHeight:"100vh",display:"flex",flexDirection:"column"}}>
+      <div style={{padding:"28px 56px",display:"flex",alignItems:"center"}}>
+        <span style={{fontFamily:"var(--serif)",fontSize:26,fontWeight:500,fontVariationSettings:'"opsz" 32',letterSpacing:"0.01em"}}>LIULIAN</span>
+        <span className="sep" style={{margin:"0 12px",color:"var(--ink-quiet)"}}>·</span>
+        <span className="meta">ML platform · r2026 · 0.4.1</span>
+        <span style={{marginLeft:"auto",display:"flex",gap:10}}>
+          <button className="btn ghost" onClick={mock("docs")}>docs</button>
+          <button className="btn ghost" onClick={mock("changelog")}>changelog</button>
+          <button className="btn" onClick={() => onPick("try-demo")}>jump to the demo →</button>
+        </span>
+      </div>
+      <div style={{maxWidth:880,margin:"40px auto 0",padding:"0 56px"}}>
+        <h1 style={{fontFamily:"var(--serif)",fontSize:88,fontWeight:400,fontVariationSettings:'"opsz" 144',letterSpacing:"-0.03em",lineHeight:1,color:"var(--ink)"}}>
+          A studio for <em style={{fontStyle:"italic",fontVariationSettings:'"opsz" 96,"SOFT" 50,"WONK" 1',color:"var(--ink-soft)"}}>time-series</em><br/>
+          forecasting.
+        </h1>
+        <p style={{fontFamily:"var(--serif)",fontStyle:"italic",fontSize:22,color:"var(--ink-muted)",fontVariationSettings:'"opsz" 28,"SOFT" 50',marginTop:22,maxWidth:"54ch"}}>
+          From dataset to dashboard, with an agent that holds the chalk. The numbers are real; the pencil is yours.
+        </p>
+
+        <div style={{display:"flex",gap:16,marginTop:36,flexWrap:"wrap"}}>
+          {[
+            { id: "create-project", title: "Create a project", sub: "fresh workspace · pick a dataset" },
+            { id: "one-shot",       title: "One-shot forecast", sub: "drop a CSV · get a chart in 30s" },
+            { id: "try-demo",       title: "Try the demo",      sub: "aare-bern · 28 stations · live" },
+            { id: "open-recent",    title: "Open recent",       sub: "aare-hydro · edited 17:42" },
+          ].map(e => (
+            <button key={e.id} onClick={() => onPick(e.id)} style={{flex:"1 1 calc(50% - 8px)",minWidth:280,padding:"18px 22px",border:"1px solid var(--hairline-strong)",borderRadius:"12px",background:"var(--surface)",cursor:"pointer",textAlign:"left",transition:"border-color 150ms"}}
+                    onMouseOver={e=>e.currentTarget.style.borderColor="var(--ink)"} onMouseOut={e=>e.currentTarget.style.borderColor="var(--hairline-strong)"}>
+              <div style={{fontFamily:"var(--serif)",fontSize:20,fontVariationSettings:'"opsz" 28'}}>{e.title}</div>
+              <div className="meta" style={{marginTop:5}}>{e.sub}</div>
+            </button>
+          ))}
+        </div>
+
+        <div style={{marginTop:42,padding:"14px 18px",background:"var(--surface)",border:"1px solid var(--hairline-strong)",borderRadius:"14px",display:"flex",gap:12,alignItems:"center"}}>
+          <span className="meta">OR · TELL THE AGENT WHAT YOU WANT TO DO</span>
+          <input value={chat} onChange={e => setChat(e.target.value)} placeholder='e.g. "import a CSV, fit PatchTST, compare against Chronos-2"' style={{flex:1,border:"none",padding:"8px 4px",fontSize:14,fontFamily:"var(--sans)",background:"transparent",outline:"none"}} onKeyDown={e => { if (e.key === "Enter") { onChat(chat); }}}/>
+          <button className="btn primary" onClick={() => onChat(chat)}>{`Send →`}</button>
+        </div>
+
+        <div style={{marginTop:48,display:"flex",gap:32,flexWrap:"wrap",color:"var(--ink-muted)",fontSize:12.5}}>
+          <div><kbd>⌘</kbd>+<kbd>K</kbd> palette &nbsp; <kbd>?</kbd> guides &nbsp; <kbd>1-8</kbd> navigate</div>
+          <div style={{marginLeft:"auto"}}>backed by UBELIX · gpu-h100 / a100 · paygo</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// AGENT DRAWER + COMMAND PALETTE + GUIDES
+// ============================================================
+function AgentDrawer({ open, onClose, page }) {
+  if (!open) return null;
+  const [input, setInput] = React.useState("");
+  const [msgs, setMsgs] = React.useState([
+    { who: "user",  body: "show stations that crossed Q95 850 last week" },
+    { who: "agent", step: "intent → station_risk_query · 4 tool calls · 1.8 s" },
+    { who: "agent", body: <>Two stations exceeded <i>Q95</i> 850 m³/s in the last seven days: <b>rhine-rheinfelden</b><sup>1</sup> (twice, peak 893) and <b>brienzersee</b><sup>2</sup> (once, peak 871). Both sit downstream of basins where precipitation was 18 % above 30-year median this week.<sup>3</sup></> },
+  ]);
+  const send = () => {
+    if (!input.trim()) return;
+    const m = input;
+    setInput("");
+    setMsgs(M => [...M, { who: "user", body: m }, { who: "agent", body: <i style={{color:"var(--ink-faint)"}}>(mock) agent reply will arrive here when the SSE endpoint is wired.</i> }]);
+  };
+  return (
+    <aside className="agent-drawer">
+      <div className="ah">
+        <span style={{width:8,height:8,borderRadius:"50%",background:"var(--bern)"}}></span>
+        <span className="name">BI agent</span>
+        <span className="meta" style={{marginLeft:8}}>on · {page.toLowerCase()}</span>
+        <span style={{marginLeft:"auto",display:"flex",gap:6}}>
+          <button className="btn ghost sm" onClick={mock("open in thread page")}>open ↗</button>
+          <button className="btn ghost sm" onClick={onClose}>esc ✕</button>
+        </span>
+      </div>
+      <div className="messages">
+        {msgs.map((m, i) => (
+          m.who === "user"
+            ? <div key={i} className="msg-user">{m.body}</div>
+            : <div key={i} className="msg-agent">
+                {m.step && <div className="step">{m.step}</div>}
+                {m.body && <div className="body">{m.body}</div>}
+              </div>
+        ))}
+      </div>
+      <div className="suggested-chips">
+        {["compare PatchTST × Chronos-2", "draft the morning brief", "annotate the cold-front window"].map(c => (
+          <span key={c} className="chip" onClick={() => setInput(c)}>{c}</span>
+        ))}
+      </div>
+      <div className="input-row">
+        <input value={input} onChange={e => setInput(e.target.value)} placeholder="ask the agent · /focus · ⏎ to send" onKeyDown={e => e.key === "Enter" && send()}/>
+        <button className="btn primary sm" onClick={send}>send</button>
+      </div>
+    </aside>
+  );
+}
+
+function CommandPalette({ open, onClose, nav }) {
+  const [q, setQ] = React.useState("");
+  if (!open) return null;
+  const cmds = [
+    { k: "1", n: "Open Forecast",   scope: "page", do: () => { nav("live");      onClose(); } },
+    { k: "2", n: "Open Data",       scope: "page", do: () => { nav("data");      onClose(); } },
+    { k: "3", n: "Open Visualize",  scope: "page", do: () => { nav("visualize"); onClose(); } },
+    { k: "4", n: "Open Train",      scope: "page", do: () => { nav("train");     onClose(); } },
+    { k: "5", n: "Open Inference",  scope: "page", do: () => { nav("predict");   onClose(); } },
+    { k: "6", n: "Open Reports",    scope: "page", do: () => { nav("reports");   onClose(); } },
+    { k: "7", n: "Open Models",     scope: "page", do: () => { nav("models");    onClose(); } },
+    { k: "8", n: "Open Library",    scope: "page", do: () => { nav("library");   onClose(); } },
+    { k: "a", n: "Open Agent",      scope: "page", do: () => { nav("agent");     onClose(); } },
+    { k: ",", n: "Open Settings",   scope: "page", do: () => { nav("settings");  onClose(); } },
+    { k: "⌘N", n: "New sweep",       scope: "action", do: () => { mock("new sweep")(); onClose(); } },
+    { k: "⌘O", n: "Open run by id",  scope: "action", do: () => { mock("open run by id")(); onClose(); } },
+    { k: "⌘D", n: "Diff two runs",   scope: "action", do: () => { mock("diff runs")(); onClose(); } },
+  ];
+  const filtered = cmds.filter(c => c.n.toLowerCase().includes(q.toLowerCase()));
+  return (
+    <div className="palette-overlay" onClick={onClose}>
+      <div className="palette" onClick={e => e.stopPropagation()}>
+        <input autoFocus placeholder="type a command, page, or action…" value={q} onChange={e => setQ(e.target.value)}/>
+        <ul>
+          {filtered.map(c => (
+            <li key={c.n} onClick={c.do}>
+              <span className="key"><kbd>{c.k}</kbd></span>
+              <span className="name">{c.n}</span>
+              <span className="scope">{c.scope}</span>
+            </li>
+          ))}
+          {filtered.length === 0 && <li style={{color:"var(--ink-faint)"}}>no matches</li>}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function GuidesModal({ open, onClose }) {
+  if (!open) return null;
+  return (
+    <div className="modal-scrim" onClick={onClose}>
+      <div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-h"><span className="ttl">Guides</span><span className="meta meta-soft">·</span><span className="meta">7</span><button className="btn ghost sm" style={{marginLeft:"auto"}} onClick={onClose}>esc ✕</button></div>
+        <div style={{padding:"16px 22px"}}>
+          {[
+            ["1", "First import",   "Drop a CSV, watch the agent annotate the schema."],
+            ["2", "Edit a cell",    "Double-click in the data table. Charts re-render at < 200 ms."],
+            ["3", "Run a sweep",    "PatchTST × seed grid · 12 trials · keep best."],
+            ["4", "Compare models", "Pick two runs. Side-by-side residuals · agent reasons about it."],
+            ["5", "Sketch a chart", "Draw a curve on canvas. Agent translates to a chart spec."],
+            ["6", "Draft a report", "Pick template. Agent fills sections, you approve."],
+            ["7", "Modes A / B / C","Classical / AI-first / Fused. C is the headline."],
+          ].map(([n, t, d]) => (
+            <div key={n} style={{display:"grid",gridTemplateColumns:"32px 1fr",gap:14,padding:"10px 0",borderBottom:"1px dashed var(--hairline)"}}>
+              <span className="mono" style={{color:"var(--ink-faint)"}}>{n}</span>
+              <div>
+                <div style={{fontWeight:500,fontSize:14}}>{t}</div>
+                <div className="meta" style={{marginTop:3}}>{d}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// APP
+// ============================================================
+function App() {
+  const [entered, setEntered] = React.useState(false);
+  const [page, setPage]       = React.useState("today");
+  const [project, setProject] = React.useState("aare-hydro");
+  const [agentOpen, setAgentOpen]     = React.useState(false);
+  const [paletteOpen, setPaletteOpen] = React.useState(false);
+  const [guidesOpen, setGuidesOpen]   = React.useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
+  const active = NAV.find(n => n.id === page) || NAV[0];
+  const projObj = PROJECTS.find(p => p.id === project);
+
+  // Global keyboard
+  React.useEffect(() => {
+    const onKey = (e) => {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+      const meta = e.metaKey || e.ctrlKey;
+      if (meta && e.key.toLowerCase() === "k") { e.preventDefault(); setPaletteOpen(o => !o); return; }
+      if (meta && e.key === "\\")              { e.preventDefault(); setSidebarCollapsed(c => !c); return; }
+      if (e.key === "Escape") { setPaletteOpen(false); setGuidesOpen(false); return; }
+      if (e.key === "?")      { setGuidesOpen(o => !o); return; }
+      if (!entered) return;
+      if (e.key.toLowerCase() === "b" && !meta) { setAgentOpen(o => !o); return; }
+      const KEY_MAP = { "0":"today", "1":"live", "2":"data", "3":"visualize", "4":"train", "5":"predict", "6":"reports", "7":"models", "8":"library", "a":"agent", ",":"settings" };
+      if (KEY_MAP[e.key]) setPage(KEY_MAP[e.key]);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [entered]);
+
+  const handleDoorwayPick = (id) => {
+    if (id === "try-demo")    { setEntered(true); setPage("live");  }
+    else if (id === "open-recent") { setEntered(true); setPage("today"); }
+    else if (id === "create-project") { setEntered(true); setPage("data"); showToast("(mock) project setup wizard — using aare-hydro for now"); }
+    else if (id === "one-shot") { setEntered(true); setPage("data"); showToast("(mock) one-shot import → would drop you on Visualize"); }
+  };
+  const handleChat = (text) => {
+    setEntered(true);
+    const t = (text || "").toLowerCase();
+    if (/csv|drop|upload|import/.test(t))   { setPage("data");      }
+    else if (/train|sweep|fork/.test(t))    { setPage("train");     }
+    else if (/compare/.test(t))             { setPage("train"); setAgentOpen(true); }
+    else if (/sketch|chart|visual/.test(t)) { setPage("visualize"); }
+    else if (/alert|anomaly/.test(t))       { setPage("live");      }
+    else                                    { setPage("today");     setAgentOpen(true); }
+  };
+
+  if (!entered) {
+    return (
+      <>
+        <Doorway onPick={handleDoorwayPick} onChat={handleChat}/>
+        <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} nav={(p) => { setEntered(true); setPage(p); }} />
+        <GuidesModal    open={guidesOpen}  onClose={() => setGuidesOpen(false)} />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <RunningHeader
+        page={active}
+        project={projObj}
+        sidebarCollapsed={sidebarCollapsed}
+        toggleSidebar={() => setSidebarCollapsed(c => !c)}
+        onPalette={() => setPaletteOpen(true)}
+        onAgent={() => setAgentOpen(o => !o)}
+        onGuides={() => setGuidesOpen(true)}
+        onBackHome={() => setEntered(false)}
+      />
+      <div style={{display:"grid",gridTemplateColumns: (sidebarCollapsed ? "44px" : "var(--sidebar-w)") + " 1fr",minHeight:`calc(100vh - var(--header-h))`,transition:"grid-template-columns 220ms var(--ease)"}}>
+        <Sidebar page={page} setPage={setPage} collapsed={sidebarCollapsed} />
+        <main style={{overflowX:"hidden",minWidth:0}}>
+          {page === "today"     && <TodayPage     onAgent={() => setAgentOpen(true)} nav={setPage} />}
+          {page === "live"      && <ForecastPage  onAgent={() => setAgentOpen(true)} />}
+          {page === "data"      && <DataPage      onAgent={() => setAgentOpen(true)} nav={setPage} />}
+          {page === "visualize" && <VisualizePage />}
+          {page === "train"     && <TrainPage     />}
+          {page === "models"    && <ModelsPage    />}
+          {page === "library"   && <LibraryPage   />}
+          {page === "predict"   && <InferencePage />}
+          {page === "reports"   && <ReportsPage   />}
+          {page === "agent"     && <AgentPage     onAgent={() => setAgentOpen(true)} />}
+          {page === "settings"  && <SettingsPage  />}
+        </main>
+      </div>
+      <AgentDrawer    open={agentOpen}   onClose={() => setAgentOpen(false)} page={active.label} />
+      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} nav={setPage} />
+      <GuidesModal    open={guidesOpen}  onClose={() => setGuidesOpen(false)} />
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+</body>
+</html>

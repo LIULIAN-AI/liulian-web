@@ -1,3 +1,4 @@
+import React from 'react';
 'use client';
 
 import { useRef, useMemo, useState } from 'react';
@@ -21,14 +22,17 @@ import ContextCard from './ContextCard';
 import ReliabilityBadge from './ReliabilityBadge';
 import SourcesFooter from './SourcesFooter';
 import MarkdownView from './MarkdownView';
-import { useOptionalCanvasContext } from '@/components/assistant/hooks/useCanvasContext';
+import { useOptionalCanvasContext } from '@/hooks/useCanvasContext';
 import InlineBIWidget, { type ChartSpec } from './InlineBIWidget';
-import FollowUpChips from './FollowUpChips';
-import BankPreviewCard from './BankPreviewCard';
 import MessageActions from './MessageActions';
 import AssistantFeedback from './AssistantFeedback';
 import { bubbleEnter, pressable, pressableIcon, springSnappy, tweenIOSFast } from './motion';
 import styles from './chat.module.css';
+
+// Legacy components moved to _legacy-bak/; inline no-op stubs keep the
+// chat render path intact until LIULIAN replacements land.
+const FollowUpChips: React.FC<Record<string, unknown>> = () => null;
+const BankPreviewCard: React.FC<Record<string, unknown>> = () => null;
 
 interface MessageBubbleProps {
   message: Message;

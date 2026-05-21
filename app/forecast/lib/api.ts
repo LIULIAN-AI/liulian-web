@@ -1,6 +1,6 @@
 /** Thin liulian-api client. Server-side fetch; no client-side base URL leakage. */
 
-import type { ForecastSeries, ModelCard, Experiment } from '../types';
+import type { ForecastSeries, ModelCard, Experiment, StationCard, TimeseriesResponse } from '../types';
 
 const BASE = process.env.LIULIAN_API_URL ?? 'http://localhost:8000';
 
@@ -32,5 +32,16 @@ export const api = {
   experiments: {
     list: (status?: string) => get<Page<Experiment>>('/experiments', { status }),
     byId: (id: string) => get<Experiment>(`/experiments/${id}`),
+  },
+  datasets: {
+    stations: (dataset_id: string = 'swiss-river-1990') =>
+      get<StationCard[]>(`/datasets/${dataset_id}/stations`),
+    timeseries: (
+      dataset_id: string,
+      station_id: string,
+      days: number = 60,
+      field: string = 'wt',
+    ) =>
+      get<TimeseriesResponse>(`/datasets/${dataset_id}/timeseries`, { station_id, field, days }),
   },
 };

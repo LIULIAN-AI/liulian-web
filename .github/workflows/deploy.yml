@@ -25,11 +25,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js 18
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Set up Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: '20'
+          cache: 'pnpm'
 
       - name: Create CI .env.local
         # Clerk publishable key must be `pk_test_` + valid standard base64.
@@ -50,16 +55,16 @@ jobs:
           EOF
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: TypeScript check
-        run: npx tsc --noEmit || true    # warn only, don't fail CI
+        run: pnpm exec tsc --noEmit || true    # warn only, don't fail CI
 
       - name: Build check
         # ESLint 9.x removed options Next.js 14 still passes internally —
         # ESLint is disabled in next.config.js (ignoreDuringBuilds: true)
         # so this only checks that the app compiles successfully.
-        run: npm run build
+        run: pnpm build
 
   # ─────────────────────────────────────────
   # Job 2: Deploy to PolyU SSH server
@@ -70,9 +75,22 @@ jobs:
     needs: check
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-    
+
     steps:
+      - name: Check DEPLOY_SSH_KEY availability
+        id: secret_check
+        env:
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          if [ -z "$KEY" ]; then
+            echo "::notice::DEPLOY_SSH_KEY not configured for this repo; skipping deploy step."
+            echo "available=false" >> $GITHUB_OUTPUT
+          else
+            echo "available=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Deploy via SSH
+        if: steps.secret_check.outputs.available == 'true'
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ env.DEPLOY_HOST }}
@@ -102,10 +120,12 @@ jobs:
             }
 
             echo "=== [3/5] Installing dependencies ==="
-            npm ci --prefer-offline
+            corepack enable
+            corepack prepare pnpm@9 --activate
+            pnpm install --frozen-lockfile --prefer-offline
 
             echo "=== [4/5] Building Next.js ==="
-            npm run build
+            pnpm build
 
             echo "=== [5/5] Restarting PM2 ==="
             pm2 restart ${{ env.PM2_APP_NAME }}

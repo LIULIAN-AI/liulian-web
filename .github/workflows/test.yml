@@ -1,8 +1,8 @@
 name: Tests
 
 # Only runs on push to main — developers must run tests locally before pushing.
-# To run locally: npm test
-# To run in watch mode during development: npm run test:watch
+# To run locally: pnpm test
+# To run in watch mode during development: pnpm test:watch
 on:
   push:
     branches: [main]
@@ -18,9 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-      - run: npm ci --legacy-peer-deps
-      - run: npm test
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test

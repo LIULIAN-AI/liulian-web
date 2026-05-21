@@ -31,6 +31,10 @@ export type ForecastChartProps = {
   forecast: ForecastSeries;
   height?: number;
   thresholds?: Threshold[];
+  /** When false, omit the outer panel chrome (border/padding/inner mono header).
+   *  Use true=default when rendered standalone, false when wrapped in
+   *  page-level panel chrome. */
+  withChrome?: boolean;
 };
 
 // Tokens — pinned snapshot of @liulian/design-tokens v0.1.
@@ -51,7 +55,7 @@ const T = {
   body: 'Switzer, sans-serif',
 };
 
-export default function ForecastChart({ forecast, height = 360, thresholds }: ForecastChartProps) {
+export default function ForecastChart({ forecast, height = 360, thresholds, withChrome = true }: ForecastChartProps) {
   const option = useMemo(() => {
     const t = forecast.timestamps;
     const obs = forecast.observed;
@@ -177,6 +181,9 @@ export default function ForecastChart({ forecast, height = 360, thresholds }: Fo
     };
   }, [forecast, thresholds]);
 
+  if (!withChrome) {
+    return <ReactECharts option={option} style={{ height }} notMerge lazyUpdate />;
+  }
   return (
     <div
       style={{
@@ -187,7 +194,6 @@ export default function ForecastChart({ forecast, height = 360, thresholds }: Fo
         position: 'relative',
       }}
     >
-      {/* Scientific running header — newspaper-of-record pattern (PLATFORM_DESIGN §3.2) */}
       <div
         style={{
           fontFamily: T.mono,

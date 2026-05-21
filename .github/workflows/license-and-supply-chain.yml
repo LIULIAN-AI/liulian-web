@@ -18,6 +18,9 @@ jobs:
   dependency-review:
     name: Dependency Review (licenses + advisories)
     runs-on: ubuntu-latest
+    # dependency-review-action requires PR context (base + head ref).
+    # Skip on workflow_dispatch where the comparison makes no sense.
+    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v4
 
@@ -43,7 +46,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install ScanCode Toolkit
-        run: pip install --upgrade pip scancode-toolkit==32.* --extra-index-url https://download.pytest.org/
+        run: pip install --upgrade pip scancode-toolkit==32.*
 
       - name: Run ScanCode (licenses + copyrights)
         run: |
