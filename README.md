@@ -4,7 +4,7 @@
 > handoff. Doorway → Today → Forecast → Data → Visualize → Train → …
 > One page per surface, an agent that holds the chalk.
 
-[![demo](https://img.shields.io/badge/demo-web--demo.html-E20613?style=for-the-badge)](./web-demo.html)
+[![demo](https://img.shields.io/badge/▶_live_demo-liulian--ai.github.io-E20613?style=for-the-badge&labelColor=131313)](https://liulian-ai.github.io/liulian-web/web-demo.html)
 [![mkdocs](https://img.shields.io/badge/mkdocs-design--specs-131313?style=for-the-badge)](https://github.com/liulian-ai/liulian-docs)
 [![next](https://img.shields.io/badge/Next.js-14-black?style=flat&logo=next.js)](https://nextjs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-9-F69220?style=flat&logo=pnpm)](https://pnpm.io/)
@@ -43,7 +43,7 @@ reasoning — and the chat history doubles as the audit log:
 
 ## Try the demo locally
 
-The single-file demo at [`web-demo.html`](./web-demo.html) is what the
+The single-file demo at [`web-demo.html`](https://liulian-ai.github.io/liulian-web/web-demo.html) is what the
 screenshots above show. No build, no npm install — just open it.
 
 ```bash
