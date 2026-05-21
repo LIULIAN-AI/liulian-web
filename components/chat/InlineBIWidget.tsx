@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { useOptionalCanvasContext } from '@/components/assistant/hooks/useCanvasContext';
+import { useOptionalCanvasContext } from '@/hooks/useCanvasContext';
 import ChartRenderer from '@/components/assistant/widgets/ChartRenderer';
 import type { ChartSpec, ChartType } from '@/components/assistant/widgets/chartTypes';
 import type { WidgetInstance } from '@/components/assistant/types';

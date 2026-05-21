@@ -7,7 +7,7 @@ import type {
   CanvasContextValue,
   WidgetInstance,
   Toast,
-} from '@/components/assistant/types';
+} from '@/types/canvas';
 
 export const initialCanvasState: CanvasState = {
   chatCollapsed: false,

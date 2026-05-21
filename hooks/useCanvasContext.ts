@@ -2,7 +2,7 @@
 
 import { useContext } from 'react';
 import { CanvasContext } from '@/contexts/CanvasContext';
-import type { CanvasContextValue } from '@/components/assistant/types';
+import type { CanvasContextValue } from '@/types/canvas';
 
 export function useCanvasContext(): CanvasContextValue {
   const ctx = useContext(CanvasContext);

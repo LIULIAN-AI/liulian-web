@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { useChatContext } from '@/components/chat/hooks/useChatContext';
-import { useOptionalCanvasContext } from '@/components/assistant/hooks/useCanvasContext';
+import { useOptionalCanvasContext } from '@/hooks/useCanvasContext';
 import REGISTRY from '@/components/assistant/widgets/registry';
 import type { WidgetInstance, WidgetType } from '@/components/assistant/types';
 import styles from '@/components/assistant/assistant.module.css';

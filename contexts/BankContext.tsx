@@ -1,10 +1,24 @@
 'use client';
+// LEGACY · neobanker fintech surface. Kept compiling so existing
+// chat / canvas tests transitively pass. The .demo-bak data
+// sources are inlined as stubs below; rewire to LIULIAN endpoints
+// when this context surfaces in a real LIULIAN page.
 import React, { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
-import { CompanyHeader } from '@/app/model/company/company';
-import { getNewHeader } from '@/app/api/company/company';
 import { cacheManager, cacheKeys } from '@/utils/cacheManager';
 import { useClerk } from '@clerk/nextjs';
-import { demoBankHeader, isDemoBankSortId } from '@/app/mock/demoBank';
+
+// Stubs for the legacy fintech imports that moved to _app-bak/
+// `CompanyHeader` type was at @/app/model/company/company
+type CompanyHeader = {
+  companyName?: string;
+  following?: boolean;
+  [k: string]: unknown;
+};
+// `getNewHeader` was at @/app/api/company/company
+const getNewHeader = async (_args: { companySortId: string; userId: string | null }): Promise<CompanyHeader> => ({});
+// `demoBankHeader` / `isDemoBankSortId` were at @/app/mock/demoBank
+const demoBankHeader: CompanyHeader = {};
+const isDemoBankSortId = (_id: string): boolean => false;
 
 interface BankContextType {
   headerInfo: CompanyHeader | null;
