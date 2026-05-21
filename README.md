@@ -43,12 +43,14 @@ reasoning — and the chat history doubles as the audit log:
 
 ## Try the demo locally
 
-The single-file demo at [`web-demo.html`](https://liulian-ai.github.io/liulian-web/web-demo.html) is what the
-screenshots above show. No build, no npm install — just open it.
+The demo at [`docs/web-demo.html`](https://liulian-ai.github.io/liulian-web/web-demo.html) is what the
+screenshots above show. It's the **full Claude-Design handoff bundle**
+(`index.html` + `data.jsx` + `app.jsx` + `pages/*.jsx` + `components/*.jsx`)
+served as static React-via-Babel — no build, no npm install:
 
 ```bash
 # from the repo root
-python3 -m http.server 8950
+cd docs/ && python3 -m http.server 8950
 # then open http://127.0.0.1:8950/web-demo.html
 ```
 
