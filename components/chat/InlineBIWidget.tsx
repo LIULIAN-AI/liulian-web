@@ -3,8 +3,11 @@ import React from 'react';
 
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { useOptionalCanvasContext } from '@/hooks/useCanvasContext';
-import type { ChartSpec, ChartType } from '@/components/assistant/widgets/chartTypes';
-import type { WidgetInstance } from '@/components/assistant/types';
+// stub: ChartSpec / ChartType from legacy assistant/widgets/chartTypes
+type ChartSpec = Record<string, unknown>;
+type ChartType = string;
+// stub: WidgetInstance from legacy assistant/types
+type WidgetInstance = Record<string, unknown>;
 import styles from './chat.module.css';
 
 // Legacy ChartRenderer moved to _legacy-bak/; no-op stub keeps the chat widget compilable.
