@@ -25,11 +25,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js 18
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Set up Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: '20'
+          cache: 'pnpm'
 
       - name: Create CI .env.local
         # Clerk publishable key must be `pk_test_` + valid standard base64.
@@ -50,16 +55,16 @@ jobs:
           EOF
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: TypeScript check
-        run: npx tsc --noEmit || true    # warn only, don't fail CI
+        run: pnpm exec tsc --noEmit || true    # warn only, don't fail CI
 
       - name: Build check
         # ESLint 9.x removed options Next.js 14 still passes internally —
         # ESLint is disabled in next.config.js (ignoreDuringBuilds: true)
         # so this only checks that the app compiles successfully.
-        run: npm run build
+        run: pnpm build
 
   # ─────────────────────────────────────────
   # Job 2: Deploy to PolyU SSH server
@@ -102,10 +107,12 @@ jobs:
             }
 
             echo "=== [3/5] Installing dependencies ==="
-            npm ci --prefer-offline
+            corepack enable
+            corepack prepare pnpm@9 --activate
+            pnpm install --frozen-lockfile --prefer-offline
 
             echo "=== [4/5] Building Next.js ==="
-            npm run build
+            pnpm build
 
             echo "=== [5/5] Restarting PM2 ==="
             pm2 restart ${{ env.PM2_APP_NAME }}

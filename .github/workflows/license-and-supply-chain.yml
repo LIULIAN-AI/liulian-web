@@ -43,7 +43,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install ScanCode Toolkit
-        run: pip install --upgrade pip scancode-toolkit==32.* --extra-index-url https://download.pytest.org/
+        run: pip install --upgrade pip scancode-toolkit==32.*
 
       - name: Run ScanCode (licenses + copyrights)
         run: |
