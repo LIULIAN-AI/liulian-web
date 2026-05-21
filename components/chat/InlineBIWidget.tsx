@@ -1,11 +1,14 @@
+import React from 'react';
 'use client';
 
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { useOptionalCanvasContext } from '@/hooks/useCanvasContext';
-import ChartRenderer from '@/components/assistant/widgets/ChartRenderer';
 import type { ChartSpec, ChartType } from '@/components/assistant/widgets/chartTypes';
 import type { WidgetInstance } from '@/components/assistant/types';
 import styles from './chat.module.css';
+
+// Legacy ChartRenderer moved to _legacy-bak/; no-op stub keeps the chat widget compilable.
+const ChartRenderer: React.FC<Record<string, unknown>> = () => null;
 
 export type { ChartSpec };
 
