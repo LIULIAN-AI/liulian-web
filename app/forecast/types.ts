@@ -17,6 +17,28 @@ export type ForecastSeries = {
   q05: number[];
   q95: number[];
   units: string;
+  real_data?: boolean;
+};
+
+export type StationCard = {
+  id: string;
+  label: string;
+  field: string;
+  unit: string;
+  n_observations: number;
+  span_start: string;
+  span_end: string;
+  latest_value: number | null;
+  delta_7d: number | null;
+};
+
+export type TimeseriesPoint = { t: string; v: number | null };
+export type TimeseriesResponse = {
+  dataset_id: string;
+  station_id: string;
+  field: string;
+  unit: string;
+  points: TimeseriesPoint[];
 };
 
 export type Station = {

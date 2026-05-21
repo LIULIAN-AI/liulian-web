@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<!--
+  LIULIAN · /forecast · Round 2 of 5
+  Lens: high-end-visual-design + gpt-taste over R1 + AI-slop self-audit.
+  Same 15 modules; R2 attacks R1's hierarchy + micro-typography + map detail.
+  Color strategy: Committed (UniBe red trimmed to 3 visible per viewport).
+  Distinctive moves: WONK-italic U · scientific header · editorial narrative band ·
+  Fraunces opsz hero title · bento asymmetry · 流 easter-egg glyph.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>LIULIAN · Forecast — Round 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,WONK@0,9..144,300..900,0..1;1,9..144,400..900,0..1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --canvas-warm:#FBFBFA; --canvas-warmer:#F2F0EA; --canvas-deep:#EAE7DD;
+    --surface:#FFFFFF; --surface-shade:#FAFAF9;
+    --ink:#131313; --ink-soft:#34373B; --ink-muted:#5C6066; --ink-faint:#8E9296; --ink-quiet:#B6B9BD;
+    --hairline:#EAEAEA; --hairline-strong:#DEDCD4;
+    --bern:#E20613; --bern-tint:#FDEBEC; --bern-tint-2:#FAD9DC; --bern-deep:#B00510;
+    --ocean:#0066B3; --ocean-tint:#D6E9F7; --green:#509A39; --apricot:#E6863A;
+    --pastel-yellow:#FBF3DB; --pastel-yellow-text:#956400;
+    --serif:'Fraunces',Georgia,serif; --sans:'Switzer',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+  html,body { background:var(--canvas-warm); color:var(--ink); font-family:var(--sans); font-feature-settings:"ss01" 1,"cv11" 1; -webkit-font-smoothing:antialiased; }
+  body { min-width:1440px; font-size:15px; line-height:1.55; }
+  button { font:inherit; color:inherit; background:transparent; border:none; cursor:pointer; }
+  ::selection { background:var(--bern-tint); color:var(--ink); }
+  .tnum { font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1; }
+
+  /* ───── Running header ───── */
+  .run-header {
+    position:sticky; top:0; z-index:50; height:32px;
+    border-bottom:1px solid var(--hairline); background:var(--canvas-warm);
+    font-family:var(--mono); font-size:10.5px; letter-spacing:0.07em; text-transform:uppercase;
+    color:var(--ink-faint); display:flex; align-items:center; padding:0 24px; gap:12px;
+  }
+  .run-header .brand { color:var(--ink); font-weight:600; letter-spacing:0.04em; }
+  .run-header .brand u { font-family:var(--serif); font-style:italic; font-variation-settings:"WONK" 1,"opsz" 24,"wght" 700; color:var(--bern); text-decoration:none; font-size:14px; line-height:0; position:relative; top:1px; }
+  .run-header .sep { color:var(--ink-quiet); }
+  .run-header .live { display:inline-flex; align-items:center; gap:5px; color:var(--ink-soft); }
+  .run-header .live::before { content:""; width:5px; height:5px; border-radius:50%; background:var(--green); box-shadow:0 0 0 3px rgba(80,154,57,0.18); }
+  .run-header .right { margin-left:auto; display:flex; align-items:center; gap:14px; }
+  .run-header kbd { font-family:var(--mono); font-size:9px; color:var(--ink-muted); border:1px solid var(--hairline); border-radius:3px; padding:1px 5px; }
+
+  /* ───── Narrative band ───── */
+  .narrative {
+    border-bottom:1px solid var(--hairline); padding:18px 32px 20px;
+    background:var(--canvas-warm); display:grid; grid-template-columns:auto 1fr auto; align-items:end; gap:32px;
+  }
+  .narrative .meta { font-family:var(--mono); font-size:10px; letter-spacing:0.10em; text-transform:uppercase; color:var(--ink-faint); padding-bottom:4px; }
+  .narrative .meta b { color:var(--ink-soft); font-weight:500; }
+  .narrative .lead {
+    font-family:var(--serif); font-variation-settings:"opsz" 56,"wght" 400;
+    font-size:25px; line-height:1.3; letter-spacing:-0.012em; color:var(--ink);
+    max-width:80ch;
+  }
+  .narrative .lead em { font-style:italic; font-variation-settings:"opsz" 56,"wght" 500,"WONK" 1; color:var(--ink); }
+  .narrative .lead b { font-weight:500; }
+  .narrative .lead .acc { color:var(--bern); font-style:italic; font-variation-settings:"opsz" 56,"wght" 600,"WONK" 1; font-feature-settings:"tnum" 1; }
+  .narrative .pulse { display:flex; gap:18px; padding-bottom:4px; font-family:var(--mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-faint); }
+  .narrative .pulse div { display:flex; flex-direction:column; gap:3px; text-align:right; }
+  .narrative .pulse strong { color:var(--ink); font-size:13px; letter-spacing:0; font-variant-numeric:tabular-nums; font-weight:500; }
+
+  /* ───── 3-rail layout ───── */
+  .layout {
+    display:grid; grid-template-columns:236px minmax(0,1fr) 372px;
+    gap:1px; background:var(--hairline);
+    min-height:calc(100vh - 32px - 100px);
+  }
+  .layout > * { background:var(--canvas-warm); }
+
+  /* ───── Stations rail ───── */
+  .stations { padding:20px 16px 20px 24px; overflow:auto; }
+  .stations .cap { font-family:var(--mono); font-size:10px; letter-spacing:0.10em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:11px; display:flex; gap:8px; align-items:baseline; }
+  .stations .cap b { color:var(--ink-soft); font-weight:500; }
+  .stations .filter { width:100%; height:32px; padding:0 10px; border:1px solid var(--hairline); border-radius:4px; background:var(--surface); font-family:var(--sans); font-size:12.5px; color:var(--ink); }
+  .stations .filter:focus { outline:none; border-color:var(--bern); }
+  .stations ul { list-style:none; margin-top:16px; }
+  .stations li { display:grid; grid-template-columns:14px 1fr auto; align-items:center; gap:8px; padding:10px 0 10px 4px; border-bottom:1px dashed var(--hairline); }
+  .stations li.active .name { color:var(--ink); font-weight:500; }
+  .stations li.active .dot { background:var(--bern); }
+  .stations li.active .meta { color:var(--ink); }
+  .stations .dot { width:6px; height:6px; border-radius:50%; background:transparent; }
+  .stations .name { font-size:13.5px; color:var(--ink-soft); }
+  .stations .code { font-family:var(--mono); font-size:10px; letter-spacing:0.04em; color:var(--ink-faint); text-transform:uppercase; }
+  .stations .meta { grid-column:2/4; display:flex; align-items:baseline; gap:8px; font-family:var(--mono); font-size:10.5px; color:var(--ink-faint); margin-top:2px; }
+  .stations .meta .val { color:var(--ink-soft); }
+  .stations .meta .delta { color:var(--ink-faint); }
+  .stations .meta .delta.up { color:var(--bern); }
+  .stations .spark { grid-column:1 / -1; padding-left:14px; margin-top:2px; }
+
+  /* ───── Bento ───── */
+  .bento { padding:18px 22px 28px; display:grid; grid-template-columns:repeat(12,1fr); grid-auto-rows:62px; gap:14px; }
+  .panel { background:var(--surface); border:1px solid var(--hairline); border-radius:10px; padding:14px 16px; display:flex; flex-direction:column; min-width:0; }
+  .panel-h { display:flex; align-items:baseline; gap:10px; margin-bottom:10px; }
+  .panel-h .title { font-family:var(--mono); font-size:10px; letter-spacing:0.10em; text-transform:uppercase; color:var(--ink-soft); }
+  .panel-h .sub { font-family:var(--mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-faint); }
+  .panel-h .right { margin-left:auto; display:flex; gap:8px; align-items:center; font-family:var(--mono); font-size:10px; color:var(--ink-faint); letter-spacing:0.04em; text-transform:uppercase; }
+  .panel-h .chip { padding:2px 7px; border:1px solid var(--hairline); border-radius:9999px; }
+  .panel.hero { border-color:var(--ink); }
+
+  /* MAP */
+  .panel-map { grid-column:1 / span 7; grid-row:1 / span 6; padding:0; overflow:hidden; }
+  .panel-map .panel-h { padding:14px 16px 0; }
+  .panel-map .map-wrap { flex:1; position:relative; background:var(--canvas-warmer); margin-top:10px; }
+  .panel-map svg.basemap { width:100%; height:100%; display:block; }
+  .panel-map .legend { position:absolute; bottom:9px; left:14px; display:flex; gap:16px; font-family:var(--mono); font-size:9.5px; color:var(--ink-faint); letter-spacing:0.04em; text-transform:uppercase; }
+  .panel-map .legend i { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; vertical-align:middle; }
+  .panel-map .attrib { position:absolute; bottom:9px; right:14px; font-family:var(--mono); font-size:9px; color:var(--ink-quiet); letter-spacing:0.04em; text-transform:uppercase; }
+
+  /* FAN (hero) */
+  .panel-fan { grid-column:8 / span 5; grid-row:1 / span 6; padding:14px 18px 14px; border:1px solid var(--ink); }
+  .fan-title-row { display:flex; align-items:baseline; gap:12px; border-bottom:1px solid var(--hairline); margin:0 -18px 10px; padding:0 18px 12px; }
+  .fan-title { font-family:var(--serif); font-variation-settings:"opsz" 56,"wght" 500; font-size:34px; line-height:1; letter-spacing:-0.022em; color:var(--ink); }
+  .fan-sub { font-family:var(--serif); font-style:italic; font-variation-settings:"opsz" 24,"wght" 400,"WONK" 0; font-size:15px; color:var(--ink-muted); }
+  .fan-coords { margin-left:auto; font-family:var(--mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-faint); text-align:right; line-height:1.5; }
+  .tab-bar { display:flex; gap:2px; border-bottom:1px solid var(--hairline); margin:0 -18px 10px; padding:0 18px; }
+  .tab { padding:7px 11px 8px; font-family:var(--mono); font-size:10px; letter-spacing:0.10em; text-transform:uppercase; color:var(--ink-faint); border-bottom:2px solid transparent; margin-bottom:-1px; }
+  .tab.active { color:var(--ink); border-bottom-color:var(--bern); }
+  .chart-area { flex:1; position:relative; }
+  .chart-area svg { width:100%; height:100%; display:block; }
+  .chart-legend { display:flex; gap:18px; margin-top:8px; font-family:var(--mono); font-size:9.5px; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-faint); }
+  .chart-legend i { display:inline-block; vertical-align:middle; margin-right:6px; }
+  .chart-legend .ln { width:18px; height:0; border-top:2px solid var(--ink); }
+  .chart-legend .lnd { width:18px; height:0; border-top:2px dashed var(--bern); }
+  .chart-legend .swatch { width:14px; height:9px; background:var(--bern-tint); border:1px solid var(--bern-tint-2); }
+  .chart-legend .dot { width:7px; height:7px; border-radius:50%; background:var(--bern); }
+
+  /* KPI strip — row 7 cols 1-8 */
+  .kpis { grid-column:1 / span 8; grid-row:7 / span 1; display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .kpi { background:var(--surface); border:1px solid var(--hairline); border-radius:10px; padding:12px 14px; display:flex; flex-direction:column; justify-content:space-between; position:relative; }
+  .kpi .label { font-family:var(--mono); font-size:9.5px; letter-spacing:0.10em; text-transform:uppercase; color:var(--ink-faint); display:flex; justify-content:space-between; }
+  .kpi .label .sub { color:var(--ink-quiet); }
+  .kpi .row { display:flex; align-items:baseline; gap:8px; margin-top:8px; }
+  .kpi .value { font-family:var(--mono); font-size:26px; letter-spacing:-0.01em; color:var(--ink); font-variant-numeric:tabular-nums; line-height:1; }
+  .kpi .unit { font-family:var(--mono); font-size:10px; color:var(--ink-faint); }
+  .kpi .delta { font-family:var(--mono); font-size:10px; color:var(--ink-soft); letter-spacing:0.04em; margin-left:auto; }
+  .kpi .delta.good { color:var(--green); }
+  .kpi .spark { margin-top:6px; height:14px; }
+  .kpi .spark svg { display:block; width:100%; height:14px; }
+
+  /* Severity teaser — row 7 cols 9-12 */
+  .panel-sev-mini { grid-column:9 / span 4; grid-row:7 / span 1; padding:11px 14px; }
+  .panel-sev-mini .panel-h { margin-bottom:8px; }
+  .sev-mini-rows { display:flex; flex-direction:column; gap:6px; }
+  .sev-mini-row { display:grid; grid-template-columns:88px 1fr 36px; align-items:center; gap:10px; font-family:var(--mono); font-size:9.5px; color:var(--ink-soft); letter-spacing:0.04em; text-transform:uppercase; }
+  .sev-mini-row .ct { color:var(--ink-faint); text-align:right; }
+  .sev-track { display:flex; height:8px; border-radius:2px; overflow:hidden; background:var(--canvas-warmer); }
+  .sev-track i { display:block; height:100%; }
+  .sev-track i.watch { background:var(--pastel-yellow); }
+  .sev-track i.elev { background:var(--bern-tint-2); }
+  .sev-track i.crit { background:var(--bern); }
+  .sev-track i.calm { background:transparent; }
+
+  /* Correlation — rows 8-11 cols 1-6 */
+  .panel-corr { grid-column:1 / span 6; grid-row:8 / span 5; padding:14px 16px 12px; }
+  .corr-grid { flex:1; display:grid; grid-template-columns:96px repeat(8,1fr); grid-template-rows:repeat(8,1fr); column-gap:1px; row-gap:1px; background:var(--hairline); border:1px solid var(--hairline); border-radius:4px; overflow:hidden; }
+  .corr-axislabel-y, .corr-cell { background:var(--surface); }
+  .corr-axislabel-y { font-family:var(--mono); font-size:9.5px; color:var(--ink-soft); letter-spacing:0.04em; text-transform:uppercase; display:flex; align-items:center; justify-content:flex-end; padding-right:8px; }
+  .corr-cell { display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:9.5px; color:var(--ink-soft); font-variant-numeric:tabular-nums; }
+  .corr-cell.diag { background:var(--canvas-warmer); color:var(--ink-faint); }
+  .corr-xaxis { display:grid; grid-template-columns:96px repeat(8,1fr); margin-top:6px; }
+  .corr-xaxis div { font-family:var(--mono); font-size:9.5px; color:var(--ink-faint); letter-spacing:0.04em; text-transform:uppercase; text-align:center; }
+  .corr-xaxis div:first-child { text-align:right; padding-right:8px; }
+
+  /* Severity full — rows 8-11 cols 7-12 */
+  .panel-sev { grid-column:7 / span 6; grid-row:8 / span 5; padding:14px 16px 12px; }
+  .sev-grid { flex:1; display:flex; flex-direction:column; gap:11px; justify-content:center; }
+  .sev-row { display:grid; grid-template-columns:230px 1fr 70px; align-items:center; gap:14px; }
+  .sev-row .name { font-family:var(--sans); font-size:12.5px; color:var(--ink-soft); line-height:1.4; }
+  .sev-row .name code { font-family:var(--mono); color:var(--ink); font-size:11px; background:var(--canvas-warmer); padding:1px 5px; border-radius:3px; font-variant-numeric:tabular-nums; }
+  .sev-row .track { display:flex; height:14px; border-radius:2px; overflow:hidden; background:var(--surface-shade); border:1px solid var(--hairline); }
+  .sev-row .track i { display:block; height:100%; }
+  .sev-row .ct { font-family:var(--mono); font-size:11px; color:var(--ink-soft); text-align:right; font-variant-numeric:tabular-nums; letter-spacing:0.02em; }
+  .sev-row .ct .crit { color:var(--bern); }
+  .sev-xaxis { display:grid; grid-template-columns:230px 1fr 70px; gap:14px; margin-top:8px; }
+  .sev-xaxis .ticks { display:flex; justify-content:space-between; font-family:var(--mono); font-size:9.5px; color:var(--ink-faint); letter-spacing:0.04em; text-transform:uppercase; padding:0 1px; }
+
+  /* Add panel */
+  .add-panel { grid-column:1 / -1; min-height:48px; display:flex; align-items:center; gap:14px; padding:0 18px; border:1px dashed var(--hairline-strong); border-radius:10px; background:transparent; color:var(--ink-faint); font-family:var(--mono); font-size:10px; letter-spacing:0.10em; text-transform:uppercase; }
+  .add-panel:hover { color:var(--ink); border-color:var(--bern); background:var(--surface); }
+  .add-panel .plus { font-family:var(--serif); font-size:20px; font-style:italic; color:var(--ink); }
+  .add-panel .suggest b { color:var(--ink-soft); font-weight:500; padding:2px 7px; border:1px solid var(--hairline); border-radius:9999px; margin:0 3px; background:var(--canvas-warm); }
+
+  /* ───── BI agent rail ───── */
+  .agent { display:flex; flex-direction:column; padding:0; max-height:calc(100vh - 32px); position:sticky; top:32px; }
+  .agent-head { padding:14px 20px 12px; border-bottom:1px solid var(--hairline); display:flex; align-items:baseline; gap:10px; }
+  .agent-head .title { font-family:var(--mono); font-size:10px; letter-spacing:0.10em; text-transform:uppercase; color:var(--ink-soft); }
+  .agent-head .persona { font-family:var(--serif); font-style:italic; font-variation-settings:"opsz" 24,"WONK" 1,"wght" 500; font-size:15px; color:var(--bern); }
+  .agent-head .state { margin-left:auto; font-family:var(--mono); font-size:9.5px; color:var(--ink-faint); letter-spacing:0.06em; text-transform:uppercase; display:flex; align-items:center; gap:5px; }
+  .agent-head .state::before { content:""; width:5px; height:5px; border-radius:50%; background:var(--green); }
+  .agent-head .state.idle::before { background:var(--ink-quiet); }
+  .notebook { flex:1; overflow:auto; padding:14px 20px; display:flex; flex-direction:column; gap:14px; }
+  .nb-prompt { font-family:var(--serif); font-style:italic; font-variation-settings:"opsz" 24; color:var(--ink-muted); font-size:14.5px; line-height:1.5; }
+  .nb-user { display:grid; grid-template-columns:32px 1fr; gap:6px; }
+  .nb-user .who { font-family:var(--mono); font-size:9.5px; color:var(--ink-faint); letter-spacing:0.06em; text-transform:uppercase; padding-top:2px; }
+  .nb-user .msg { font-size:13.5px; color:var(--ink); line-height:1.5; }
+  .nb-step { display:grid; grid-template-columns:32px 1fr; gap:6px; align-items:start; }
+  .nb-step .who { font-family:var(--mono); font-size:9.5px; color:var(--ink-faint); letter-spacing:0.06em; text-transform:uppercase; padding-top:2px; }
+  .nb-step .call { font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); white-space:pre-wrap; line-height:1.55; }
+  .nb-step .call .fn { color:var(--ink); }
+  .nb-step .call .arrow { color:var(--ink-quiet); }
+  .nb-step .call .out { color:var(--ink-muted); }
+  .nb-prop { border:1px dashed var(--ink); border-radius:6px; padding:11px 13px; background:var(--canvas-warm); }
+  .nb-prop .label { font-family:var(--mono); font-size:9.5px; letter-spacing:0.10em; text-transform:uppercase; color:var(--ink); }
+  .nb-prop .body { font-size:13px; color:var(--ink-soft); margin-top:5px; line-height:1.5; }
+  .nb-prop .actions { display:flex; gap:8px; margin-top:9px; }
+  .nb-prop .btn { font-family:var(--mono); font-size:10px; padding:5px 11px; border:1px solid var(--ink); border-radius:4px; color:var(--ink); letter-spacing:0.06em; text-transform:uppercase; }
+  .nb-prop .btn.primary { background:var(--ink); color:var(--canvas-warm); border-color:var(--ink); }
+  .nb-prop .btn:hover { border-color:var(--bern); color:var(--bern); }
+  .nb-prop .btn.primary:hover { background:var(--bern-deep); border-color:var(--bern-deep); color:var(--canvas-warm); }
+  .nb-answer { font-size:14px; color:var(--ink); line-height:1.62; font-feature-settings:"ss01" 1; }
+  .nb-answer sup { color:var(--ink-soft); font-family:var(--mono); font-size:9.5px; margin:0 1px; font-feature-settings:"sups" 1; }
+  .nb-refs { font-family:var(--mono); font-size:10px; color:var(--ink-faint); border-top:1px dashed var(--hairline); padding-top:8px; line-height:1.55; }
+  .nb-refs .r { display:block; }
+  .nb-refs .r sup { color:var(--ink-soft); }
+  .nb-suggest { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+  .nb-suggest button { font-family:var(--sans); font-size:12px; color:var(--ink-soft); border:1px solid var(--hairline); border-radius:9999px; padding:5px 11px; }
+  .nb-suggest button:hover { color:var(--ink); border-color:var(--ink); }
+  .nb-cost { font-family:var(--mono); font-size:9px; color:var(--ink-quiet); letter-spacing:0.04em; text-transform:uppercase; }
+  .ask-form { border-top:1px solid var(--hairline); padding:12px 18px; display:flex; gap:8px; align-items:center; }
+  .ask-form input { flex:1; height:36px; border:1px solid var(--hairline); border-radius:4px; padding:0 12px; font-family:var(--sans); font-size:13.5px; background:var(--surface); }
+  .ask-form input::placeholder { color:var(--ink-quiet); }
+  .ask-form input:focus { outline:none; border-color:var(--ink); }
+  .ask-form .send { height:36px; padding:0 16px; font-family:var(--mono); font-size:10.5px; letter-spacing:0.10em; text-transform:uppercase; background:var(--ink); color:var(--canvas-warm); border-radius:4px; }
+  .agent-foot { border-top:1px solid var(--hairline); padding:8px 18px; display:flex; justify-content:space-between; font-family:var(--mono); font-size:9px; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-quiet); }
+</style>
+</head>
+<body>
+
+<header class="run-header">
+  <span class="brand">LI<u>U</u>LIAN</span>
+  <span class="sep">·</span>
+  <span>Forecast</span>
+  <span class="sep">·</span>
+  <span class="live">2026-05-20&nbsp;14:38&nbsp;UTC&nbsp;·&nbsp;live</span>
+  <span class="sep">·</span>
+  <span>aare-bern / patchtst / entity=none / seed=42</span>
+  <span class="right">
+    <span><kbd>⌘K</kbd> palette</span>
+    <span><kbd>b</kbd> agent</span>
+    <span><kbd>m</kbd> map</span>
+    <span><kbd>?</kbd> help</span>
+  </span>
+</header>
+
+<section class="narrative">
+  <div class="meta">Canvas summary<br><b>20 May · 14:38 UTC</b></div>
+  <p class="lead">
+    Eight stations live <em>across the Aare and Rhine basins</em>. One watch, none elevated; but
+    <b class="acc">rhine-rheinfelden</b>'s Q95 ceiling drifts toward the <span class="acc">850&nbsp;m³/s</span>
+    mark over the next 72 h, lifted by 18 % above-median precipitation upstream.
+  </p>
+  <div class="pulse">
+    <div>Stations<br><strong class="tnum">8</strong></div>
+    <div>Watch<br><strong class="tnum">1</strong></div>
+    <div>Elev / Crit<br><strong class="tnum">0 / 0</strong></div>
+    <div>Models active<br><strong class="tnum">3</strong></div>
+  </div>
+</section>
+
+<div class="layout">
+
+  <!-- Stations -->
+  <aside class="stations">
+    <div class="cap"><b>Stations</b> <span>8 sensors</span> <span>· J/K nav</span></div>
+    <input class="filter" placeholder="filter…  ⌘/" />
+    <ul>
+      <li class="active">
+        <span class="dot"></span><span class="name">Aare at Bern</span><span class="code">aare-bern</span>
+        <span class="meta"><span class="val tnum">408.2 m³/s</span><span class="delta">−1.2 / 24h</span></span>
+        <span class="spark"><svg viewBox="0 0 200 14" preserveAspectRatio="none" width="180" height="14"><polyline fill="none" stroke="#E20613" stroke-width="1.1" points="0,9 14,10 28,8 42,6 56,7 70,5 84,4 98,5 112,4 126,3 140,4 154,5 168,4 182,5 196,4"/></svg></span>
+      </li>
+      <li>
+        <span class="dot"></span><span class="name">Aare at Thun</span><span class="code">aare-thun</span>
+        <span class="meta"><span class="val tnum">312.7</span><span class="delta">+0.4</span></span>
+      </li>
+      <li>
+        <span class="dot"></span><span class="name">Aare at Hagneck</span><span class="code">aare-hagneck</span>
+        <span class="meta"><span class="val tnum">288.1</span><span class="delta">−0.7</span></span>
+      </li>
+      <li>
+        <span class="dot"></span><span class="name">Rhine at Basel</span><span class="code">rhine-basel</span>
+        <span class="meta"><span class="val tnum">1 024.5</span><span class="delta">+2.1</span></span>
+      </li>
+      <li>
+        <span class="dot"></span><span class="name">Rhine at Rheinfelden</span><span class="code">rhine-rheinfelden</span>
+        <span class="meta"><span class="val tnum">812.4</span><span class="delta up">+3.6 watch</span></span>
+      </li>
+      <li>
+        <span class="dot"></span><span class="name">Reuss at Luzern</span><span class="code">reuss-luzern</span>
+        <span class="meta"><span class="val tnum">198.3</span><span class="delta">−0.2</span></span>
+      </li>
+      <li>
+        <span class="dot"></span><span class="name">Limmat at Zurich</span><span class="code">limmat-zurich</span>
+        <span class="meta"><span class="val tnum">285.6</span><span class="delta">+0.1</span></span>
+      </li>
+      <li>
+        <span class="dot"></span><span class="name">Brienzersee</span><span class="code">brienzersee</span>
+        <span class="meta"><span class="val tnum">142.0</span><span class="delta">−0.4</span></span>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Bento -->
+  <main class="bento">
+
+    <!-- MAP -->
+    <section class="panel panel-map">
+      <div class="panel-h">
+        <span class="title">River network</span>
+        <span class="sub">Swisstopo · Aare + Rhine + Reuss + Limmat · upstream → downstream</span>
+        <span class="right"><span class="chip">click · filter</span></span>
+      </div>
+      <div class="map-wrap">
+        <svg class="basemap" viewBox="0 0 720 410" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <pattern id="dotgrid" width="36" height="36" patternUnits="userSpaceOnUse">
+              <circle cx="18" cy="18" r="0.7" fill="#DEDCD4"/>
+            </pattern>
+          </defs>
+          <rect width="720" height="410" fill="url(#dotgrid)"/>
+
+          <!-- Switzerland silhouette (organic, abstracted) -->
+          <path d="M55,210 C70,160 130,110 200,100 C260,93 310,75 370,80 C440,86 510,72 580,98 C640,122 690,165 690,225 C685,275 640,318 580,335 C520,355 460,335 400,348 C340,360 280,355 215,340 C155,325 95,300 65,270 C45,250 45,235 55,210 Z"
+                fill="#FFFFFF" stroke="#DEDCD4" stroke-width="0.6"/>
+
+          <!-- cantons hint (very subtle dashed) -->
+          <path d="M260,180 C290,200 320,210 360,205" fill="none" stroke="#DEDCD4" stroke-width="0.4" stroke-dasharray="3 3" opacity="0.6"/>
+          <path d="M400,160 C440,170 470,185 500,200" fill="none" stroke="#DEDCD4" stroke-width="0.4" stroke-dasharray="3 3" opacity="0.6"/>
+
+          <!-- LAKES (blue) — Thunersee, Brienzersee, Vierwaldstättersee, Bodensee approximation, Zürichsee -->
+          <ellipse cx="200" cy="270" rx="34" ry="9" fill="#E1F3FE" stroke="#B7DDF4" stroke-width="0.5"/>
+          <ellipse cx="265" cy="280" rx="22" ry="6" fill="#E1F3FE" stroke="#B7DDF4" stroke-width="0.5"/>
+          <ellipse cx="360" cy="222" rx="28" ry="7.5" fill="#E1F3FE" stroke="#B7DDF4" stroke-width="0.5"/>
+          <ellipse cx="500" cy="190" rx="18" ry="5.5" fill="#E1F3FE" stroke="#B7DDF4" stroke-width="0.5"/>
+          <ellipse cx="580" cy="208" rx="20" ry="5" fill="#E1F3FE" stroke="#B7DDF4" stroke-width="0.5"/>
+
+          <!-- RIVERS — Aare (blue thread) and Rhine -->
+          <!-- Aare: Brienzersee → Thun → Bern → Hagneck → toward Rhine -->
+          <path d="M265,280 C250,272 230,268 215,266 C200,265 195,266 200,270 M200,270 C180,268 155,260 130,258 M200,270 C220,262 250,250 275,238 C290,233 305,228 312,222 C320,215 330,210 345,210 M345,210 C360,210 380,205 400,200 C420,195 445,195 470,195"
+                fill="none" stroke="#7FB6DD" stroke-width="1.6" opacity="0.85"/>
+          <!-- Rhine: Bodensee → Basel → Rheinfelden -->
+          <path d="M580,208 C620,196 640,178 660,170 C660,170 640,160 600,148 C560,135 520,140 480,148 C440,158 405,168 380,178" fill="none" stroke="#7FB6DD" stroke-width="2.1" opacity="0.85"/>
+          <!-- Reuss & Limmat tributaries -->
+          <path d="M380,260 C390,235 395,215 390,200" fill="none" stroke="#7FB6DD" stroke-width="1.4" opacity="0.85"/>
+          <path d="M510,235 C520,215 525,200 520,190" fill="none" stroke="#7FB6DD" stroke-width="1.4" opacity="0.85"/>
+
+          <!-- Topology overlay edges (charcoal, semi-transparent, ∝ discharge) -->
+          <g stroke="#666A70" fill="none" opacity="0.5">
+            <path d="M265,280 C250,260 230,240 215,235" stroke-width="1.6"/>
+            <path d="M215,235 C235,225 260,215 285,212" stroke-width="2.0"/>
+            <path d="M285,212 C305,210 325,208 345,210" stroke-width="1.4"/>
+            <path d="M345,210 C400,200 470,178 500,170" stroke-width="3.0"/>
+            <path d="M500,170 C540,158 600,160 645,170" stroke-width="3.6"/>
+            <path d="M390,260 C390,240 392,225 385,215" stroke-width="1.3"/>
+            <path d="M540,225 C535,205 525,190 520,185" stroke-width="1.6"/>
+          </g>
+
+          <!-- station nodes -->
+          <!-- aare-bern ACTIVE -->
+          <g transform="translate(285,212)">
+            <circle r="14" fill="#FAD9DC" opacity="0.55"/>
+            <circle r="8" fill="#FDEBEC"/>
+            <circle r="3.6" fill="#E20613"/>
+            <text x="0" y="-19" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#131313" font-weight="500" letter-spacing="0.3">aare-bern · 408</text>
+          </g>
+          <g transform="translate(215,235)">
+            <circle r="10" fill="#EAEAEA"/><circle r="5" fill="#F2F0EA"/><circle r="2.6" fill="#131313"/>
+            <text x="0" y="20" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#5C6066">aare-thun</text>
+          </g>
+          <g transform="translate(345,210)">
+            <circle r="10" fill="#EAEAEA"/><circle r="5" fill="#F2F0EA"/><circle r="2.6" fill="#131313"/>
+            <text x="0" y="-15" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#5C6066">aare-hagneck</text>
+          </g>
+          <g transform="translate(500,170)">
+            <circle r="15" fill="#EAEAEA"/><circle r="8" fill="#F2F0EA"/><circle r="3.2" fill="#131313"/>
+            <text x="0" y="-22" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#5C6066">rhine-basel · 1024</text>
+          </g>
+          <g transform="translate(580,180)">
+            <!-- rhine-rheinfelden — WATCH state — slight pastel-yellow ring -->
+            <circle r="13" fill="#FBF3DB" opacity="0.65"/>
+            <circle r="7" fill="#F2F0EA"/><circle r="2.9" fill="#131313"/>
+            <text x="0" y="22" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#5C6066">rhine-rheinfelden · 812 ·</text>
+            <text x="0" y="33" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#956400" letter-spacing="0.4">watch</text>
+          </g>
+          <g transform="translate(390,260)">
+            <circle r="10" fill="#EAEAEA"/><circle r="5" fill="#F2F0EA"/><circle r="2.5" fill="#131313"/>
+            <text x="0" y="20" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#5C6066">reuss-luzern</text>
+          </g>
+          <g transform="translate(540,225)">
+            <circle r="11" fill="#EAEAEA"/><circle r="6" fill="#F2F0EA"/><circle r="2.8" fill="#131313"/>
+            <text x="0" y="22" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#5C6066">limmat-zurich</text>
+          </g>
+          <g transform="translate(265,280)">
+            <circle r="9" fill="#EAEAEA"/><circle r="5" fill="#F2F0EA"/><circle r="2.4" fill="#131313"/>
+            <text x="0" y="-13" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#5C6066">brienzersee</text>
+          </g>
+
+          <!-- north arrow -->
+          <g transform="translate(660,55)" font-family="JetBrains Mono" font-size="9" fill="#8E9296">
+            <line x1="0" y1="-12" x2="0" y2="6" stroke="#8E9296" stroke-width="0.7"/>
+            <polygon points="0,-14 -3,-6 3,-6" fill="#8E9296"/>
+            <text x="0" y="20" text-anchor="middle">N</text>
+          </g>
+        </svg>
+        <span class="legend">
+          <span><i style="background:#E20613"></i>active</span>
+          <span><i style="background:#131313"></i>obs</span>
+          <span><i style="background:#FAD9DC"></i>uncertainty</span>
+          <span><i style="background:#FBF3DB;border:1px solid #956400"></i>watch</span>
+        </span>
+        <span class="attrib">CH 1:500 000 · swisstopo lightbase · ©</span>
+      </div>
+    </section>
+
+    <!-- FAN — hero -->
+    <section class="panel panel-fan">
+      <div class="fan-title-row">
+        <h2 class="fan-title">aare-bern</h2>
+        <p class="fan-sub">Aare river · Bern station · 72-hour discharge forecast with Q05–Q95 prediction band.</p>
+        <div class="fan-coords">
+          <div>2026-05-20·06:00&nbsp;UTC</div>
+          <div>horizon 72 h · units m³/s</div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <span class="tab active">Forecast</span>
+        <span class="tab">Compare ·3</span>
+        <span class="tab">Scenario</span>
+        <span class="tab">Residual</span>
+        <span class="tab">Seasonality</span>
+      </div>
+      <div class="chart-area">
+        <svg viewBox="0 0 560 280" preserveAspectRatio="none">
+          <g stroke="#EAEAEA" stroke-width="0.5">
+            <line x1="42" x2="556" y1="40" y2="40"/>
+            <line x1="42" x2="556" y1="100" y2="100"/>
+            <line x1="42" x2="556" y1="160" y2="160"/>
+            <line x1="42" x2="556" y1="220" y2="220"/>
+          </g>
+          <g font-family="JetBrains Mono" font-size="9" fill="#8E9296" text-anchor="end">
+            <text x="38" y="14">600 m³/s</text>
+            <text x="38" y="43">500</text>
+            <text x="38" y="103">400</text>
+            <text x="38" y="163">300</text>
+            <text x="38" y="223">200</text>
+          </g>
+          <line x1="42" x2="556" y1="20" y2="20" stroke="#E20613" stroke-width="0.7" stroke-dasharray="3 3" opacity="0.7"/>
+          <text x="556" y="14" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#E20613" letter-spacing="0.3">elevated · 600 m³/s</text>
+
+          <path d="M 82,118 L 116,116 L 152,113 L 188,110 L 224,108 L 260,103 L 296,99 L 332,93 L 368,86 L 404,79 L 440,72 L 476,64 L 512,56 L 540,52
+                   L 540,90 L 512,98 L 476,103 L 440,110 L 404,116 L 368,121 L 332,125 L 296,128 L 260,131 L 224,135 L 188,138 L 152,141 L 116,143 L 82,144 Z"
+                fill="#FDEBEC" opacity="0.85"/>
+
+          <polyline fill="none" stroke="#131313" stroke-width="1.8"
+                    points="82,131 102,134 122,132 142,128 162,131 182,127 202,130 222,128 242,127 258,126"/>
+          <polyline fill="none" stroke="#E20613" stroke-width="1.6" stroke-dasharray="4 3"
+                    points="258,126 296,122 332,115 368,108 404,101 440,93 476,84 512,75 540,69"/>
+          <circle cx="258" cy="126" r="2.8" fill="#131313"/>
+
+          <!-- 流 easter egg — appears at the threshold line first contact -->
+          <text x="540" y="58" text-anchor="end" font-family="Fraunces" font-size="22" font-style="italic" fill="#E20613" opacity="0.42" font-variation-settings="'WONK' 1, 'wght' 500">流</text>
+
+          <line x1="42" x2="556" y1="244" y2="244" stroke="#EAEAEA" stroke-width="0.5"/>
+          <g font-family="JetBrains Mono" font-size="9" fill="#8E9296" text-anchor="middle">
+            <text x="82" y="258">05-20·06</text>
+            <text x="180" y="258">05-20·18</text>
+            <text x="258" y="258">05-21·06</text>
+            <text x="368" y="258">05-22·06</text>
+            <text x="476" y="258">05-23·06</text>
+            <text x="540" y="258">05-23·06</text>
+          </g>
+          <line x1="258" x2="258" y1="38" y2="244" stroke="#8E9296" stroke-width="0.5" stroke-dasharray="1.5 2"/>
+          <text x="262" y="46" font-family="JetBrains Mono" font-size="9" fill="#8E9296" letter-spacing="0.3">now</text>
+
+          <rect x="42" y="262" width="514" height="10" fill="#FAFAF9" stroke="#EAEAEA"/>
+          <rect x="170" y="262" width="320" height="10" fill="#FDEBEC" stroke="#E20613" stroke-width="0.5" opacity="0.45"/>
+        </svg>
+      </div>
+      <div class="chart-legend">
+        <span><i class="ln"></i>observation</span>
+        <span><i class="lnd"></i>forecast mean · patchtst</span>
+        <span><i class="swatch"></i>Q05 – Q95</span>
+        <span><i class="dot"></i>threshold marker</span>
+      </div>
+    </section>
+
+    <!-- KPI -->
+    <div class="kpis">
+      <div class="kpi">
+        <div class="label"><span>MAE · 24 h</span><span class="sub">m³/s</span></div>
+        <div class="row"><span class="value">6.16</span><span class="delta good">−0.42</span></div>
+        <div class="spark"><svg viewBox="0 0 100 14" preserveAspectRatio="none"><polyline fill="none" stroke="#34373B" stroke-width="1.1" points="0,7 12,8 24,7 36,9 48,6 60,7 72,5 84,6 96,4"/></svg></div>
+      </div>
+      <div class="kpi">
+        <div class="label"><span>RMSE · 24 h</span><span class="sub">m³/s</span></div>
+        <div class="row"><span class="value">7.55</span><span class="delta good">−0.31</span></div>
+        <div class="spark"><svg viewBox="0 0 100 14" preserveAspectRatio="none"><polyline fill="none" stroke="#34373B" stroke-width="1.1" points="0,8 12,9 24,8 36,10 48,7 60,8 72,6 84,7 96,5"/></svg></div>
+      </div>
+      <div class="kpi">
+        <div class="label"><span>CRPS</span><span class="sub">proper score</span></div>
+        <div class="row"><span class="value">4.82</span><span class="delta good">−0.18</span></div>
+        <div class="spark"><svg viewBox="0 0 100 14" preserveAspectRatio="none"><polyline fill="none" stroke="#34373B" stroke-width="1.1" points="0,9 12,8 24,9 36,7 48,8 60,6 72,7 84,5 96,5"/></svg></div>
+      </div>
+      <div class="kpi">
+        <div class="label"><span>Coverage @ 90</span><span class="sub">target 90</span></div>
+        <div class="row"><span class="value">88.5<span class="unit">%</span></span><span class="delta">−1.5</span></div>
+        <div class="spark"><svg viewBox="0 0 100 14" preserveAspectRatio="none"><line x1="0" x2="100" y1="6" y2="6" stroke="#DEDCD4" stroke-width="0.4" stroke-dasharray="2 2"/><polyline fill="none" stroke="#34373B" stroke-width="1.1" points="0,7 12,6 24,7 36,6 48,7 60,6 72,7 84,6 96,6"/></svg></div>
+      </div>
+    </div>
+
+    <!-- Alerts mini -->
+    <section class="panel panel-sev-mini">
+      <div class="panel-h"><span class="title">Alerts · 24 h</span><span class="right"><span class="chip">3 rules</span></span></div>
+      <div class="sev-mini-rows">
+        <div class="sev-mini-row">Q95 &gt; 850 <div class="sev-track"><i class="calm" style="width:62%"></i><i class="watch" style="width:14%"></i><i class="calm" style="width:8%"></i><i class="elev" style="width:6%"></i><i class="calm" style="width:10%"></i></div><span class="ct tnum">2</span></div>
+        <div class="sev-mini-row">z &gt; 2 <div class="sev-track"><i class="calm" style="width:88%"></i><i class="watch" style="width:6%"></i><i class="calm" style="width:6%"></i></div><span class="ct tnum">1</span></div>
+        <div class="sev-mini-row">drift &gt; 30% <div class="sev-track"><i class="calm" style="width:42%"></i><i class="elev" style="width:8%"></i><i class="calm" style="width:24%"></i><i class="crit" style="width:6%"></i><i class="calm" style="width:20%"></i></div><span class="ct tnum">3</span></div>
+      </div>
+    </section>
+
+    <!-- Correlation -->
+    <section class="panel panel-corr">
+      <div class="panel-h">
+        <span class="title">Cross-station correlation</span>
+        <span class="sub">Spearman ρ · 30 d · topology-ordered</span>
+        <span class="right"><span class="chip">click · scatter</span></span>
+      </div>
+      <div class="corr-grid">
+        <div class="corr-axislabel-y">aare-thun</div>
+        <div class="corr-cell diag">1.00</div><div class="corr-cell" style="background:#FAD9DC">.92</div><div class="corr-cell" style="background:#FDEBEC">.81</div><div class="corr-cell" style="background:#FBEEF0">.71</div><div class="corr-cell" style="background:#FAFAF9">.42</div><div class="corr-cell" style="background:#FBFBFA">.38</div><div class="corr-cell" style="background:#F2F0EA">.21</div><div class="corr-cell" style="background:#FDEBEC">.74</div>
+        <div class="corr-axislabel-y">aare-bern</div>
+        <div class="corr-cell" style="background:#FAD9DC">.92</div><div class="corr-cell diag">1.00</div><div class="corr-cell" style="background:#FAD9DC">.94</div><div class="corr-cell" style="background:#FBEEF0">.77</div><div class="corr-cell" style="background:#FAFAF9">.45</div><div class="corr-cell" style="background:#FBFBFA">.41</div><div class="corr-cell" style="background:#F2F0EA">.24</div><div class="corr-cell" style="background:#FDEBEC">.69</div>
+        <div class="corr-axislabel-y">aare-hagneck</div>
+        <div class="corr-cell" style="background:#FDEBEC">.81</div><div class="corr-cell" style="background:#FAD9DC">.94</div><div class="corr-cell diag">1.00</div><div class="corr-cell" style="background:#FAD9DC">.88</div><div class="corr-cell" style="background:#FAFAF9">.49</div><div class="corr-cell" style="background:#FBFBFA">.46</div><div class="corr-cell" style="background:#F2F0EA">.22</div><div class="corr-cell" style="background:#FBEEF0">.62</div>
+        <div class="corr-axislabel-y">rhine-basel</div>
+        <div class="corr-cell" style="background:#FBEEF0">.71</div><div class="corr-cell" style="background:#FBEEF0">.77</div><div class="corr-cell" style="background:#FAD9DC">.88</div><div class="corr-cell diag">1.00</div><div class="corr-cell" style="background:#FAD9DC">.91</div><div class="corr-cell" style="background:#FBEEF0">.74</div><div class="corr-cell" style="background:#FAFAF9">.39</div><div class="corr-cell" style="background:#FAFAF9">.41</div>
+        <div class="corr-axislabel-y">rhine-rh.</div>
+        <div class="corr-cell" style="background:#FAFAF9">.42</div><div class="corr-cell" style="background:#FAFAF9">.45</div><div class="corr-cell" style="background:#FAFAF9">.49</div><div class="corr-cell" style="background:#FAD9DC">.91</div><div class="corr-cell diag">1.00</div><div class="corr-cell" style="background:#FAD9DC">.83</div><div class="corr-cell" style="background:#FBFBFA">.37</div><div class="corr-cell" style="background:#FBFBFA">.33</div>
+        <div class="corr-axislabel-y">reuss-luzern</div>
+        <div class="corr-cell" style="background:#FBFBFA">.38</div><div class="corr-cell" style="background:#FBFBFA">.41</div><div class="corr-cell" style="background:#FBFBFA">.46</div><div class="corr-cell" style="background:#FBEEF0">.74</div><div class="corr-cell" style="background:#FAD9DC">.83</div><div class="corr-cell diag">1.00</div><div class="corr-cell" style="background:#FBFBFA">.52</div><div class="corr-cell" style="background:#FAFAF9">.36</div>
+        <div class="corr-axislabel-y">limmat-zur.</div>
+        <div class="corr-cell" style="background:#F2F0EA">.21</div><div class="corr-cell" style="background:#F2F0EA">.24</div><div class="corr-cell" style="background:#F2F0EA">.22</div><div class="corr-cell" style="background:#FAFAF9">.39</div><div class="corr-cell" style="background:#FBFBFA">.37</div><div class="corr-cell" style="background:#FBFBFA">.52</div><div class="corr-cell diag">1.00</div><div class="corr-cell" style="background:#FBFBFA">.38</div>
+        <div class="corr-axislabel-y">brienzersee</div>
+        <div class="corr-cell" style="background:#FDEBEC">.74</div><div class="corr-cell" style="background:#FDEBEC">.69</div><div class="corr-cell" style="background:#FBEEF0">.62</div><div class="corr-cell" style="background:#FAFAF9">.41</div><div class="corr-cell" style="background:#FBFBFA">.33</div><div class="corr-cell" style="background:#FAFAF9">.36</div><div class="corr-cell" style="background:#FBFBFA">.38</div><div class="corr-cell diag">1.00</div>
+      </div>
+      <div class="corr-xaxis">
+        <div></div><div>thun</div><div>bern</div><div>hag.</div><div>basel</div><div>rh.fld.</div><div>luzern</div><div>zurich</div><div>brz.</div>
+      </div>
+    </section>
+
+    <!-- Severity full -->
+    <section class="panel panel-sev">
+      <div class="panel-h">
+        <span class="title">Alert severity ribbon</span>
+        <span class="sub">Last 24 h · 3 rules · click segment for context</span>
+        <span class="right"><span class="chip">SOP</span></span>
+      </div>
+      <div class="sev-grid">
+        <div class="sev-row">
+          <span class="name">Q95 discharge &gt; <code>850 m³/s</code> · any station</span>
+          <div class="track">
+            <i class="calm" style="width:18%"></i><i class="watch" style="width:12%"></i><i class="calm" style="width:14%"></i><i class="elev" style="width:6%"></i><i class="calm" style="width:28%"></i><i class="watch" style="width:8%"></i><i class="calm" style="width:14%"></i>
+          </div>
+          <span class="ct">2 · <span style="color:var(--pastel-yellow-text)">1</span></span>
+        </div>
+        <div class="sev-row">
+          <span class="name">Discharge anomaly <code>z &gt; 2</code></span>
+          <div class="track">
+            <i class="calm" style="width:60%"></i><i class="watch" style="width:10%"></i><i class="calm" style="width:30%"></i>
+          </div>
+          <span class="ct">1 · 0</span>
+        </div>
+        <div class="sev-row">
+          <span class="name">Topology lead-lag drift <code>&gt; 30 %</code></span>
+          <div class="track">
+            <i class="calm" style="width:8%"></i><i class="watch" style="width:16%"></i><i class="elev" style="width:5%"></i><i class="calm" style="width:36%"></i><i class="crit" style="width:4%"></i><i class="calm" style="width:31%"></i>
+          </div>
+          <span class="ct">3 · <span class="crit">1</span></span>
+        </div>
+      </div>
+      <div class="sev-xaxis">
+        <div></div>
+        <div class="ticks"><span>−24 h</span><span>−18</span><span>−12</span><span>−6</span><span>now</span></div>
+        <div></div>
+      </div>
+    </section>
+
+    <button class="add-panel">
+      <span class="plus">+</span>
+      <span>Add panel</span>
+      <span class="suggest"><b>multi-model</b> <b>scenario</b> <b>profile</b> <b>cohort</b> <b>report</b></span>
+    </button>
+
+  </main>
+
+  <!-- AGENT -->
+  <aside class="agent">
+    <div class="agent-head">
+      <span class="title">BI <span class="persona">agent</span></span>
+      <span class="state">working</span>
+    </div>
+    <div class="notebook">
+      <p class="nb-prompt">Ask in plain English. The agent reads forecasts, scans risk, proposes alert rules, and can pin new panels to your canvas; you confirm before it does.</p>
+
+      <div class="nb-user"><span class="who">you</span><span class="msg">Show stations where Q95 went above 850 last week, and propose an alert if any upstream station is trending elevated.</span></div>
+
+      <div class="nb-step"><span class="who">trace</span><span class="call"><span class="fn">intent</span> → station_risk_query · entities (<i>q95</i>, <i>850 m³/s</i>, <i>−7 d…now</i>)</span></div>
+      <div class="nb-step"><span class="who">tool</span><span class="call"><span class="fn">query_forecasts</span>(<span class="out">window=−7d..now, q=q95, threshold=850</span>) <span class="arrow">→</span> 17 forecasts · 2 stations above</span></div>
+      <div class="nb-step"><span class="who">tool</span><span class="call"><span class="fn">station_matcher</span>(<span class="out">trend=elevated, lookback=24h</span>) <span class="arrow">→</span> [rhine-rheinfelden, brienzersee]</span></div>
+      <div class="nb-step"><span class="who">tool</span><span class="call"><span class="fn">create_alert_rule</span>(<span class="out">metric=q95, op=&gt;, threshold=850, horizon=72h</span>) <span class="arrow">→</span> draft</span></div>
+
+      <p class="nb-answer">
+        Two stations exceeded <i>Q95</i> 850 m³/s in the last seven days: <b>rhine-rheinfelden</b> (twice, peak 893 m³/s) and <b>brienzersee</b> (once, peak 871 m³/s).<sup>1,2</sup> Both sit downstream of basins where precipitation was 18 % above the 30-year median this week.<sup>3</sup> Of the upstream group, <b>rhine-basel</b> is trending elevated with a Q95 ceiling near 1090 m³/s over the next 72 h.
+      </p>
+
+      <div class="nb-prop">
+        <div class="label">Proposed panel · alert rule</div>
+        <div class="body">Add <code style="font-family:var(--mono);font-size:11.5px">Q95 &gt; 850 m³/s</code> with notify-on-call to the ribbon, scoped downstream of rhine-basel. Pin a multi-model overlay for rhine-rheinfelden so the next breach renders against both PatchTST and Chronos-2.</div>
+        <div class="actions">
+          <button class="btn primary">accept · pin</button>
+          <button class="btn">edit</button>
+          <button class="btn">dismiss</button>
+        </div>
+      </div>
+
+      <div class="nb-refs">
+        <span class="r"><sup>1</sup> /forecasts?station_id=rhine-rheinfelden · patchtst · 05-15…20</span>
+        <span class="r"><sup>2</sup> /forecasts?station_id=brienzersee · patchtst · 05-15…20</span>
+        <span class="r"><sup>3</sup> MeteoSwiss precipitation grid · weekly composite</span>
+      </div>
+
+      <div class="nb-suggest">
+        <button>Compare PatchTST and Chronos-2 for rhine-rheinfelden</button>
+        <button>Show seasonality for brienzersee</button>
+        <button>Notify on-call when rule fires</button>
+      </div>
+
+      <div class="nb-cost">$0.0023 · 1 840 tok in / 412 tok out · DeepSeek V4 · 1.8 s</div>
+    </div>
+    <form class="ask-form" onsubmit="event.preventDefault();">
+      <input placeholder="Ask in plain English  ·  /  to focus  ·  b to toggle" />
+      <button class="send" type="submit">Ask</button>
+    </form>
+    <div class="agent-foot">
+      <span>SSE · /agent/chat · 8001</span>
+      <span>region · CH · DeepSeek V4</span>
+    </div>
+  </aside>
+
+</div>
+
+</body>
+</html>

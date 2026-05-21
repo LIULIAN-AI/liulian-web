@@ -20,9 +20,12 @@ type AgentEvent =
   | { type: 'intent'; data: { intent: string; entities?: string[] } }
   | { type: 'tool_call'; data: { tool: string; input: Record<string, unknown> } }
   | { type: 'tool_result'; data: { tool: string; output: unknown } }
+  | { type: 'chunk'; data: { text: string } }
   | { type: 'response'; data: { text: string; references?: { id: string; text: string }[] } }
+  | { type: 'references'; data: unknown }
+  | { type: 'reliability'; data: unknown }
   | { type: 'suggestions'; data: string[] }
-  | { type: 'done'; data: null };
+  | { type: 'done'; data: unknown };
 
 type Step = {
   kind: 'thinking' | 'tool' | 'response';
@@ -72,10 +75,16 @@ export default function ChatSidebar({
       setError(null);
       setSteps(prev => [...prev, { kind: 'thinking', text }]);
       try {
-        const r = await fetch(`${agentBaseUrl}/agents/${persona}/invoke`, {
+        const r = await fetch(`${agentBaseUrl}/agent/chat`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream' },
-          body: JSON.stringify({ message: text }),
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'text/event-stream',
+            // Offline scripted SwissRiver scenarios — no LLM key required.
+            // Drop this header once an LLM provider key is configured for live mode.
+            'X-Demo-Mode': '1',
+          },
+          body: JSON.stringify({ message: text, persona }),
         });
         if (!r.ok || !r.body) throw new Error(`agent returned ${r.status}`);
 
@@ -299,12 +308,57 @@ function StepLine({ step }: { step: Step }) {
   // response
   return (
     <div style={{ color: T.ink, fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
-      <span style={{ color: T.inkFaint, fontFamily: T.mono, fontSize: 11, marginRight: 8 }}>
+      <div style={{ color: T.inkFaint, fontFamily: T.mono, fontSize: 11, marginBottom: 4 }}>
         agent
-      </span>
-      {step.text}
+      </div>
+      <div>{renderRichText(step.text)}</div>
     </div>
   );
+}
+
+/** Inline **bold** rendering — splits a line on the bold delimiter. */
+function renderInline(text: string, keyBase: string): React.ReactNode[] {
+  return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return (
+        <strong key={`${keyBase}-${i}`} style={{ fontWeight: 600, color: T.ink }}>
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    return <span key={`${keyBase}-${i}`}>{part}</span>;
+  });
+}
+
+/** Minimal markdown: line breaks, bullets, bold, and monospace table rows. */
+function renderRichText(text: string): React.ReactNode {
+  return text.split('\n').map((line, i) => {
+    const key = `ln${i}`;
+    if (line.trim() === '') return <div key={key} style={{ height: 6 }} />;
+    if (line.startsWith('|')) {
+      return (
+        <div
+          key={key}
+          style={{ fontFamily: T.mono, fontSize: 11, whiteSpace: 'pre-wrap', color: T.inkMuted }}
+        >
+          {line}
+        </div>
+      );
+    }
+    if (line.startsWith('- ')) {
+      return (
+        <div key={key} style={{ display: 'flex', gap: 7, margin: '3px 0' }}>
+          <span style={{ color: T.bern, flex: 'none' }}>·</span>
+          <span>{renderInline(line.slice(2), key)}</span>
+        </div>
+      );
+    }
+    return (
+      <div key={key} style={{ margin: '3px 0' }}>
+        {renderInline(line, key)}
+      </div>
+    );
+  });
 }
 
 function parseSseFrame(frame: string): AgentEvent | null {
@@ -340,14 +394,28 @@ function applyEvent(
         return [...prev, { kind: 'tool', text: '', tool: ev.data.tool, output: ev.data.output }];
       });
       break;
+    case 'chunk': {
+      // Streamed text — accumulate into the trailing response step.
+      const piece = (ev.data as { text?: string })?.text ?? '';
+      if (!piece) break;
+      setSteps(prev => {
+        const last = prev[prev.length - 1];
+        if (last?.kind === 'response') {
+          return [...prev.slice(0, -1), { ...last, text: last.text + piece }];
+        }
+        return [...prev, { kind: 'response', text: piece }];
+      });
+      break;
+    }
     case 'response':
       setSteps(prev => [...prev, { kind: 'response', text: ev.data.text }]);
       break;
     case 'suggestions':
-      setSuggestions(ev.data);
+      setSuggestions(Array.isArray(ev.data) ? ev.data : []);
       break;
     default:
-      // thinking / trace / intent / done — surfaced via header indicator only
+      // thinking / trace / intent / references / reliability / done —
+      // surfaced via the header working indicator only.
       break;
   }
 }

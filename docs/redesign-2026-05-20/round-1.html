@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<!--
+  LIULIAN · /forecast · Round 1 of 5 (redesign-2026-05-20)
+  Lens applied: minimalist-ui + impeccable shared design laws.
+  Faithful execution of docs/strategy/PLATFORM_DESIGN.md §4 — all 8 canonical
+  panels + scientific-notebook BI agent in editorial-Swiss restraint.
+  Color strategy: Committed (UniBe red as sole spot, ≤2 visible per viewport).
+  Module checklist (15): running-header · bento-12x8 · stations · map · fan-chart
+  · multi-model (tab) · correlation · severity-ribbon · scenario (tab) · profile-peek
+  · add-panel · agent-notebook · cmdk-hint · keyboard-discipline · empty/loading.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>LIULIAN · Forecast — Round 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,WONK@0,9..144,300..900,0..1;1,9..144,400..900,0..1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --canvas-warm:#FBFBFA; --canvas-warmer:#F2F0EA;
+    --surface:#FFFFFF; --surface-shade:#FAFAF9;
+    --ink:#131313; --ink-soft:#34373B; --ink-muted:#5C6066; --ink-faint:#8E9296; --ink-quiet:#B6B9BD;
+    --hairline:#EAEAEA; --hairline-strong:#DEDCD4;
+    --bern:#E20613; --bern-tint:#FDEBEC; --bern-tint-2:#FAD9DC; --bern-deep:#B00510;
+    --ocean:#0066B3; --green:#509A39; --apricot:#E6863A;
+    --pastel-yellow:#FBF3DB; --pastel-yellow-text:#956400;
+    --serif:'Fraunces',Georgia,serif; --sans:'Switzer',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+    --r-sm:4px; --r-md:10px; --r-lg:14px;
+  }
+  *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+  html,body { background:var(--canvas-warm); color:var(--ink); font-family:var(--sans); font-size:15px; line-height:1.55; }
+  body { min-width:1440px; }
+  a { color:inherit; }
+  button { font:inherit; color:inherit; background:transparent; border:none; cursor:pointer; }
+  ::selection { background:var(--bern-tint); color:var(--ink); }
+
+  /* ───── Running header ───── */
+  .run-header {
+    position:sticky; top:0; z-index:50; height:32px;
+    border-bottom:1px solid var(--hairline);
+    background:var(--canvas-warm);
+    font-family:var(--mono); font-size:10.5px; letter-spacing:0.07em; text-transform:uppercase;
+    color:var(--ink-faint);
+    display:flex; align-items:center; padding:0 24px; gap:12px;
+  }
+  .run-header .brand { color:var(--ink); font-weight:600; }
+  .run-header .brand u { font-family:var(--serif); font-style:italic; font-variation-settings:"WONK" 1,"wght" 700; color:var(--bern); text-decoration:none; font-size:13px; line-height:0; position:relative; top:1px; }
+  .run-header .sep { color:var(--ink-quiet); }
+  .run-header .live { display:inline-flex; align-items:center; gap:5px; color:var(--ink-soft); }
+  .run-header .live::before { content:""; width:5px; height:5px; border-radius:50%; background:var(--green); box-shadow:0 0 0 3px rgba(80,154,57,0.18); }
+  .run-header .right { margin-left:auto; display:flex; align-items:center; gap:14px; }
+  .run-header kbd { font-family:var(--mono); font-size:9px; color:var(--ink-muted); border:1px solid var(--hairline); border-radius:3px; padding:1px 5px; }
+
+  /* ───── 3-rail layout ───── */
+  .layout {
+    display:grid; grid-template-columns:240px minmax(0,1fr) 364px;
+    gap:1px; background:var(--hairline);   /* hairlines drawn as grid gap */
+    min-height:calc(100vh - 32px);
+  }
+  .layout > * { background:var(--canvas-warm); }
+
+  /* ───── Stations rail (left) ───── */
+  .stations { padding:18px 16px 18px 24px; overflow:auto; }
+  .stations .cap { font-family:var(--mono); font-size:10px; letter-spacing:0.10em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:11px; display:flex; gap:8px; align-items:baseline; }
+  .stations .cap b { color:var(--ink-soft); font-weight:500; }
+  .stations .filter {
+    width:100%; height:30px; padding:0 10px;
+    border:1px solid var(--hairline); border-radius:var(--r-sm);
+    background:var(--surface);
+    font-family:var(--sans); font-size:12.5px; color:var(--ink);
+  }
+  .stations .filter::placeholder { color:var(--ink-quiet); }
+  .stations .filter:focus { outline:none; border-color:var(--bern); }
+  .stations ul { list-style:none; margin-top:14px; }
+  .stations li { display:grid; grid-template-columns:14px 1fr auto; align-items:center; gap:8px; padding:9px 0 9px 4px; border-bottom:1px dashed var(--hairline); cursor:pointer; }
+  .stations li:hover { background:var(--surface-shade); }
+  .stations li.active .name { color:var(--ink); font-weight:500; }
+  .stations li.active .dot { background:var(--bern); }
+  .stations .dot { width:6px; height:6px; border-radius:50%; background:transparent; }
+  .stations .name { font-size:13.5px; color:var(--ink-soft); }
+  .stations .code { font-family:var(--mono); font-size:10px; letter-spacing:0.04em; color:var(--ink-faint); text-transform:uppercase; }
+  .stations .spark { grid-column:1 / -1; padding-left:14px; margin-top:2px; }
+  .stations .spark svg { display:block; }
+
+  /* ───── Bento canvas (center) ───── */
+  .bento { padding:18px 20px 28px; display:grid; grid-template-columns:repeat(12,1fr); grid-auto-rows:62px; gap:14px 14px; }
+  .panel { background:var(--surface); border:1px solid var(--hairline); border-radius:var(--r-md); padding:14px 16px; display:flex; flex-direction:column; min-width:0; }
+  .panel-h { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .panel-h .title { font-family:var(--mono); font-size:10px; letter-spacing:0.10em; text-transform:uppercase; color:var(--ink-soft); }
+  .panel-h .sub { font-family:var(--mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-faint); }
+  .panel-h .right { margin-left:auto; display:flex; gap:8px; align-items:center; font-family:var(--mono); font-size:10px; color:var(--ink-faint); letter-spacing:0.04em; text-transform:uppercase; }
+  .panel-h .chip { padding:2px 7px; border:1px solid var(--hairline); border-radius:9999px; }
+  .panel-h .chip.live { color:var(--green); border-color:rgba(80,154,57,0.45); }
+  .tab-bar { display:flex; gap:2px; border-bottom:1px solid var(--hairline); margin:0 -16px 12px; padding:0 16px; }
+  .tab { padding:7px 10px 8px; font-family:var(--mono); font-size:10px; letter-spacing:0.10em; text-transform:uppercase; color:var(--ink-faint); border-bottom:2px solid transparent; margin-bottom:-1px; }
+  .tab.active { color:var(--ink); border-bottom-color:var(--bern); }
+  .tab:hover { color:var(--ink-soft); }
+
+  /* MAP — cols 1–6, rows 1–4 */
+  .panel-map { grid-column:1 / span 7; grid-row:1 / span 5; padding:0; overflow:hidden; }
+  .panel-map .panel-h { padding:14px 16px 0; }
+  .panel-map .map-wrap { flex:1; position:relative; background:var(--canvas-warmer); margin-top:10px; }
+  .panel-map svg.basemap { width:100%; height:100%; display:block; }
+  .panel-map .map-caption { position:absolute; bottom:8px; left:14px; font-family:var(--mono); font-size:9.5px; color:var(--ink-faint); letter-spacing:0.06em; text-transform:uppercase; }
+  .panel-map .map-legend { position:absolute; bottom:8px; right:14px; display:flex; gap:14px; font-family:var(--mono); font-size:9.5px; color:var(--ink-faint); letter-spacing:0.04em; text-transform:uppercase; }
+  .panel-map .map-legend i { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; vertical-align:middle; }
+
+  /* FAN — cols 7–12, rows 1–4 */
+  .panel-fan { grid-column:8 / span 5; grid-row:1 / span 5; padding:14px 16px 12px; }
+  .fan-meta { font-family:var(--mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-faint); margin-top:-4px; margin-bottom:8px; }
+  .fan-meta b { color:var(--ink-soft); font-weight:500; }
+  .chart-area { flex:1; position:relative; }
+  .chart-area svg { width:100%; height:100%; display:block; }
+  .chart-legend { display:flex; gap:14px; margin-top:8px; font-family:var(--mono); font-size:9.5px; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-faint); }
+  .chart-legend i { display:inline-block; width:14px; height:2px; vertical-align:middle; margin-right:6px; }
+
+  /* KPI strip — row 6 cols 1–8 */
+  .kpis { grid-column:1 / span 8; grid-row:6 / span 1; display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .kpi { background:var(--surface); border:1px solid var(--hairline); border-radius:var(--r-md); padding:11px 14px; display:flex; flex-direction:column; justify-content:space-between; }
+  .kpi .label { font-family:var(--mono); font-size:9.5px; letter-spacing:0.10em; text-transform:uppercase; color:var(--ink-faint); }
+  .kpi .row { display:flex; align-items:baseline; justify-content:space-between; margin-top:6px; }
+  .kpi .value { font-family:var(--mono); font-size:22px; letter-spacing:-0.01em; color:var(--ink); font-feature-settings:"tnum" 1; font-variant-numeric:tabular-nums; }
+  .kpi .unit { font-family:var(--mono); font-size:10px; color:var(--ink-faint); margin-left:3px; }
+  .kpi .delta { font-family:var(--mono); font-size:10px; color:var(--ink-soft); letter-spacing:0.04em; }
+  .kpi .spark { margin-top:6px; height:14px; }
+
+  /* Severity teaser — row 6 cols 9–12 */
+  .panel-sev-mini { grid-column:9 / span 4; grid-row:6 / span 1; padding:11px 14px; }
+  .panel-sev-mini .panel-h { margin-bottom:8px; }
+  .sev-mini-rows { display:flex; flex-direction:column; gap:6px; }
+  .sev-mini-row { display:grid; grid-template-columns:88px 1fr; align-items:center; gap:10px; font-family:var(--mono); font-size:9.5px; color:var(--ink-soft); letter-spacing:0.04em; text-transform:uppercase; }
+  .sev-track { display:flex; height:8px; border-radius:2px; overflow:hidden; background:var(--canvas-warmer); }
+  .sev-track i { display:block; height:100%; }
+  .sev-track i.watch { background:var(--pastel-yellow); }
+  .sev-track i.elev { background:var(--bern-tint-2); }
+  .sev-track i.crit { background:var(--bern); }
+  .sev-track i.calm { background:transparent; }
+
+  /* Correlation — rows 7-9 cols 1-6 */
+  .panel-corr { grid-column:1 / span 6; grid-row:7 / span 5; padding:14px 16px 12px; }
+  .corr-grid { flex:1; display:grid; grid-template-columns:84px repeat(8,1fr); grid-template-rows:repeat(8,1fr); column-gap:1px; row-gap:1px; background:var(--hairline); border:1px solid var(--hairline); border-radius:var(--r-sm); overflow:hidden; }
+  .corr-axislabel-y, .corr-axislabel-x, .corr-cell { background:var(--surface); }
+  .corr-axislabel-y { font-family:var(--mono); font-size:9.5px; color:var(--ink-soft); letter-spacing:0.04em; text-transform:uppercase; display:flex; align-items:center; justify-content:flex-end; padding-right:8px; }
+  .corr-cell { display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:9.5px; color:var(--ink-soft); }
+  .corr-cell.diag { background:var(--canvas-warmer); color:var(--ink-faint); }
+  .corr-xaxis { display:grid; grid-template-columns:84px repeat(8,1fr); margin-top:6px; }
+  .corr-xaxis div { font-family:var(--mono); font-size:9.5px; color:var(--ink-faint); letter-spacing:0.04em; text-transform:uppercase; text-align:center; transform:rotate(-32deg); transform-origin:50% 0; }
+
+  /* Severity full — rows 7-9 cols 7-12 */
+  .panel-sev { grid-column:7 / span 6; grid-row:7 / span 5; padding:14px 16px 12px; }
+  .sev-grid { flex:1; display:flex; flex-direction:column; gap:9px; }
+  .sev-row { display:grid; grid-template-columns:200px 1fr 56px; align-items:center; gap:12px; }
+  .sev-row .name { font-family:var(--sans); font-size:12.5px; color:var(--ink-soft); }
+  .sev-row .name code { font-family:var(--mono); color:var(--ink); font-size:11px; background:var(--canvas-warmer); padding:1px 5px; border-radius:3px; }
+  .sev-row .track { display:flex; height:14px; border-radius:2px; overflow:hidden; background:var(--surface-shade); border:1px solid var(--hairline); }
+  .sev-row .track i { display:block; height:100%; }
+  .sev-row .count { font-family:var(--mono); font-size:11px; color:var(--ink-soft); text-align:right; }
+  .sev-row .count .crit { color:var(--bern); }
+  .sev-xaxis { display:grid; grid-template-columns:200px 1fr 56px; gap:12px; margin-top:6px; }
+  .sev-xaxis .ticks { display:flex; justify-content:space-between; font-family:var(--mono); font-size:9.5px; color:var(--ink-faint); letter-spacing:0.04em; text-transform:uppercase; padding:0 1px; }
+
+  /* Add panel */
+  .add-panel { grid-column:1 / -1; grid-row:auto / auto; min-height:46px; display:flex; align-items:center; gap:14px; padding:0 18px; border:1px dashed var(--hairline-strong); border-radius:var(--r-md); background:transparent; color:var(--ink-faint); font-family:var(--mono); font-size:10px; letter-spacing:0.10em; text-transform:uppercase; }
+  .add-panel:hover { color:var(--ink); border-color:var(--bern); background:var(--surface); }
+  .add-panel .plus { font-family:var(--serif); font-size:18px; font-style:italic; color:var(--bern); }
+  .add-panel .suggest { color:var(--ink-quiet); }
+  .add-panel .suggest b { color:var(--ink-soft); font-weight:500; padding:2px 6px; border:1px solid var(--hairline); border-radius:9999px; margin:0 4px; }
+
+  /* ───── BI Agent rail (right) ───── */
+  .agent { display:flex; flex-direction:column; padding:0; max-height:calc(100vh - 32px); position:sticky; top:32px; }
+  .agent-head { padding:14px 18px 10px; border-bottom:1px solid var(--hairline); display:flex; align-items:center; gap:10px; }
+  .agent-head .title { font-family:var(--mono); font-size:10px; letter-spacing:0.10em; text-transform:uppercase; color:var(--ink-soft); }
+  .agent-head .persona { font-family:var(--serif); font-size:13px; font-style:italic; color:var(--bern); margin-left:-3px; }
+  .agent-head .state { margin-left:auto; font-family:var(--mono); font-size:9.5px; color:var(--green); letter-spacing:0.06em; text-transform:uppercase; display:flex; align-items:center; gap:5px; }
+  .agent-head .state::before { content:""; width:5px; height:5px; border-radius:50%; background:var(--green); }
+  .notebook { flex:1; overflow:auto; padding:14px 18px; display:flex; flex-direction:column; gap:14px; }
+  .nb-prompt { font-family:var(--serif); font-style:italic; color:var(--ink-muted); font-size:14px; line-height:1.5; }
+  .nb-user { display:grid; grid-template-columns:32px 1fr; gap:6px; }
+  .nb-user .who { font-family:var(--mono); font-size:9.5px; color:var(--ink-faint); letter-spacing:0.06em; text-transform:uppercase; padding-top:2px; }
+  .nb-user .msg { font-size:13.5px; color:var(--ink); }
+  .nb-step { display:grid; grid-template-columns:32px 1fr; gap:6px; align-items:start; }
+  .nb-step .who { font-family:var(--mono); font-size:9.5px; color:var(--ink-faint); letter-spacing:0.06em; text-transform:uppercase; padding-top:2px; }
+  .nb-step .call { font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); white-space:pre-wrap; line-height:1.55; }
+  .nb-step .call .fn { color:var(--ink); }
+  .nb-step .call .arrow { color:var(--bern); }
+  .nb-step .call .out { color:var(--ink-muted); }
+  .nb-prop { background:var(--bern-tint); border:1px dashed var(--bern); border-radius:var(--r-sm); padding:10px 12px; margin-top:6px; }
+  .nb-prop .label { font-family:var(--mono); font-size:9.5px; letter-spacing:0.10em; text-transform:uppercase; color:var(--bern-deep); }
+  .nb-prop .body { font-size:12.5px; color:var(--ink-soft); margin-top:4px; }
+  .nb-prop .actions { display:flex; gap:8px; margin-top:8px; }
+  .nb-prop .btn { font-family:var(--mono); font-size:10px; padding:4px 9px; border:1px solid var(--bern); border-radius:var(--r-sm); color:var(--bern); letter-spacing:0.06em; text-transform:uppercase; }
+  .nb-prop .btn.primary { background:var(--bern); color:var(--canvas-warm); }
+  .nb-answer { font-size:13.5px; color:var(--ink); line-height:1.6; }
+  .nb-answer sup { color:var(--bern); font-family:var(--mono); font-size:10px; margin:0 1px; }
+  .nb-refs { font-family:var(--mono); font-size:10px; color:var(--ink-faint); border-top:1px dashed var(--hairline); padding-top:8px; }
+  .nb-refs .r { display:block; }
+  .nb-refs .r sup { color:var(--bern); }
+  .nb-suggest { display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; }
+  .nb-suggest button { font-family:var(--sans); font-size:12px; color:var(--ink-soft); border:1px solid var(--hairline); border-radius:9999px; padding:5px 11px; }
+  .nb-suggest button:hover { color:var(--bern); border-color:var(--bern); }
+  .nb-cost { font-family:var(--mono); font-size:9px; color:var(--ink-quiet); letter-spacing:0.04em; text-transform:uppercase; }
+  .ask-form { border-top:1px solid var(--hairline); padding:12px 18px; display:flex; gap:8px; align-items:center; }
+  .ask-form input { flex:1; height:34px; border:1px solid var(--hairline); border-radius:var(--r-sm); padding:0 10px; font-family:var(--sans); font-size:13px; background:var(--surface); }
+  .ask-form input::placeholder { color:var(--ink-quiet); }
+  .ask-form input:focus { outline:none; border-color:var(--bern); }
+  .ask-form .send { height:34px; padding:0 14px; font-family:var(--mono); font-size:10.5px; letter-spacing:0.10em; text-transform:uppercase; background:var(--ink); color:var(--canvas-warm); border-radius:var(--r-sm); }
+  .ask-form .send:hover { background:var(--bern-deep); }
+  .agent-foot { border-top:1px solid var(--hairline); padding:8px 18px; display:flex; justify-content:space-between; font-family:var(--mono); font-size:9px; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-quiet); }
+</style>
+</head>
+<body>
+
+<header class="run-header">
+  <span class="brand">LI<u>U</u>LIAN</span>
+  <span class="sep">·</span>
+  <span>Forecast</span>
+  <span class="sep">·</span>
+  <span class="live">2026-05-20&nbsp;14:38&nbsp;UTC&nbsp;·&nbsp;live</span>
+  <span class="sep">·</span>
+  <span>aare-bern / patchtst / entity=none / seed=42</span>
+  <span class="right">
+    <span><kbd>⌘K</kbd> palette</span>
+    <span><kbd>b</kbd> agent</span>
+    <span><kbd>m</kbd> map</span>
+    <span><kbd>?</kbd> help</span>
+  </span>
+</header>
+
+<div class="layout">
+
+  <!-- ═════════════════ Stations rail ═════════════════ -->
+  <aside class="stations">
+    <div class="cap"><b>Stations</b> <span>8 sensors</span> <span>· J/K nav</span> <span>· O open</span></div>
+    <input class="filter" placeholder="filter…  ⌘/" />
+    <ul>
+      <li class="active"><span class="dot"></span><span class="name">Aare at Bern</span><span class="code">aare-bern</span><span class="spark"><svg viewBox="0 0 200 14" preserveAspectRatio="none" width="180" height="14"><polyline fill="none" stroke="#E20613" stroke-width="1.2" points="0,9 14,10 28,8 42,6 56,7 70,5 84,4 98,5 112,4 126,3 140,4 154,5 168,4 182,5 196,4"/></svg></span></li>
+      <li><span class="dot"></span><span class="name">Aare at Thun</span><span class="code">aare-thun</span></li>
+      <li><span class="dot"></span><span class="name">Aare at Hagneck</span><span class="code">aare-hagneck</span></li>
+      <li><span class="dot"></span><span class="name">Rhine at Basel</span><span class="code">rhine-basel</span></li>
+      <li><span class="dot"></span><span class="name">Rhine at Rheinfelden</span><span class="code">rhine-rheinfelden</span></li>
+      <li><span class="dot"></span><span class="name">Reuss at Luzern</span><span class="code">reuss-luzern</span></li>
+      <li><span class="dot"></span><span class="name">Limmat at Zurich</span><span class="code">limmat-zurich</span></li>
+      <li><span class="dot"></span><span class="name">Brienzersee</span><span class="code">brienzersee</span></li>
+    </ul>
+  </aside>
+
+  <!-- ═════════════════ Bento canvas ═════════════════ -->
+  <main class="bento">
+
+    <!-- MAP -->
+    <section class="panel panel-map">
+      <div class="panel-h">
+        <span class="title">River network</span>
+        <span class="sub">Swisstopo · topology overlay · 8 stations</span>
+        <span class="right"><span class="chip live">live</span><span class="chip">click · filter</span></span>
+      </div>
+      <div class="map-wrap">
+        <!-- abstract Swiss border + lakes as soft paths; replace with MapLibre in impl -->
+        <svg class="basemap" viewBox="0 0 720 410" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <pattern id="gridmap" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M40 0H0V40" fill="none" stroke="#DEDCD4" stroke-width="0.3"/>
+            </pattern>
+          </defs>
+          <rect width="720" height="410" fill="url(#gridmap)"/>
+          <!-- Switzerland-ish outline (abstracted) -->
+          <path d="M55,200 C85,140 165,90 240,95 C320,100 360,70 430,80 C500,90 580,75 640,110 C680,150 695,210 640,265 C595,310 540,340 470,340 C400,340 340,320 280,340 C220,360 150,340 110,310 C70,280 35,250 55,200 Z" fill="#FFFFFF" stroke="#DEDCD4" stroke-width="0.8"/>
+          <!-- lakes -->
+          <ellipse cx="240" cy="265" rx="42" ry="11" fill="#E1F3FE" stroke="#B7DDF4" stroke-width="0.4"/>
+          <ellipse cx="380" cy="225" rx="34" ry="9" fill="#E1F3FE" stroke="#B7DDF4" stroke-width="0.4"/>
+          <ellipse cx="490" cy="195" rx="22" ry="7" fill="#E1F3FE" stroke="#B7DDF4" stroke-width="0.4"/>
+          <!-- topology edges (curved, thickness ∝ discharge) -->
+          <path d="M180,265 C195,250 215,225 245,210" fill="none" stroke="#B6B9BD" stroke-width="2.4" opacity="0.78"/>
+          <path d="M285,260 C310,235 335,215 360,210" fill="none" stroke="#B6B9BD" stroke-width="1.6" opacity="0.78"/>
+          <path d="M260,210 C310,180 380,160 440,150" fill="none" stroke="#B6B9BD" stroke-width="3.2" opacity="0.78"/>
+          <path d="M395,225 C440,210 490,190 540,170" fill="none" stroke="#B6B9BD" stroke-width="2.2" opacity="0.78"/>
+          <path d="M540,170 C595,150 615,170 605,210" fill="none" stroke="#B6B9BD" stroke-width="3.6" opacity="0.78"/>
+          <path d="M390,300 C405,260 410,240 395,225" fill="none" stroke="#B6B9BD" stroke-width="1.4" opacity="0.78"/>
+          <!-- station nodes — outer ring α band width, inner dot = obs; aare-bern = active red -->
+          <!-- aare-bern (active) -->
+          <g transform="translate(260,210)">
+            <circle r="14" fill="#FAD9DC" opacity="0.55"/>
+            <circle r="8" fill="#FDEBEC"/>
+            <circle r="3.6" fill="#E20613"/>
+            <text x="0" y="-19" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#131313" font-weight="500">AARE-BERN · 408</text>
+          </g>
+          <g transform="translate(180,265)"><circle r="11" fill="#EAEAEA"/><circle r="6" fill="#F2F0EA"/><circle r="2.8" fill="#131313"/><text x="0" y="22" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#5C6066">aare-thun</text></g>
+          <g transform="translate(285,260)"><circle r="10" fill="#EAEAEA"/><circle r="5" fill="#F2F0EA"/><circle r="2.6" fill="#131313"/><text x="0" y="22" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#5C6066">aare-hagneck</text></g>
+          <g transform="translate(440,150)"><circle r="16" fill="#EAEAEA"/><circle r="9" fill="#F2F0EA"/><circle r="3.4" fill="#131313"/><text x="0" y="-22" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#5C6066">rhine-basel · 1024</text></g>
+          <g transform="translate(540,170)"><circle r="13" fill="#EAEAEA"/><circle r="7" fill="#F2F0EA"/><circle r="3" fill="#131313"/><text x="0" y="22" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#5C6066">rhine-rheinfelden</text></g>
+          <g transform="translate(360,210)"><circle r="10" fill="#EAEAEA"/><circle r="5" fill="#F2F0EA"/><circle r="2.6" fill="#131313"/><text x="0" y="-15" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#5C6066">reuss-luzern</text></g>
+          <g transform="translate(605,210)"><circle r="12" fill="#EAEAEA"/><circle r="6" fill="#F2F0EA"/><circle r="2.8" fill="#131313"/><text x="0" y="22" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#5C6066">limmat-zurich</text></g>
+          <g transform="translate(395,300)"><circle r="9" fill="#EAEAEA"/><circle r="5" fill="#F2F0EA"/><circle r="2.4" fill="#131313"/><text x="0" y="22" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#5C6066">brienzersee</text></g>
+        </svg>
+        <span class="map-caption">CH · Swisstopo lightbase · upstream → downstream</span>
+        <span class="map-legend">
+          <span><i style="background:#E20613"></i>active</span>
+          <span><i style="background:#131313"></i>obs</span>
+          <span><i style="background:#FAD9DC;opacity:.7"></i>uncertainty</span>
+        </span>
+      </div>
+    </section>
+
+    <!-- FAN CHART -->
+    <section class="panel panel-fan">
+      <div class="panel-h">
+        <span class="title">Aare-Bern · forecast</span>
+        <span class="sub">72 h · Q05–Q95</span>
+        <span class="right"><span class="chip">b agent</span><span class="chip">e edit</span></span>
+      </div>
+      <div class="tab-bar">
+        <span class="tab active">Forecast</span>
+        <span class="tab">Compare ·3</span>
+        <span class="tab">Scenario</span>
+        <span class="tab">Residual</span>
+      </div>
+      <div class="fan-meta"><b>patchtst</b> · forecast_at <b>2026-05-20 06:00 UTC</b> · horizon 72 h · units m³/s</div>
+      <div class="chart-area">
+        <svg viewBox="0 0 560 280" preserveAspectRatio="none">
+          <!-- y grid -->
+          <g stroke="#EAEAEA" stroke-width="0.5">
+            <line x1="40" x2="556" y1="40" y2="40"/>
+            <line x1="40" x2="556" y1="100" y2="100"/>
+            <line x1="40" x2="556" y1="160" y2="160"/>
+            <line x1="40" x2="556" y1="220" y2="220"/>
+          </g>
+          <!-- y labels -->
+          <g font-family="JetBrains Mono" font-size="9" fill="#8E9296" text-anchor="end">
+            <text x="36" y="14">600 m³/s</text>
+            <text x="36" y="43">500</text>
+            <text x="36" y="103">400</text>
+            <text x="36" y="163">300</text>
+            <text x="36" y="223">200</text>
+          </g>
+          <!-- elevated threshold band (600) at y=18, sub-baseline -->
+          <line x1="40" x2="556" y1="18" y2="18" stroke="#E20613" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.75"/>
+          <text x="556" y="14" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#E20613">elevated · 600</text>
+
+          <!-- Q05-Q95 fan area (back) — synthesized to widen with horizon -->
+          <path d="M 80,118 L 116,116 L 152,113 L 188,110 L 224,108 L 260,103 L 296,99 L 332,93 L 368,86 L 404,79 L 440,72 L 476,64 L 512,56 L 540,52
+                   L 540,90 L 512,98 L 476,103 L 440,110 L 404,116 L 368,121 L 332,125 L 296,128 L 260,131 L 224,135 L 188,138 L 152,141 L 116,143 L 80,144 Z"
+                fill="#FDEBEC" opacity="0.85"/>
+
+          <!-- observation (solid charcoal, first 24h) -->
+          <polyline fill="none" stroke="#131313" stroke-width="1.6"
+                    points="80,131 100,134 120,132 140,128 160,131 180,127 200,130 220,128 240,127 256,126"/>
+
+          <!-- forecast mean (dashed red, from h+24 onward) -->
+          <polyline fill="none" stroke="#E20613" stroke-width="1.5" stroke-dasharray="4 3"
+                    points="256,126 296,122 332,115 368,108 404,101 440,93 476,84 512,75 540,69"/>
+
+          <!-- transition pivot -->
+          <circle cx="256" cy="126" r="2.6" fill="#131313"/>
+
+          <!-- threshold marker (none crossed in this view; show ghost at end of band as pulse) -->
+          <circle cx="540" cy="69" r="4" fill="#E20613"/>
+          <circle cx="540" cy="69" r="4" fill="none" stroke="#E20613" stroke-width="1.2" opacity="0.5">
+            <animate attributeName="r" values="4;9;4" dur="2.2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.5;0;0.5" dur="2.2s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- x axis ticks -->
+          <g stroke="#EAEAEA"><line x1="40" x2="556" y1="244" y2="244"/></g>
+          <g font-family="JetBrains Mono" font-size="9" fill="#8E9296" text-anchor="middle">
+            <text x="80" y="258">05-20·06</text>
+            <text x="160" y="258">05-20·18</text>
+            <text x="256" y="258">05-21·06</text>
+            <text x="368" y="258">05-22·06</text>
+            <text x="476" y="258">05-23·06</text>
+            <text x="540" y="258">05-23·06</text>
+          </g>
+
+          <!-- now marker -->
+          <line x1="256" x2="256" y1="38" y2="244" stroke="#8E9296" stroke-width="0.4" stroke-dasharray="1.5 2"/>
+          <text x="258" y="46" font-family="JetBrains Mono" font-size="9" fill="#8E9296">now</text>
+
+          <!-- dataZoom slider stub -->
+          <rect x="40" y="262" width="516" height="10" fill="#FAFAF9" stroke="#EAEAEA"/>
+          <rect x="170" y="262" width="320" height="10" fill="#FDEBEC" stroke="#E20613" stroke-width="0.6" opacity="0.55"/>
+        </svg>
+      </div>
+      <div class="chart-legend">
+        <span><i style="background:#131313"></i>observation</span>
+        <span><i style="background:#E20613;border-top:2px dashed #E20613;background:transparent;width:18px"></i>forecast mean</span>
+        <span><i style="background:#FDEBEC;width:14px;height:8px"></i>Q05–Q95</span>
+        <span><i style="background:#E20613;width:6px;height:6px;border-radius:50%"></i>threshold</span>
+      </div>
+    </section>
+
+    <!-- KPI strip -->
+    <div class="kpis">
+      <div class="kpi">
+        <div class="label">MAE · 24 h</div>
+        <div class="row"><span class="value">6.16<span class="unit">m³/s</span></span><span class="delta">−0.42</span></div>
+        <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><polyline fill="none" stroke="#5C6066" stroke-width="1.1" points="0,7 12,8 24,7 36,9 48,6 60,7 72,5 84,6 96,4"/></svg>
+      </div>
+      <div class="kpi">
+        <div class="label">RMSE · 24 h</div>
+        <div class="row"><span class="value">7.55<span class="unit">m³/s</span></span><span class="delta">−0.31</span></div>
+        <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><polyline fill="none" stroke="#5C6066" stroke-width="1.1" points="0,8 12,9 24,8 36,10 48,7 60,8 72,6 84,7 96,5"/></svg>
+      </div>
+      <div class="kpi">
+        <div class="label">CRPS · proper score</div>
+        <div class="row"><span class="value">4.82</span><span class="delta">−0.18</span></div>
+        <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><polyline fill="none" stroke="#5C6066" stroke-width="1.1" points="0,9 12,8 24,9 36,7 48,8 60,6 72,7 84,5 96,5"/></svg>
+      </div>
+      <div class="kpi">
+        <div class="label">Coverage @ 90</div>
+        <div class="row"><span class="value">88.5<span class="unit">%</span></span><span class="delta">target 90</span></div>
+        <svg class="spark" viewBox="0 0 100 14" preserveAspectRatio="none"><polyline fill="none" stroke="#5C6066" stroke-width="1.1" points="0,7 12,6 24,7 36,6 48,7 60,6 72,7 84,6 96,6"/><line x1="0" x2="100" y1="6" y2="6" stroke="#E20613" stroke-width="0.4" stroke-dasharray="2 2"/></svg>
+      </div>
+    </div>
+
+    <!-- Severity teaser -->
+    <section class="panel panel-sev-mini">
+      <div class="panel-h">
+        <span class="title">Alerts · 24 h</span>
+        <span class="right"><span class="chip">3 rules</span></span>
+      </div>
+      <div class="sev-mini-rows">
+        <div class="sev-mini-row">Q95 &gt; 850 <div class="sev-track"><i class="calm" style="width:62%"></i><i class="watch" style="width:14%"></i><i class="calm" style="width:8%"></i><i class="elev" style="width:6%"></i><i class="calm" style="width:10%"></i></div></div>
+        <div class="sev-mini-row">z &gt; 2 <div class="sev-track"><i class="calm" style="width:88%"></i><i class="watch" style="width:6%"></i><i class="calm" style="width:6%"></i></div></div>
+        <div class="sev-mini-row">lead-lag &gt; 30% <div class="sev-track"><i class="calm" style="width:42%"></i><i class="elev" style="width:8%"></i><i class="calm" style="width:24%"></i><i class="crit" style="width:6%"></i><i class="calm" style="width:20%"></i></div></div>
+      </div>
+    </section>
+
+    <!-- Correlation matrix -->
+    <section class="panel panel-corr">
+      <div class="panel-h">
+        <span class="title">Cross-station correlation</span>
+        <span class="sub">Spearman ρ · 30 d window · topology-ordered</span>
+        <span class="right"><span class="chip">click · scatter</span></span>
+      </div>
+      <div class="corr-grid">
+        <!-- header row -->
+        <!-- row 1 -->
+        <div class="corr-axislabel-y">aare-thun</div>
+        <div class="corr-cell diag">1.00</div>
+        <div class="corr-cell" style="background:#FAD9DC">.92</div>
+        <div class="corr-cell" style="background:#FDEBEC">.81</div>
+        <div class="corr-cell" style="background:#FBEEF0">.71</div>
+        <div class="corr-cell" style="background:#FAFAF9">.42</div>
+        <div class="corr-cell" style="background:#FBFBFA">.38</div>
+        <div class="corr-cell" style="background:#F2F0EA">.21</div>
+        <div class="corr-cell" style="background:#FDEBEC">.74</div>
+        <!-- row 2 -->
+        <div class="corr-axislabel-y">aare-bern</div>
+        <div class="corr-cell" style="background:#FAD9DC">.92</div>
+        <div class="corr-cell diag">1.00</div>
+        <div class="corr-cell" style="background:#FAD9DC">.94</div>
+        <div class="corr-cell" style="background:#FBEEF0">.77</div>
+        <div class="corr-cell" style="background:#FAFAF9">.45</div>
+        <div class="corr-cell" style="background:#FBFBFA">.41</div>
+        <div class="corr-cell" style="background:#F2F0EA">.24</div>
+        <div class="corr-cell" style="background:#FDEBEC">.69</div>
+        <!-- row 3 -->
+        <div class="corr-axislabel-y">aare-hagneck</div>
+        <div class="corr-cell" style="background:#FDEBEC">.81</div>
+        <div class="corr-cell" style="background:#FAD9DC">.94</div>
+        <div class="corr-cell diag">1.00</div>
+        <div class="corr-cell" style="background:#FAD9DC">.88</div>
+        <div class="corr-cell" style="background:#FAFAF9">.49</div>
+        <div class="corr-cell" style="background:#FBFBFA">.46</div>
+        <div class="corr-cell" style="background:#F2F0EA">.22</div>
+        <div class="corr-cell" style="background:#FBEEF0">.62</div>
+        <!-- row 4 -->
+        <div class="corr-axislabel-y">rhine-basel</div>
+        <div class="corr-cell" style="background:#FBEEF0">.71</div>
+        <div class="corr-cell" style="background:#FBEEF0">.77</div>
+        <div class="corr-cell" style="background:#FAD9DC">.88</div>
+        <div class="corr-cell diag">1.00</div>
+        <div class="corr-cell" style="background:#FAD9DC">.91</div>
+        <div class="corr-cell" style="background:#FBEEF0">.74</div>
+        <div class="corr-cell" style="background:#FAFAF9">.39</div>
+        <div class="corr-cell" style="background:#FAFAF9">.41</div>
+        <!-- row 5 -->
+        <div class="corr-axislabel-y">rhine-rheinfelden</div>
+        <div class="corr-cell" style="background:#FAFAF9">.42</div>
+        <div class="corr-cell" style="background:#FAFAF9">.45</div>
+        <div class="corr-cell" style="background:#FAFAF9">.49</div>
+        <div class="corr-cell" style="background:#FAD9DC">.91</div>
+        <div class="corr-cell diag">1.00</div>
+        <div class="corr-cell" style="background:#FAD9DC">.83</div>
+        <div class="corr-cell" style="background:#FBFBFA">.37</div>
+        <div class="corr-cell" style="background:#FBFBFA">.33</div>
+        <!-- row 6 -->
+        <div class="corr-axislabel-y">reuss-luzern</div>
+        <div class="corr-cell" style="background:#FBFBFA">.38</div>
+        <div class="corr-cell" style="background:#FBFBFA">.41</div>
+        <div class="corr-cell" style="background:#FBFBFA">.46</div>
+        <div class="corr-cell" style="background:#FBEEF0">.74</div>
+        <div class="corr-cell" style="background:#FAD9DC">.83</div>
+        <div class="corr-cell diag">1.00</div>
+        <div class="corr-cell" style="background:#FBFBFA">.52</div>
+        <div class="corr-cell" style="background:#FAFAF9">.36</div>
+        <!-- row 7 -->
+        <div class="corr-axislabel-y">limmat-zurich</div>
+        <div class="corr-cell" style="background:#F2F0EA">.21</div>
+        <div class="corr-cell" style="background:#F2F0EA">.24</div>
+        <div class="corr-cell" style="background:#F2F0EA">.22</div>
+        <div class="corr-cell" style="background:#FAFAF9">.39</div>
+        <div class="corr-cell" style="background:#FBFBFA">.37</div>
+        <div class="corr-cell" style="background:#FBFBFA">.52</div>
+        <div class="corr-cell diag">1.00</div>
+        <div class="corr-cell" style="background:#FBFBFA">.38</div>
+        <!-- row 8 -->
+        <div class="corr-axislabel-y">brienzersee</div>
+        <div class="corr-cell" style="background:#FDEBEC">.74</div>
+        <div class="corr-cell" style="background:#FDEBEC">.69</div>
+        <div class="corr-cell" style="background:#FBEEF0">.62</div>
+        <div class="corr-cell" style="background:#FAFAF9">.41</div>
+        <div class="corr-cell" style="background:#FBFBFA">.33</div>
+        <div class="corr-cell" style="background:#FAFAF9">.36</div>
+        <div class="corr-cell" style="background:#FBFBFA">.38</div>
+        <div class="corr-cell diag">1.00</div>
+      </div>
+      <div class="corr-xaxis">
+        <div></div><div>aare-thun</div><div>aare-bern</div><div>aare-hagneck</div><div>rhine-basel</div><div>rhine-rh.</div><div>reuss-luzern</div><div>limmat-zur.</div><div>brienzersee</div>
+      </div>
+    </section>
+
+    <!-- Severity ribbon (full) -->
+    <section class="panel panel-sev">
+      <div class="panel-h">
+        <span class="title">Alert severity ribbon</span>
+        <span class="sub">Last 24 h · 3 rules · click segment for context</span>
+        <span class="right"><span class="chip">SOP</span></span>
+      </div>
+      <div class="sev-grid">
+        <div class="sev-row">
+          <span class="name">Q95 discharge &gt; <code>850 m³/s</code> · any</span>
+          <div class="track">
+            <i class="calm" style="width:18%"></i>
+            <i class="watch" style="width:12%"></i>
+            <i class="calm" style="width:14%"></i>
+            <i class="elev" style="width:6%"></i>
+            <i class="calm" style="width:28%"></i>
+            <i class="watch" style="width:8%"></i>
+            <i class="calm" style="width:14%"></i>
+          </div>
+          <span class="count">2 · 1<span class="crit"></span></span>
+        </div>
+        <div class="sev-row">
+          <span class="name">Discharge anomaly <code>z &gt; 2</code></span>
+          <div class="track">
+            <i class="calm" style="width:60%"></i>
+            <i class="watch" style="width:10%"></i>
+            <i class="calm" style="width:30%"></i>
+          </div>
+          <span class="count">1 · 0</span>
+        </div>
+        <div class="sev-row">
+          <span class="name">Topology lead-lag drift <code>&gt; 30 %</code></span>
+          <div class="track">
+            <i class="calm" style="width:8%"></i>
+            <i class="watch" style="width:16%"></i>
+            <i class="elev" style="width:5%"></i>
+            <i class="calm" style="width:36%"></i>
+            <i class="crit" style="width:4%"></i>
+            <i class="calm" style="width:31%"></i>
+          </div>
+          <span class="count">3 · 1 <span class="crit">●</span></span>
+        </div>
+      </div>
+      <div class="sev-xaxis">
+        <div></div>
+        <div class="ticks"><span>−24 h</span><span>−18</span><span>−12</span><span>−6</span><span>now</span></div>
+        <div></div>
+      </div>
+    </section>
+
+    <!-- Add panel -->
+    <button class="add-panel">
+      <span class="plus">+</span>
+      <span>Add panel</span>
+      <span class="suggest">try <b>multi-model overlay</b> · <b>scenario</b> · <b>station profile</b> · <b>cohort</b> · <b>report</b></span>
+    </button>
+
+  </main>
+
+  <!-- ═════════════════ BI agent ═════════════════ -->
+  <aside class="agent">
+    <div class="agent-head">
+      <span class="title">BI <span class="persona">agent</span></span>
+      <span class="state">working</span>
+    </div>
+    <div class="notebook">
+      <p class="nb-prompt">Ask in plain English. The agent reads forecasts, scans risk, proposes alert rules, and can drop new panels onto your canvas — you confirm before it pins.</p>
+
+      <div class="nb-user"><span class="who">you</span><span class="msg">Show stations where Q95 went above 850 last week, and propose an alert if any upstream station is trending elevated.</span></div>
+
+      <div class="nb-step">
+        <span class="who">trace</span>
+        <span class="call"><span class="fn">intent</span> → station_risk_query  ·  entities = (<i>q95</i>, <i>850 m³/s</i>, <i>-7d..now</i>)</span>
+      </div>
+      <div class="nb-step">
+        <span class="who">tool</span>
+        <span class="call"><span class="fn">query_forecasts</span>(<span class="out">window=-7d..now, q=q95, threshold=850</span>) <span class="arrow">→</span> 17 forecasts found · 2 stations above</span>
+      </div>
+      <div class="nb-step">
+        <span class="who">tool</span>
+        <span class="call"><span class="fn">station_matcher</span>(<span class="out">trend=elevated, lookback=24h</span>) <span class="arrow">→</span> [rhine-rheinfelden, brienzersee]</span>
+      </div>
+      <div class="nb-step">
+        <span class="who">tool</span>
+        <span class="call"><span class="fn">create_alert_rule</span>(<span class="out">metric=q95, op=&gt;, threshold=850, horizon=72h</span>) <span class="arrow">→</span> draft</span>
+      </div>
+
+      <p class="nb-answer">
+        Two stations exceeded <i>Q95</i> 850 m³/s in the last seven days: <b>rhine-rheinfelden</b> (twice, max 893 m³/s) and <b>brienzersee</b> (once, max 871 m³/s).<sup>1,2</sup> Both are downstream of basins where precipitation was 18 % above the 30-year median this week.<sup>3</sup> Of the upstream group, <b>rhine-basel</b> is trending elevated with a Q95 ceiling near 1090 m³/s in the next 72 h.
+      </p>
+
+      <div class="nb-prop">
+        <div class="label">proposed panel · alert rule</div>
+        <div class="body">Add the rule <code style="font-family:var(--mono);font-size:11.5px">Q95 &gt; 850 m³/s</code> with notify-on-call to the ribbon, scoped to all stations downstream of rhine-basel. Pin a multi-model overlay for rhine-rheinfelden so the next breach renders against both PatchTST and Chronos-2.</div>
+        <div class="actions">
+          <button class="btn primary">accept · pin to canvas</button>
+          <button class="btn">edit</button>
+          <button class="btn">dismiss</button>
+        </div>
+      </div>
+
+      <div class="nb-refs">
+        <span class="r"><sup>1</sup> /forecasts?station_id=rhine-rheinfelden  ·  patchtst  ·  2026-05-15..20</span>
+        <span class="r"><sup>2</sup> /forecasts?station_id=brienzersee  ·  patchtst  ·  2026-05-15..20</span>
+        <span class="r"><sup>3</sup> swisstopo / MeteoSwiss precipitation grid · weekly composite</span>
+      </div>
+
+      <div class="nb-suggest">
+        <button>Compare PatchTST and Chronos-2 for rhine-rheinfelden</button>
+        <button>Show seasonality for brienzersee</button>
+        <button>Notify on-call when rule fires</button>
+      </div>
+
+      <div class="nb-cost">$0.0023 · 1 840 tok in / 412 tok out · DeepSeek V4 · 1.8 s</div>
+    </div>
+    <form class="ask-form" onsubmit="event.preventDefault();">
+      <input placeholder="Ask in plain English  ·  /  to focus  ·  b to toggle" />
+      <button class="send" type="submit">Ask</button>
+    </form>
+    <div class="agent-foot">
+      <span>SSE · /agent/chat</span>
+      <span>Region · CH · DeepSeek V4</span>
+    </div>
+  </aside>
+
+</div>
+
+</body>
+</html>
