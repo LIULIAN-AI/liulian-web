@@ -1,5 +1,5 @@
 // ──────────────────────────────────────────────────────────────
-// LIULIAN — The Doorway (initial landing · 门厅)
+// LIULIAN — The Doorway (initial landing)
 //   Shown when there is no active project / first-time visit.
 //   Minimal chrome: brand top-left · palette + guides top-right.
 //   Three to four panels for concrete next actions; chat composer
@@ -50,7 +50,7 @@ function DoorwayPage({ onPick, onChat, openWizard, openSidebar, setGuidesOpen, s
         padding: "8vh 32px 6vh",
         maxWidth: 1080, margin: "0 auto", width: "100%",
       }}>
-        <div className="meta" style={{ marginBottom: 14, color: "var(--ink-muted)" }}>The Doorway · <span style={{ fontFamily: "var(--serif)", fontStyle: "italic" }}>门厅</span></div>
+        <div className="meta" style={{ marginBottom: 14, color: "var(--ink-muted)" }}>The Doorway</div>
         <h1 className="display" style={{
           fontSize: 52, margin: 0, textAlign: "center",
           fontVariationSettings: '"opsz" 64',

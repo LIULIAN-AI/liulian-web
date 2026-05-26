@@ -677,7 +677,7 @@ function ImportDialog({ onClose }) {
       <div onClick={e => e.stopPropagation()} style={{ width: step === "preview" ? 980 : 760, maxWidth: "94vw", maxHeight: "88vh", background: "var(--surface)", border: "1px solid var(--hairline)", borderRadius: 14, overflow: "hidden", boxShadow: "0 28px 60px rgba(19,19,19,0.18)", display: "flex", flexDirection: "column" }}>
         <header style={{ padding: "16px 22px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center" }}>
           <div>
-            <div className="meta">Workspace · Data · The Annotated Drop · <span style={{ fontFamily: "var(--serif)", fontStyle: "italic", color: "var(--ink-muted)" }}>落档</span></div>
+            <div className="meta">Workspace · Data · The Annotated Drop</div>
             <h2 className="display" style={{ fontSize: 24, margin: "4px 0 0" }}>Import a dataset</h2>
           </div>
           <span style={{ flex: 1 }} />
@@ -765,7 +765,7 @@ function SourceStep({ mode, setMode, drag, setDrag, onPreview, onClose }) {
   );
 }
 
-// The headline of story 2 · The Annotated Drop · 落档.
+// The headline of story 2 · The Annotated Drop.
 // Schema on the left, agent annotations on the right, anchored row-by-row.
 function PreviewStep({ onBack, onCommit }) {
   const [applied, setApplied] = React.useState({}); // annotation id → true
