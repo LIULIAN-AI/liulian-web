@@ -1,6 +1,6 @@
 // ──────────────────────────────────────────────────────────────
 // LIULIAN — Guides modal · the seven canonical user stories
-//   Each story is named (codename + 中文 codename), persona-led,
+//   Each story is named (codename), persona-led,
 //   mode-tagged (A/B/C), and lists the F-principles it invokes.
 // ──────────────────────────────────────────────────────────────
 
