@@ -39,9 +39,11 @@ Card shape: **ID · title** — *why* · **accept:** done-criteria · **files:**
   **DONE (increment 1) 2026-06-27:** `e2e/visual-regression.spec.ts` +
   `playwright.visual.config.ts` (`pnpm test:visual`) screenshot the **6 top-level demo
   surfaces** (`docs/*.html`, full-page, 1440×980) via `file://` — no server, deterministic.
-  Baselines committed to `verify/baseline/*.png`; tolerant diff (maxDiffPixelRatio 0.01),
-  non-zero exit on change. **Verified:** generate → re-check = **6 passed, 0 diffs**; an
-  injected probe correctly **failed** the run (proves it catches regressions).
+  Baselines committed to `verify/baseline/{platform}/*.png` (e.g. `linux/`); tolerant diff
+  (maxDiffPixelRatio 0.01), non-zero exit on change. The main `playwright.config.ts`
+  `testIgnore`s this spec so `pnpm test:e2e` is unaffected. **Verified:** generate → re-check =
+  **6 passed, 0 diffs**; an injected probe correctly **failed** the run (catches regressions);
+  `playwright test --list` shows 0 visual lines (isolation works).
   **Deferred (increment 2, still `todo` on this card):** the 4 in-SPA popups of
   `web-demo.html` (Agent drawer / Command palette / Guides / Project picker) need per-popup
   open steps — next visual-regression run.
