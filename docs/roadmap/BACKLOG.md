@@ -23,7 +23,13 @@ Card shape: **ID · title** — *why* · **accept:** done-criteria · **files:**
   engines / CI matrix), or (b) relocate `node_modules` to an ext4 path and bind-mount, or
   (c) a `pnpm` reinstall that survives the mount. Write the chosen path into `README.md` §2.
   **files:** `.devcontainer/Dockerfile`, `README.md`, maybe a `scripts/dev-linux.sh`.
-  **verify:** `curl :3000/forecast → 200`; screenshot the live route. `P0` deps:— `todo`
+  **verify:** `curl :3000/forecast → 200`; screenshot the live route. `P0` deps:— `in_review`
+  **DONE 2026-06-27** (chose option **c**): `scripts/dev-linux.sh` does a clean
+  `node-linker=hoisted` + `package-import-method=copy` install with the pnpm store on ext4
+  (no symlinks → immune to the dead Windows junctions), then `next dev` with
+  `WATCHPACK_POLLING=true` for fuseblk. Verified `/forecast` + `/` → HTTP 200; screenshot
+  `verify/W0-01-forecast-2026-06-27.png`. README "Develop the real Next.js app" updated.
+  PR open on `feat/web-w0-01-dev-path-2026-06-27` (no auto-merge).
 - **W0-02 · Playwright visual-regression harness for the demo** — lock the 12 pages + 4
   popups so future runs catch regressions.
   **accept:** a script screenshots all pages + Agent drawer / Command palette / Guides /

@@ -103,6 +103,28 @@ pnpm exec next lint     # ESLint
 pnpm build              # production build
 ```
 
+### Linux on an NTFS / fuseblk working drive (use `scripts/dev-linux.sh`)
+
+If your working copy lives on an NTFS / fuseblk mount (the case for the
+`2026.02.07_liulian` drive), a plain `pnpm install` / `pnpm dev` can fail with
+`Cannot find module .../next/dist/bin/next`. That happens when `node_modules`
+was first installed under Windows: its symlinks are Windows reparse-tag
+junctions that are dead on Linux. pnpm's default symlinked store is also fragile
+on fuse. Boot the app with the helper instead:
+
+```bash
+scripts/dev-linux.sh          # installs if needed, then `next dev` on :3000
+PORT=3001 scripts/dev-linux.sh # pick another port
+```
+
+It keeps the pnpm store on ext4 (`~/.cache/liulian-web/pnpm-store`), installs
+with `node-linker=hoisted` + `package-import-method=copy` (a flat `node_modules`
+with **no** symlinks, immune to the dead-junction class), and runs the dev
+server with file-watch polling (`WATCHPACK_POLLING=true`) since inotify is not
+delivered reliably over fuseblk. It is idempotent — it only reinstalls when
+`node_modules` is missing or still contains dead symlinks. Verified
+2026-06-27: `/forecast` and `/` both serve HTTP 200.
+
 ### Common commands
 
 | Command | What it does |

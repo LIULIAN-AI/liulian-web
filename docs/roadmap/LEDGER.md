@@ -58,3 +58,27 @@
   those are **separate repos** (not `liulian-python`, which is read-only); still, surface any
   backend need in the entry and build the web side against a stub first.
 - **PR:** to be opened for the roadmap docs (`feat/web-roadmap-2026-06-24`).
+
+## 2026-06-27 · W0-01 · Repair the local dev path so `pnpm dev` boots
+- **Picked:** W0-01 — top P0 of W0, deps `—`, gates every `app/**` card. First true
+  autonomous run (2026-06-24 was the install/bootstrap).
+- **Did:**
+  - `scripts/dev-linux.sh` (new) — idempotent boot for an NTFS/fuseblk working copy:
+    clean `pnpm install --node-linker=hoisted --package-import-method=copy` with the store on
+    ext4 (`~/.cache/liulian-web/pnpm-store`), then `next dev` with `WATCHPACK_POLLING=true`.
+    Reinstalls only when `node_modules` is missing or has dead symlinks.
+  - `README.md` — new subsection under "Develop the real Next.js app" documenting the
+    NTFS path + the helper.
+  - `docs/roadmap/BACKLOG.md` — W0-01 → `in_review` with the DONE note.
+  - Reclaimed 1.7 GB: removed the dead Windows `node_modules` (regenerable, gitignored).
+- **Verify:** `curl :3000/forecast → HTTP 200` and `curl :3000/ → 200` (real boot, Next.js
+  14.2.35 compile logs); re-ran via `scripts/dev-linux.sh` on :3001 → `/forecast` 200;
+  `node_modules` has **0 dead symlinks** (was 92); screenshot
+  `verify/W0-01-forecast-2026-06-27.png` shows the full forecast canvas rendering.
+- **Status:** W0-01 → `in_review` (acceptance met; PR not merged — autopilot does not auto-merge).
+- **Next up:** **W0-02** (Playwright visual-regression harness; P0, deps `—`, now unblocked
+  because the app boots) — or the F0 per-repo health sweep.
+- **Blockers / INTERVENTION NEEDED:** none. No `liulian-python` change needed (pure
+  dev-env / tooling fix). Note: HMR on fuseblk relies on polling (inotify unreliable) — a
+  known trade-off, documented, not a blocker.
+- **PR:** to be opened on `feat/web-w0-01-dev-path-2026-06-27` (no auto-merge).
