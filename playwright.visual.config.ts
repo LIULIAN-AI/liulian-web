@@ -20,8 +20,10 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 0,
   reporter: [['list']],
-  // Write/read baselines as verify/baseline/<name>.png (flat, reviewable).
-  snapshotPathTemplate: 'verify/baseline/{arg}{ext}',
+  // Baselines are platform-scoped: verify/baseline/<platform>/<name>.png. Font
+  // anti-aliasing differs across OSes, so a baseline made on one platform must
+  // not be compared against another's — {platform} keeps them separate.
+  snapshotPathTemplate: 'verify/baseline/{platform}/{arg}{ext}',
   use: {
     ...devices['Desktop Chrome'],
     viewport: { width: 1440, height: 980 },

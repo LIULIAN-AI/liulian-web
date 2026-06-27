@@ -14,6 +14,13 @@ import path from 'node:path';
  * `web-demo.html` (Agent drawer / Command palette / Guides / Project picker)
  * are a follow-up increment — they need per-popup open steps and are tracked
  * back on the W0-02 card.
+ *
+ * Determinism caveat: the demo pages reference webfonts from a CDN. Under
+ * `file://` Chromium can still fetch them, so baselines are *network-dependent*
+ * and *platform-dependent* (font AA differs per OS) — hence the platform-scoped
+ * `snapshotPathTemplate` in the config and the `document.fonts.ready` wait below.
+ * Re-baseline (`--update-snapshots`) on the same platform the check runs on.
+ * A future increment can self-host the fonts to drop the network dependency.
  */
 
 const DOCS_DIR = path.resolve(__dirname, '..', 'docs');
