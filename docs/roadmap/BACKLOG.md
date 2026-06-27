@@ -35,7 +35,16 @@ Card shape: **ID · title** — *why* · **accept:** done-criteria · **files:**
   **accept:** a script screenshots all pages + Agent drawer / Command palette / Guides /
   Project picker at 1440×980 and writes to `verify/`; a baseline set is committed; a diff
   mode flags changes. **files:** `scripts/visual-regression.mjs`, `verify/baseline/*`.
-  **verify:** run it twice → 0 diffs on an unchanged demo. `P0` deps:— `todo`
+  **verify:** run it twice → 0 diffs on an unchanged demo. `P0` deps:— `in_review`
+  **DONE (increment 1) 2026-06-27:** `e2e/visual-regression.spec.ts` +
+  `playwright.visual.config.ts` (`pnpm test:visual`) screenshot the **6 top-level demo
+  surfaces** (`docs/*.html`, full-page, 1440×980) via `file://` — no server, deterministic.
+  Baselines committed to `verify/baseline/*.png`; tolerant diff (maxDiffPixelRatio 0.01),
+  non-zero exit on change. **Verified:** generate → re-check = **6 passed, 0 diffs**; an
+  injected probe correctly **failed** the run (proves it catches regressions).
+  **Deferred (increment 2, still `todo` on this card):** the 4 in-SPA popups of
+  `web-demo.html` (Agent drawer / Command palette / Guides / Project picker) need per-popup
+  open steps — next visual-regression run.
 - **W0-03 · CI green + IOU audit** — confirm `liulian-web` Actions are green; fix or
   ticket each failure. **accept:** latest run green, or each red documented in the federation
   ci-skips ledger with a fix card here. **files:** `.github/workflows/*`. **verify:**

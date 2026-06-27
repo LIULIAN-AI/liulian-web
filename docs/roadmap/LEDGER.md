@@ -82,3 +82,10 @@
   dev-env / tooling fix). Note: HMR on fuseblk relies on polling (inotify unreliable) — a
   known trade-off, documented, not a blocker.
 - **PR:** to be opened on `feat/web-w0-01-dev-path-2026-06-27` (no auto-merge).
+- **Also this run (W0-02, increment 1):** the app booting unblocked W0-02, and the floor
+  (≥30 min) was not yet met, so a second unit was started per the run rule. Built a Playwright
+  visual-regression harness for the static demo: `e2e/visual-regression.spec.ts` +
+  `playwright.visual.config.ts` (`pnpm test:visual`), baselines in `verify/baseline/*.png`
+  for the 6 top-level demo surfaces. **Verified:** generate → re-check = 6 passed / 0 diffs;
+  injected probe correctly failed (catches regressions). Installed the Playwright chromium
+  browser (v1223). W0-02 → `in_review`; the 4 in-SPA popups deferred to increment 2.
