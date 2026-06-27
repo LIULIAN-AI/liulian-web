@@ -75,6 +75,7 @@
   14.2.35 compile logs); re-ran via `scripts/dev-linux.sh` on :3001 → `/forecast` 200;
   `node_modules` has **0 dead symlinks** (was 92); screenshot
   `verify/W0-01-forecast-2026-06-27.png` shows the full forecast canvas rendering.
+  Full unit suite green on the rebuilt toolchain: `vitest run` → **38 files / 294 tests passed**.
 - **Status:** W0-01 → `in_review` (acceptance met; PR not merged — autopilot does not auto-merge).
 - **Next up:** **W0-02** (Playwright visual-regression harness; P0, deps `—`, now unblocked
   because the app boots) — or the F0 per-repo health sweep.
