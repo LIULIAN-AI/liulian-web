@@ -16,9 +16,10 @@ const switzer = Switzer({ subsets: ['latin'], display: 'swap' });
 
 const TABS = [
   { id: 'data', href: '/studio/data', label: 'Data', shortcut: '1' },
-  { id: 'train', href: '/studio/train', label: 'Train', shortcut: '2' },
-  { id: 'inference', href: '/studio/inference', label: 'Inference', shortcut: '3' },
-  { id: 'insight', href: '/studio/insight', label: 'Insight', shortcut: '4' },
+  { id: 'models', href: '/studio/models', label: 'Models', shortcut: '2' },
+  { id: 'train', href: '/studio/train', label: 'Train', shortcut: '3' },
+  { id: 'inference', href: '/studio/inference', label: 'Inference', shortcut: '4' },
+  { id: 'insight', href: '/studio/insight', label: 'Insight', shortcut: '5' },
 ] as const;
 
 export default function StudioLayout({ children }: { children: React.ReactNode }) {
