@@ -93,8 +93,8 @@ export default async function StudioModels({ searchParams }: { searchParams: { f
             A LIULIAN model is a forecasting adapter the engine can load by
             name. This catalog is derived live from the engine&rsquo;s real
             adapter set, so it always matches what training and inference can
-            actually run &mdash; add an adapter to the engine and it appears
-            here with no code change.
+            actually run. Add an adapter to the engine and it appears here
+            with no code change.
           </p>
           <p className="footnote">&#8984;K &rarr; &ldquo;run model&rdquo;</p>
         </aside>
