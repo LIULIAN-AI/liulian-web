@@ -44,9 +44,9 @@ export default async function StudioData() {
                 {d.name}
                 <span className="mono" style={{ marginLeft: 8 }}>{d.id}</span>
               </span>
-              <span className="mono">{d.n_stations}</span>
-              <span className="mono">{d.n_features}</span>
-              <span className="mono">{d.horizon_hours}h</span>
+              <span className="mono">{d.n_stations ?? '—'}</span>
+              <span className="mono">{d.n_features ?? '—'}</span>
+              <span className="mono">{d.horizon_hours != null ? `${d.horizon_hours}h` : '—'}</span>
             </div>
           ))}
         </div>
