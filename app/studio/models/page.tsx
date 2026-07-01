@@ -1,15 +1,26 @@
 /**
  * Studio · Models — the model catalog, served live from the engine's real adapter registry
  * (liulian-api GET /models, which auto-derives from liulian-python/liulian/models/torch/*).
+ * A family filter uses the api's own ?family= query.
  */
 
+import Link from 'next/link';
 import type { ModelCard } from '../../forecast/types';
 
 const BASE = process.env.LIULIAN_API_URL ?? 'http://localhost:8000';
 
-async function fetchModels(): Promise<ModelCard[]> {
+const FAMILIES = [
+  'all', 'classical', 'decomposition', 'efficient', 'patch',
+  'mixture', 'state-space', 'llm-grounded', 'domain', 'foundation',
+] as const;
+
+async function fetchModels(family?: string): Promise<ModelCard[]> {
+  const url =
+    family && family !== 'all'
+      ? `${BASE}/models?family=${encodeURIComponent(family)}`
+      : `${BASE}/models`;
   try {
-    const r = await fetch(`${BASE}/models`, { next: { revalidate: 30 } });
+    const r = await fetch(url, { next: { revalidate: 30 } });
     if (!r.ok) return FALLBACK;
     return (await r.json()) as ModelCard[];
   } catch {
@@ -21,14 +32,35 @@ const FALLBACK: ModelCard[] = [
   { id: 'lstm', name: 'LSTM', family: 'classical', capabilities: ['deterministic'], source: 'liulian-core' },
 ];
 
-export default async function StudioModels() {
-  const models = await fetchModels();
+export default async function StudioModels({ searchParams }: { searchParams: { family?: string } }) {
+  const active = searchParams.family ?? 'all';
+  const models = await fetchModels(active);
 
   return (
     <div>
-      <h1 style={{ fontFamily: 'Fraunces, serif', fontWeight: 500, fontSize: 38, letterSpacing: '-0.02em', margin: '0 0 24px' }}>
+      <h1 style={{ fontFamily: 'Fraunces, serif', fontWeight: 500, fontSize: 38, letterSpacing: '-0.02em', margin: '0 0 20px' }}>
         Models
       </h1>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', margin: '0 0 24px' }}>
+        {FAMILIES.map(f => (
+          <Link
+            key={f}
+            href={f === 'all' ? '/studio/models' : `/studio/models?family=${f}`}
+            className="mono"
+            style={{
+              fontSize: 12,
+              padding: '4px 10px',
+              borderRadius: 6,
+              textDecoration: 'none',
+              border: '1px solid #EAEAEA',
+              background: active === f ? '#111111' : 'transparent',
+              color: active === f ? '#FFFFFF' : '#787774',
+            }}
+          >
+            {f}
+          </Link>
+        ))}
+      </div>
       <div className="studio-list-layout">
         <div className="studio-list-table">
           <div className="studio-list-table-header">
