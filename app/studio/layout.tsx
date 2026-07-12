@@ -21,6 +21,7 @@ const TABS = [
   { id: 'inference', href: '/studio/inference', label: 'Inference', shortcut: '4' },
   { id: 'insight', href: '/studio/insight', label: 'Insight', shortcut: '5' },
   { id: 'outlook', href: '/studio/outlook', label: 'Outlook', shortcut: '6' },
+  { id: 'alerts', href: '/studio/alerts', label: 'Alerts', shortcut: '7' },
 ] as const;
 
 export default function StudioLayout({ children }: { children: React.ReactNode }) {
