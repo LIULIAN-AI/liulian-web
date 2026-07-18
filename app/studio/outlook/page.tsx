@@ -37,6 +37,36 @@ async function fetchOutlook(dataset: string): Promise<Outlook | null> {
   }
 }
 
+// SR-5: out-of-sample reliability of the climatology band (GET /datasets/{id}/coverage).
+interface CoverageMonth {
+  month: number;
+  coverage: number;
+  n: number;
+}
+interface Coverage {
+  dataset_id: string;
+  column: string;
+  nominal: number;
+  coverage: number;
+  n_test: number;
+  n_train_years: number;
+  n_test_years: number;
+  by_month: CoverageMonth[];
+  note: string;
+}
+
+async function fetchCoverage(dataset: string): Promise<Coverage | null> {
+  try {
+    const r = await fetch(`${BASE}/datasets/${dataset}/coverage`, { next: { revalidate: 120 } });
+    if (!r.ok) return null;
+    return (await r.json()) as Coverage;
+  } catch {
+    return null;
+  }
+}
+
+const MONTH_ABBR = ['Ja', 'Fe', 'Mr', 'Ap', 'My', 'Jn', 'Jl', 'Au', 'Se', 'Oc', 'No', 'De'];
+
 // Rough day-of-year → month-start ticks for the x-axis.
 const MONTHS: [number, string][] = [
   [1, 'Jan'], [32, 'Feb'], [60, 'Mar'], [91, 'Apr'], [121, 'May'], [152, 'Jun'],
@@ -49,7 +79,12 @@ export default async function StudioOutlook({
   searchParams: { dataset?: string };
 }) {
   const dataset = CHOICES.includes(searchParams.dataset ?? '') ? searchParams.dataset! : 'illness';
-  const o = await fetchOutlook(dataset);
+  const [o, cov] = await Promise.all([fetchOutlook(dataset), fetchCoverage(dataset)]);
+
+  // SR-5 verdict: a static band that covers within 10pp of nominal is "calibrated"; a big shortfall means
+  // the series is non-stationary (trend / regime shift), which a static interval cannot handle.
+  const covCalibrated = cov ? cov.coverage - cov.nominal >= -0.1 : false;
+  const covAccent = covCalibrated ? '#346538' : '#9F2F2D';
 
   const W = 880;
   const H = 340;
@@ -146,6 +181,52 @@ export default async function StudioOutlook({
       ) : (
         <p style={{ color: 'var(--ink-faint)' }}>Outlook unavailable (the API is not reachable).</p>
       )}
+
+      <section style={{ marginTop: 44 }}>
+        <h2 style={{ fontFamily: 'Fraunces, serif', fontWeight: 500, fontSize: 24, letterSpacing: '-0.02em', margin: '0 0 6px' }}>
+          Does the band actually cover? — out-of-sample reliability
+        </h2>
+        <p style={{ color: 'var(--ink-muted)', maxWidth: '68ch', margin: '0 0 16px' }}>
+          A climatology band is only trustworthy if it covers future years. This fits the p10–p90 band on the
+          earlier years and measures how much of the held-out later years actually falls inside — a
+          leakage-free calibration check. A stationary seasonal series lands near the nominal 80%; a series
+          with a trend or regime shift under-covers, which is what conformal calibration is for.
+        </p>
+        {cov ? (
+          <div style={{ border: '1px solid var(--hairline)', borderRadius: 8, padding: '20px 24px' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 28, flexWrap: 'wrap', margin: '0 0 16px' }}>
+              <div>
+                <div className="mono" style={{ fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-faint)' }}>empirical coverage</div>
+                <div style={{ fontSize: 34, fontWeight: 700, color: covAccent, lineHeight: 1.1 }}>{(cov.coverage * 100).toFixed(0)}%</div>
+              </div>
+              <div>
+                <div className="mono" style={{ fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-faint)' }}>nominal</div>
+                <div style={{ fontSize: 34, fontWeight: 400, color: 'var(--ink-muted)', lineHeight: 1.1 }}>{(cov.nominal * 100).toFixed(0)}%</div>
+              </div>
+              <div style={{ alignSelf: 'center', padding: '4px 12px', borderRadius: 9999, border: `1px solid ${covAccent}`, color: covAccent, fontSize: 12, fontWeight: 600 }}>
+                {covCalibrated ? 'well-calibrated' : 'under-covers · non-stationary'}
+              </div>
+              <div className="mono" style={{ fontSize: 11, color: 'var(--ink-faint)', alignSelf: 'center' }}>
+                trained on {cov.n_train_years} yrs · tested on {cov.n_test_years} · n={cov.n_test}
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: 3, alignItems: 'flex-end', margin: '4px 0' }}>
+              {cov.by_month.map(m => (
+                <div key={m.month} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
+                  <div style={{ width: '100%', height: 48, background: 'var(--hairline)', borderRadius: 2, position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', bottom: 0, width: '100%', height: `${Math.max(0, Math.min(1, m.coverage)) * 100}%`, background: m.coverage >= cov.nominal - 0.1 ? '#346538' : '#9F2F2D' }} />
+                  </div>
+                  <span className="mono" style={{ fontSize: 8, color: 'var(--ink-faint)' }}>{MONTH_ABBR[m.month - 1]}</span>
+                </div>
+              ))}
+            </div>
+            <p className="footnote" style={{ marginTop: 8 }}>Per-month out-of-sample coverage (green = meets nominal, red = under-covers).</p>
+            <p style={{ fontSize: 12, color: 'var(--ink-muted)', margin: '8px 0 0', maxWidth: '68ch' }}>{cov.note}</p>
+          </div>
+        ) : (
+          <p style={{ color: 'var(--ink-faint)' }}>Coverage needs a multi-year seasonal series (or the API is unreachable).</p>
+        )}
+      </section>
     </div>
   );
 }
